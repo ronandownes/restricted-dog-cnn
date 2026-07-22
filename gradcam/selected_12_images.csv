@@ -1,0 +1,13 @@
+image_path,original_filename,breed_label,true_class,predicted_class,category_code,model_output
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/black-and-tan_coonhound_n02089078_1454.jpg,black-and-tan_coonhound_n02089078_1454.jpg,black-and-tan coonhound,unrestricted,restricted,FP,0.8814767003059387
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/kelpie_n02105412_7370.jpg,kelpie_n02105412_7370.jpg,kelpie,unrestricted,restricted,FP,0.9394990801811218
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/weimaraner_n02092339_3028.jpg,weimaraner_n02092339_3028.jpg,weimaraner,unrestricted,restricted,FP,0.5963549017906189
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/staffordshire_bullterrier_n02093256_5325.jpg,staffordshire_bullterrier_n02093256_5325.jpg,staffordshire bullterrier,restricted,unrestricted,FN,0.32305461168289185
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/staffordshire_bullterrier_n02093256_5988.jpg,staffordshire_bullterrier_n02093256_5988.jpg,staffordshire bullterrier,restricted,unrestricted,FN,0.11079362779855728
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/staffordshire_bullterrier_n02093256_2987.jpg,staffordshire_bullterrier_n02093256_2987.jpg,staffordshire bullterrier,restricted,unrestricted,FN,0.42626723647117615
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/greater_swiss_mountain_dog_n02107574_2662.jpg,greater_swiss_mountain_dog_n02107574_2662.jpg,greater swiss mountain dog,unrestricted,unrestricted,TN,7.013505819486454e-05
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/kelpie_n02105412_7810.jpg,kelpie_n02105412_7810.jpg,kelpie,unrestricted,unrestricted,TN,4.492224252317101e-05
+/content/drive/MyDrive/restricted-dog-cnn/data/test/unrestricted/curly-coated_retriever_n02099429_1465.jpg,curly-coated_retriever_n02099429_1465.jpg,curly-coated retriever,unrestricted,unrestricted,TN,0.001207830966450274
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/rottweiler_n02106550_4962.jpg,rottweiler_n02106550_4962.jpg,rottweiler,restricted,restricted,TP,0.9997290968894958
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/staffordshire_bullterrier_n02093256_8205.jpg,staffordshire_bullterrier_n02093256_8205.jpg,staffordshire bullterrier,restricted,restricted,TP,0.9620888233184814
+/content/drive/MyDrive/restricted-dog-cnn/data/test/restricted/german_shepherd_n02106662_13368.jpg,german_shepherd_n02106662_13368.jpg,german shepherd,restricted,restricted,TP,0.9995972514152527

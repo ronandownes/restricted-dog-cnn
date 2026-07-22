@@ -1,0 +1,97 @@
+# ============================================
+# Restricted Dog CNN - Git exclusions
+# ============================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / editor files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============================================
+# DATA
+# Do not commit the Stanford Dogs image dataset
+# ============================================
+
+data/Images/
+data/Annotation/
+data/raw/
+data/processed/
+data/train/
+data/validation/
+data/val/
+data/test/
+*.tar
+*.tar.gz
+*.zip
+
+# ============================================
+# MODEL CHECKPOINTS / SAVED MODELS
+# ============================================
+
+*.keras
+*.h5
+*.hdf5
+*.ckpt
+*.weights
+*.weights.h5
+checkpoint
+checkpoints/
+
+# TensorFlow saved models
+saved_model/
+*.pb
+
+# ============================================
+# TRAINING / RUNTIME OUTPUT
+# ============================================
+
+logs/
+tensorboard/
+wandb/
+tmp/
+temp/
+.cache/
+
+# ============================================
+# COLAB / LOCAL RUNTIME MATERIAL
+# ============================================
+
+content/
+drive/
+
+# ============================================
+# LaTeX temporary build files
+# Keep .tex and .bib source if added later
+# ============================================
+
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
