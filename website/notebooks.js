@@ -1,21 +1,21 @@
 const notebooks = {
   data: {
-    title: "01 · Data Preparation",
+    title: "Notebook 01 · Data Preparation",
     description: "Dataset acquisition, class construction, reproducible sampling and train/validation/test splitting.",
     file: "01_Data_Preparation.ipynb"
   },
   benchmark: {
-    title: "02 · Frozen Model Benchmarking",
+    title: "Notebook 02 · Frozen Model Benchmarking",
     description: "The six ImageNet-pretrained CNN comparison, including saved metrics, curves and confusion matrices.",
     file: "02_Frozen_Model_Benchmarking.ipynb"
   },
   fine: {
-    title: "03 · Selected Model Fine-tuning",
+    title: "Notebook 03 · Selected Model Fine-tuning",
     description: "InceptionResNetV2 before and after selective unfreezing, with the saved training and evaluation outputs.",
     file: "03_Selected_Model_Fine_Tuning.ipynb"
   },
   gradcam: {
-    title: "04 · Model Explainability",
+    title: "Notebook 04 · Grad-CAM Explainability",
     description: "Grad-CAM preparation and class-specific explanation outputs for the selected CNN.",
     file: "04_Model_Explainability.ipynb"
   }
@@ -174,7 +174,31 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(notebookUrl);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const notebook = await response.json();
+      const total = Number(response.headers.get("content-length")) || 0;
+      let received = 0;
+      let notebookText = "";
+      if (response.body?.getReader) {
+        const readerStream = response.body.getReader();
+        const decoder = new TextDecoder();
+        while (true) {
+          const {done, value} = await readerStream.read();
+          if (done) break;
+          received += value.length;
+          notebookText += decoder.decode(value, {stream: true});
+          if (currentRequest !== requestNumber) {
+            await readerStream.cancel();
+            return;
+          }
+          const amount = total ? `${Math.round(received / total * 100)}%` : `${(received / 1048576).toFixed(1)} MB`;
+          status.innerHTML = `<strong>Loading ${selected.title}</strong><span>${amount} · reading saved outputs, not running code</span><i><b style="width:${total ? Math.min(received / total * 100, 100) : 35}%"></b></i>`;
+        }
+        notebookText += decoder.decode();
+      } else {
+        notebookText = await response.text();
+      }
+      status.innerHTML = `<strong>Preparing the saved cells…</strong><span>No analysis is being rerun.</span>`;
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+      const notebook = JSON.parse(notebookText);
       if (currentRequest !== requestNumber) return;
       reader.innerHTML = (notebook.cells || []).map(renderCell).join("");
       status.hidden = true;
