@@ -2,7 +2,7 @@ const documents = {
   proposal: {
     title: "Proposal",
     description: "The original research proposal that defined the planned study, motivation and ethical considerations.",
-    file: "dog_cnn_research_proposal.pdf"
+    file: "dog_cnn_proposal.pdf"
   },
   report: {
     title: "Report",

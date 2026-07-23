@@ -169,9 +169,9 @@ if ($Target -eq "proposal" -or $Target -eq "all") {
 
         Copy-Item `
             (Join-Path $ProposalDirectory "main.pdf") `
-            (Join-Path $DocsDirectory "dog_cnn_research_proposal.pdf") -Force
+            (Join-Path $DocsDirectory "dog_cnn_proposal.pdf") -Force
 
-        Write-Host "Created docs\dog_cnn_research_proposal.pdf" -ForegroundColor Green
+        Write-Host "Created docs\dog_cnn_proposal.pdf" -ForegroundColor Green
     }
     finally {
         Pop-Location

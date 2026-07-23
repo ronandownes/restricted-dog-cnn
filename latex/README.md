@@ -2,7 +2,7 @@
 
 This directory is the authoritative source for the project documents:
 
-- `proposal/main.tex` builds `docs/dog_cnn_research_proposal.pdf`;
+- `proposal/main.tex` builds `docs/dog_cnn_proposal.pdf`;
 - `report.tex` builds `docs/dog_cnn_report.pdf`;
 - `poster.tex` builds `docs/dog_cnn_poster.pdf`;
 - `presentation.tex` builds `docs/dog_cnn_presentation.pdf`;
