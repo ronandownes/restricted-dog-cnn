@@ -1,0 +1,29 @@
+COMPLETE REVISED OVERLEAF PROJECT — JULY 2026
+
+This archive replaces the previous project ZIP.
+
+Included:
+- revised report master and all eight revised chapters;
+- revised poster source;
+- current viva source;
+- supplied references.bib;
+- appendices, tables and build settings;
+- only graphics referenced by the retained report, poster or viva sources.
+
+Removed:
+- reportoverwrittren.tex;
+- posterold.tex and vivaold.tex;
+- all .original backup files;
+- compiled PDF copies;
+- unused model learning curves and confusion matrices;
+- duplicate PNG/PDF chart exports and unused CSV/table-image exports.
+
+Validation:
+- report.tex compiled successfully with pdfLaTeX/BibTeX;
+- poster.tex compiled successfully with pdfLaTeX;
+- viva.tex compiled successfully with pdfLaTeX.
+
+Overleaf main documents:
+- report.tex — dissertation
+- poster.tex — poster
+- viva.tex — viva presentation
