@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="An interactive visual journey from ImageNet and convolutional neural networks to transfer learning, Grad-CAM and Vision Transformers, grounded in a six-model restricted-dog classification benchmark.">
   <title>From ImageNet to Vision Transformers · Restricted Dog CNN</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-2">
+  <link rel="stylesheet" href="styles.css?v=20260723-3">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="app.js?v=20260723-3" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -178,7 +178,26 @@
 </section>
 
 <section class="section transfer-band">
-  <div class="wrap transfer-grid"><div><p class="chapter light">05 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. This experiment reuses those representations rather than learning vision from scratch.</p></div><div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div></div>
+  <div class="wrap">
+    <div class="transfer-grid">
+      <div><p class="chapter light">05 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. This experiment reuses those representations rather than learning vision from scratch.</p></div>
+      <div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div>
+    </div>
+    <div class="head-lesson">
+      <div class="head-route" aria-label="Project model route">
+        <div><small>IMAGE</small><b>224×224 or 299×299 pixels</b><span>The size depended on the selected CNN.</span></div><i>→</i>
+        <div><small>PRETRAINED CNN BASE</small><b>Feature maps</b><span>ImageNet-trained filters converted pixels into learned visual features.</span></div><i>→</i>
+        <div><small>GLOBAL AVERAGE POOLING</small><b>One value per feature map</b><span>Each map was averaged across its width and height to form a compact feature vector.</span></div><i>→</i>
+        <div><small>DROPOUT 0.20</small><b>Regularisation</b><span>During training, 20% of these features were randomly suppressed to discourage over-reliance.</span></div><i>→</i>
+        <div class="head-output"><small>DENSE(1) + SIGMOID</small><b>Restricted probability</b><span>Every pooled feature connects to one output neuron, producing a value from 0 to 1.</span></div>
+      </div>
+      <div class="dense-definition">
+        <h3>What is a fully connected or dense layer?</h3>
+        <p><strong>Dense</strong> and <strong>fully connected</strong> mean the same thing: every input arriving at the layer has a learned weight connecting it to every neuron in that layer. In this project the final dense layer had just one sigmoid neuron. It learned how strongly each pooled CNN feature should count for or against the restricted class.</p>
+        <p>The dense layer did not inspect raw pixels. The CNN base had already transformed the image into meaningful feature signals.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="benchmark" class="section alt benchmark-section">
@@ -188,6 +207,7 @@
     <a class="metrics-callout curve-callout" href="learning-curves.html"><span>How did training behave?</span><strong>Learn to interpret training accuracy, validation accuracy, training loss and validation loss →</strong></a>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="grid-two"><div class="chart-box"><canvas id="benchmarkChart"></canvas></div><aside class="panel result-panel"><p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p><div id="tiles" class="tiles"></div></aside></div>
+    <article id="architecture" class="architecture-panel" aria-live="polite"></article>
     <div id="deltas" class="deltas"></div>
     <div class="key-line"><strong>Read this carefully</strong><span>Architecture chronology does not guarantee better performance on a particular downstream task. The benchmark decides.</span></div>
   </div>
@@ -195,6 +215,14 @@
 
 <section id="fine" class="section">
   <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>Better overall performance can still change the error trade-off.</h2></div><p class="section-intro">Accuracy alone hides the important question: which mistakes disappeared, and which mistakes increased?</p></div>
+    <div class="fine-process">
+      <article><span>1</span><div><small>START FROM THE WINNER</small><h3>Load the best frozen checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Its trained classification head and ImageNet feature extractor were retained.</p></div></article>
+      <article><span>2</span><div><small>OPEN THE DEEPEST PART</small><h3>Unfreeze the final 20 base layers</h3><p>Earlier layers stayed fixed. Only the deepest 20 layers of the pretrained base—plus the classification head—were allowed to change.</p></div></article>
+      <article><span>3</span><div><small>PROPAGATE THE ERROR BACKWARDS</small><h3>Backpropagation calculates useful changes</h3><p>Each prediction produced a loss. Gradients carried that error backwards from the sigmoid output, through the head and into the 20 unfrozen layers.</p></div></article>
+      <article><span>4</span><div><small>MAKE SMALL UPDATES</small><h3>Adam updates trainable weights at 1e-5</h3><p>The low learning rate made cautious adjustments, helping deeper features specialise without rapidly overwriting useful ImageNet knowledge.</p></div></article>
+      <article><span>5</span><div><small>CONTROL GENERALISATION</small><h3>Validate, stop and retain the best checkpoint</h3><p>Training allowed up to 15 epochs with class weighting and patience 4. Early stopping limited overfitting, and the best validation checkpoint—not simply the last epoch—was evaluated.</p></div></article>
+    </div>
+    <div class="fine-boundary"><strong>Important correction:</strong><span>fine-tuning does not “work backwards deeper into the model” by permanently opening one layer after another. The chosen final 20 layers were trainable together. Backpropagation then carried gradients backwards through that trainable region on every batch.</span></div>
     <a class="inline-help" href="learning-curves.html#project-curves">How should I read the frozen and fine-tuned learning curves? →</a>
     <div class="chart-box tall"><canvas id="fineChart"></canvas></div><div id="fineDeltas" class="deltas"></div>
     <div class="trade"><div class="good"><b>−15</b><span>false positives</span><small>27 → 12</small></div><div class="bad"><b>+3</b><span>false negatives</span><small>3 → 6</small></div><div><b>+0.0327</b><span>MCC</span><small>0.9101 → 0.9428</small></div></div>
