@@ -24,12 +24,12 @@ body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(-
 .nav-dropdown[open] summary::after{transform:rotate(180deg)}
 .nav-dropdown summary:hover,.nav-dropdown[open] summary{color:var(--blue)}
 .nav-dropdown summary:focus-visible{outline:3px solid rgba(44,111,176,.3);outline-offset:5px;border-radius:5px}
-.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 14px);z-index:50;display:grid;gap:4px;width:320px;padding:10px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
-.nav-dropdown-menu a{display:block;padding:11px 13px;border-radius:10px;font-size:1rem!important;line-height:1.35}
+.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 10px);z-index:50;display:grid;gap:0;width:320px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}
+.nav-dropdown-menu a{display:block;overflow:hidden;padding:7px 10px;border-radius:8px;font-size:.92rem!important;line-height:1.2;text-overflow:ellipsis;white-space:nowrap}
 .nav-dropdown-menu a:hover{background:var(--lightblue)}
 .nav-dropdown-menu strong,.nav-dropdown-menu small{display:block}
 .nav-dropdown-menu strong{color:var(--ink);font-size:1rem}
-.nav-dropdown-menu small{margin-top:2px;color:var(--muted);font-size:.88rem;font-weight:600}
+.nav-dropdown-menu small{display:none!important}
 .hero{padding:105px 0 90px;background:radial-gradient(circle at 80% 20%,#dceafa 0,transparent 28%),linear-gradient(135deg,#fff 0,#f4f8fc 55%,#edf4fb 100%)}
 .hero-grid{display:grid;grid-template-columns:1.45fr .75fr;gap:70px;align-items:center}
 .eyebrow,.chapter{text-transform:uppercase;letter-spacing:.13em;font-weight:900;font-size:.74rem;color:var(--blue);margin:0 0 10px}
@@ -300,8 +300,8 @@ footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted)}
 .nav nav.is-open{display:flex}
 .nav nav>a,.nav-dropdown>summary{width:100%;padding:13px 14px;border-radius:9px;font-size:1.05rem}
 .nav nav>a:hover,.nav-dropdown>summary:hover{background:var(--lightblue)}
-.nav-dropdown-menu{position:static;width:100%;margin:0 0 8px;padding:6px 8px 8px;background:#f5f8fb;border:0;border-radius:10px;box-shadow:none}
-.nav-dropdown-menu a{padding:12px 13px}
+.nav-dropdown-menu{position:static;width:100%;margin:0 0 5px;padding:4px 6px;background:#f5f8fb;border:0;border-radius:9px;box-shadow:none}
+.nav-dropdown-menu a{padding:7px 9px}
 body.menu-open{overflow:hidden}
 .hero-grid,.section-head,.transfer-grid,.grid-two,.benchmark-results{grid-template-columns:1fr}
 .head-route{grid-template-columns:1fr}
