@@ -343,6 +343,8 @@ body.menu-open{overflow:hidden}
 .key-line{grid-template-columns:1fr}
 .footer-grid{flex-direction:column}
 .stepper{flex-direction:column}
+.benchmark-section .stepper{flex-direction:row;gap:8px}
+.benchmark-section .stepper .btn{padding:10px 12px;font-size:.86rem}
 .chart-box{height:430px;padding:10px}
 .labelled-visual{height:475px}
 .fine-stepper+.chart-box{height:340px}
@@ -401,6 +403,8 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .metrics-callout:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
 .metrics-callout span{color:#b9d2eb}
 .benchmark-heading{grid-template-columns:1fr;margin-bottom:20px}
+.benchmark-section .benchmark-heading{margin-bottom:4px}
+.benchmark-section .stepper{margin:7px 0 14px}
 .benchmark-learning-links{margin-top:26px}
 .benchmark-learning-links .metrics-callout:last-child{margin-bottom:0}
 .inline-help{display:inline-block;color:var(--navy);font-weight:850;margin:-24px 0 22px}
