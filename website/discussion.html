@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Discussion of the Restricted Dog CNN Classifier results: benchmarking, fine-tuning, learning curves, Grad-CAM, limitations and conclusions.">
+  <title>Discussion · Restricted Dog CNN Classifier</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20260723-35">
+  <script src="navigation.js?v=20260723-13" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark four-dot-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Restricted Dog CNN Classifier</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu"><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-label">Menu</span></button>
+    <nav id="primary-navigation" aria-label="Primary navigation"></nav>
+  </div>
+</header>
+<main>
+  <section class="theory-hero"><div class="wrap"><p class="eyebrow">Interpretation of this project</p><h1>Discussion</h1><p class="lede">What the benchmark, fine-tuning experiment, learning curves and Grad-CAM cases mean when considered together.</p><div class="theory-index"><a href="#benchmark-finding">Benchmark</a><a href="#fine-tuning-finding">Fine-tuning</a><a href="#learning-curve-finding">Learning curves</a><a href="#gradcam-finding">Grad-CAM</a><a href="#limitations">Limitations</a></div></div></section>
+
+  <section id="benchmark-finding" class="section"><div class="wrap"><div class="section-head"><div><h2>Benchmark finding</h2></div><p class="section-intro">All models used the same binary task and evaluation logic, allowing their frozen transfer-learning performance to be compared directly.</p></div><div class="benchmark-key conclusion"><h3>InceptionResNetV2 provided the strongest overall balance</h3><p>Its combination of accuracy, precision, recall and F1 made it the selected model for fine-tuning. Selection did not depend on accuracy alone.</p></div><div class="buttons"><a class="btn primary" href="index.html#benchmark">Explore the benchmark</a><a class="btn" href="metrics.html">Review the metrics</a></div></div></section>
+
+  <section id="fine-tuning-finding" class="section alt"><div class="wrap"><div class="section-head"><div><h2>Fine-tuning changed the error trade-off</h2></div><p class="section-intro">Unfreezing the final 20 layers improved accuracy, precision and F1, while restricted-class recall fell slightly.</p></div><div class="concept-grid four"><article class="concept"><h3>Accuracy</h3><p>96.79% → 97.96%</p></article><article class="concept"><h3>Precision</h3><p>86.85% → 92.89%</p></article><article class="concept"><h3>Recall</h3><p>97.37% → 96.32%</p></article><article class="concept"><h3>F1</h3><p>91.81% → 94.57%</p></article></div><div class="benchmark-key"><h3>Fewer false positives, two more false negatives</h3><p>False positives fell from 28 to 14, while false negatives rose from 5 to 7. Fine-tuning improved overall balance, but it did not improve every consequence of error.</p></div><a class="return-link" href="index.html#fine">Explore the fine-tuning comparison →</a></div></section>
+
+  <section id="learning-curve-finding" class="section"><div class="wrap"><div class="section-head"><div><h2>Learning curves explain the training process</h2></div><p class="section-intro">Training and validation accuracy and loss show how learning developed across epochs. They complement the final held-out test metrics rather than replacing them.</p></div><div class="benchmark-key"><h3>Best checkpoint matters more than the last epoch</h3><p>Validation monitoring and early stopping were used to retain the strongest checkpoint and reduce unnecessary training after improvement had stalled.</p></div><div class="buttons"><a class="btn primary" href="index.html#fine">View the project curves</a><a class="btn" href="learning-curves.html">Learn how to interpret them</a></div></div></section>
+
+  <section id="gradcam-finding" class="section alt"><div class="wrap"><div class="section-head"><div><h2>Grad-CAM added evidence, not proof</h2></div><p class="section-intro">The selected cases show where class-relevant deep activations occurred across correct and incorrect predictions.</p></div><div class="benchmark-key"><h3>Attention to the dog is reassuring; background reliance is a warning</h3><p>The heatmaps help identify whether the model attended to plausible dog regions or potentially relied on contextual shortcuts. A plausible heatmap does not establish causal or human-like reasoning.</p></div><div class="buttons"><a class="btn primary" href="gradcam.html">Explore the Grad-CAM cases</a><a class="btn" href="theory.html#gradcam">Review Grad-CAM theory</a></div></div></section>
+
+  <section id="limitations" class="section"><div class="wrap"><div class="section-head"><div><h2>Limitations and conclusion</h2></div><p class="section-intro">The results are strong for the constructed Stanford Dogs experiment, but the task remains narrower than real-world breed identification.</p></div><div class="concept-grid three"><article class="concept"><h3>Constructed classes</h3><p>Six represented restricted breeds were grouped against a sampled set of comparison breeds. This is not the full legal category.</p></article><article class="concept"><h3>Dataset conditions</h3><p>Curated images may contain breed, pose and background patterns that differ from photographs encountered in practice.</p></article><article class="concept"><h3>Visual explanation</h3><p>Grad-CAM can expose possible shortcuts, but it cannot prove why a prediction occurred or eliminate bias.</p></article></div><div class="benchmark-key conclusion"><h3>Overall conclusion</h3><p>ImageNet transfer learning performed strongly, InceptionResNetV2 ranked first, and fine-tuning improved overall test balance. The experiment demonstrates a reproducible computer-vision workflow while also showing why headline accuracy must be interpreted alongside error counts, training behaviour and explanation evidence.</p></div><div class="buttons"><a class="btn primary" href="documents.html?document=report">Read the report</a><a class="btn" href="theory.html">Open the literature review</a></div></div></section>
+</main>
+<footer><div class="wrap footer-grid"><div><b>Discussion</b><span>Interpretation of the project findings</span></div><div><a href="index.html">Return to project →</a></div></div></footer>
+</body>
+</html>

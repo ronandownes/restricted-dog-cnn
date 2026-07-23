@@ -27,17 +27,29 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </details>
     <details class="nav-dropdown">
-      <summary>Discussion</summary>
+      <summary>Literature Review</summary>
       <div class="nav-dropdown-menu">
-        <a href="theory.html"><strong>Discussion overview</strong></a>
-        <a href="metrics.html"><strong>Metrics guide</strong></a>
-        <a href="learning-curves.html"><strong>Learning curves</strong></a>
+        <a href="theory.html"><strong>Literature review overview</strong></a>
         <a href="theory.html#bitter-lesson"><strong>Feature engineering</strong></a>
         <a href="theory.html#benchmark-lifecycle"><strong>Benchmark lifecycle</strong></a>
+        <a href="theory.html#imagenet"><strong>ImageNet and transfer learning</strong></a>
         <a href="theory.html#cnn"><strong>CNN foundations</strong></a>
         <a href="theory.html#training"><strong>Training methods</strong></a>
         <a href="theory.html#architectures"><strong>CNN architectures</strong></a>
+        <a href="theory.html#gradcam"><strong>Grad-CAM theory</strong></a>
         <a href="theory.html#transformers"><strong>Transformers and LLMs</strong></a>
+        <a href="theory.html#sources"><strong>Papers and sources</strong></a>
+      </div>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Discussion</summary>
+      <div class="nav-dropdown-menu">
+        <a href="discussion.html"><strong>Project interpretation</strong></a>
+        <a href="discussion.html#benchmark-finding"><strong>Benchmark findings</strong></a>
+        <a href="discussion.html#fine-tuning-finding"><strong>Fine-tuning trade-off</strong></a>
+        <a href="discussion.html#learning-curve-finding"><strong>Learning curves</strong></a>
+        <a href="discussion.html#gradcam-finding"><strong>Grad-CAM findings</strong></a>
+        <a href="discussion.html#limitations"><strong>Limitations and conclusion</strong></a>
       </div>
     </details>
     <details class="nav-dropdown">
