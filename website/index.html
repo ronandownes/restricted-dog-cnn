@@ -92,7 +92,7 @@
 <section id="context" class="section context-section">
   <div class="wrap">
     <div class="section-head benchmark-heading">
-      <div><h2>Restricted Dog Breeds in Ireland</h2><p class="section-subtitle">Irish legislation created the classification context, while its limits make clear why image classification cannot determine legal identity or dangerousness.</p></div>
+      <div><h2>Restricted Dog Breeds in Ireland</h2><p class="section-subtitle">Irish legislation provided the real-world context for a binary image-classification study using the Stanford Dogs dataset.</p></div>
     </div>
     <div class="context-grid">
       <article class="context-card law-card">
@@ -108,16 +108,11 @@
         <p class="context-small">This is a reproducible research construction—not a complete representation of every dog covered by Irish law.</p>
       </article>
       <article class="context-card boundary-card">
-        <span class="context-year">The boundary</span>
-        <h3>Image classification is not legal identification</h3>
-        <p>Breed labels can be uncertain, crosses are difficult to determine visually, appearance does not establish behaviour, and a model trained on curated images does not reproduce real deployment conditions.</p>
-        <strong>The experiment benchmarks CNN transfer learning. It does not decide whether an individual dog is legally restricted or dangerous.</strong>
+        <span class="context-year">Bias &amp; fairness</span>
+        <h3>What the dataset may teach the model</h3>
+        <p>Breed representation is uneven, the positive class combines visually different breeds, and recurring settings such as grass or show poses can become shortcuts. Breed-level results and Grad-CAM therefore matter alongside headline accuracy.</p>
+        <strong>The experiment classifies the two dataset groups; it does not assess an individual dog’s behaviour.</strong>
       </article>
-    </div>
-    <div class="xl-note">
-      <div><span>Later policy development</span><h3>XL Bully regulations created a separate, stricter regime.</h3></div>
-      <p>The 2024 regulations define an XL Bully using a physical-conformation standard. Since 1 February 2025, ownership requires a valid Certificate of Exemption. This later development reinforces the project’s central caution: legal classification can depend on rules and evidence that an image classifier cannot supply.</p>
-      <a href="https://www.irishstatutebook.ie/eli/2024/si/491/made/en/print" target="_blank" rel="noopener">Read the 2024 Regulations ↗</a>
     </div>
     <div class="source-line">Official context: <a href="https://www.gov.ie/en/department-of-agriculture-food-and-the-marine/policy-information/dog-control/" target="_blank" rel="noopener">Government of Ireland dog-control guidance ↗</a></div>
   </div>
@@ -314,7 +309,7 @@
       <div><span class="tag TP">True positive</span><h3>Explore all twelve cases</h3><p>The dedicated page contains full-width TP, TN, FP and FN examples, filters, case interpretation and the limits of heatmap evidence.</p></div>
       <a class="btn primary" href="gradcam.html">Open the Grad-CAM study →</a>
     </div>
-    <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction. It does not prove why the model decided, and it certainly does not establish behaviour, danger or legal identity. <a href="theory.html#gradcam">Learn how Grad-CAM works →</a></span></div>
+    <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction; it does not prove causal reasoning. <a href="theory.html#gradcam">Learn how Grad-CAM works →</a></span></div>
   </div>
 </section>
 
