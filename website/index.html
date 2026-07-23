@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-9">
+  <link rel="stylesheet" href="styles.css?v=20260723-10">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-8" defer></script>
+  <script src="app.js?v=20260723-10" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -226,13 +226,12 @@
 
 <section id="fine" class="section">
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
-    <div class="chart-box tall"><canvas id="fineChart"></canvas></div>
-    <div id="fineDeltas" class="deltas"></div>
-    <div class="fine-matrices">
-      <article class="cm-card"><div class="cm-title"><div><small>Before fine-tuning</small><h3>Frozen CNN base</h3></div><span>96.79%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>810</b></div><div class="warn"><small>False positive</small><b>28</b></div><div class="badcell"><small>False negative</small><b>5</b></div><div class="ok"><small>True positive</small><b>185</b></div></div></article>
-      <article class="cm-card selected"><div class="cm-title"><div><small>After fine-tuning</small><h3>Final 20 base layers trainable</h3></div><span>97.96%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>824</b><em>+14</em></div><div class="warn"><small>False positive</small><b>14</b><em>−14</em></div><div class="badcell"><small>False negative</small><b>7</b><em>+2</em></div><div class="ok"><small>True positive</small><b>183</b><em>−2</em></div></div></article>
+    <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next view →</button></div>
+    <div class="benchmark-results">
+      <div class="chart-box"><canvas id="fineChart"></canvas></div>
+      <aside id="finePanel" class="panel result-panel" aria-live="polite"></aside>
     </div>
-    <div class="trade"><div class="good"><b>−14</b><span>false positives</span><small>28 → 14</small></div><div class="bad"><b>+2</b><span>false negatives</span><small>5 → 7</small></div><div><b>+1.17</b><span>accuracy points</span><small>96.79% → 97.96%</small></div></div>
+    <div id="fineDeltas" class="deltas"></div>
     <div class="fine-process">
       <article><span>1</span><div><small>START FROM THE SELECTED MODEL</small><h3>Load its best checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Before fine-tuning, its ImageNet CNN base was frozen and only its classification head had learned this task.</p></div></article>
       <article><span>2</span><div><small>OPEN THE DEEPEST PART</small><h3>Unfreeze the final 20 base layers</h3><p>Earlier layers stayed fixed. Only the deepest 20 layers of the pretrained base—plus the classification head—were allowed to change.</p></div></article>
