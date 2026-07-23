@@ -14,7 +14,7 @@
   <div class="wrap nav">
     <a class="brand" href="#top"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
     <nav aria-label="Primary navigation">
-      <a href="#imagenet">ImageNet</a><a href="#cnn">CNNs</a><a href="#evolution">Evolution</a><a href="#benchmark">My benchmark</a><a href="#transformers">Transformers</a><a href="#gradcam">Grad-CAM</a>
+      <a href="#context">Irish context</a><a href="#imagenet">ImageNet</a><a href="#cnn">CNNs</a><a href="#benchmark">My benchmark</a><a href="metrics.html">Metrics help</a><a href="#transformers">Transformers</a>
     </nav>
   </div>
 </header>
@@ -26,7 +26,7 @@
       <p class="eyebrow">MSc Data Analytics · Computer Vision Learning Site</p>
       <h1>From <span>ImageNet</span> to CNNs to <span>Vision Transformers</span></h1>
       <p class="lede">Learn the ideas by following the problems that forced computer vision to change. Then see those ideas tested in a real six-model transfer-learning benchmark.</p>
-      <div class="buttons"><a class="btn primary" href="#imagenet">Start the story</a><a class="btn" href="#benchmark">Jump to my experiment</a></div>
+      <div class="buttons"><a class="btn primary" href="#context">Start with the Irish context</a><a class="btn" href="#benchmark">Jump to my experiment</a></div>
       <p class="byline">Ronan Downes · MSc Data Analytics · CCT College Dublin · 2026</p>
     </div>
     <aside class="hero-map" aria-label="Learning journey">
@@ -38,7 +38,42 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Dataset</span><i>→</i><span>Convolution</span><i>→</i><span>Architecture</span><i>→</i><span>Transfer learning</span><i>→</i><span>Explainability</span><i>→</i><span>Attention</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Irish context</span><i>→</i><span>Dataset</span><i>→</i><span>Convolution</span><i>→</i><span>Architecture</span><i>→</i><span>Evaluation</span><i>→</i><span>Attention</span></div></section>
+
+<section id="context" class="section context-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="chapter">00 · Why this project exists</p><h2>An Irish legal category created the classification question.</h2></div>
+      <p class="section-intro">This project began with a real policy context: Irish law places additional controls on specified dogs. The research asks whether transfer learning can distinguish a constructed restricted-versus-unrestricted image dataset—and, equally importantly, where that experiment stops being suitable for real-world use.</p>
+    </div>
+    <div class="context-grid">
+      <article class="context-card law-card">
+        <span class="context-year">1998</span>
+        <h3>Additional controls for specified dogs</h3>
+        <p>The Control of Dogs Regulations 1998 apply additional public-place controls to listed breeds, types and their crosses. These include secure muzzling and a sufficiently strong chain or leash no longer than two metres, held by someone over sixteen.</p>
+        <a href="https://www.irishstatutebook.ie/eli/1998/si/442/made/en/print" target="_blank" rel="noopener">Read the 1998 Regulations ↗</a>
+      </article>
+      <article class="context-card dataset-card">
+        <span class="context-year">The dataset</span>
+        <h3>Six represented restricted breeds</h3>
+        <p>The Stanford Dogs dataset contained six breeds used for the restricted class: Bull Mastiff, Doberman Pinscher, German Shepherd, Rhodesian Ridgeback, Rottweiler and Staffordshire Bull Terrier. Twenty-four other breeds formed the comparison class.</p>
+        <p class="context-small">This is a reproducible research construction—not a complete representation of every dog covered by Irish law.</p>
+      </article>
+      <article class="context-card boundary-card">
+        <span class="context-year">The boundary</span>
+        <h3>Image classification is not legal identification</h3>
+        <p>Breed labels can be uncertain, crosses are difficult to determine visually, appearance does not establish behaviour, and a model trained on curated images does not reproduce real deployment conditions.</p>
+        <strong>The experiment benchmarks CNN transfer learning. It does not decide whether an individual dog is legally restricted or dangerous.</strong>
+      </article>
+    </div>
+    <div class="xl-note">
+      <div><span>Later policy development</span><h3>XL Bully regulations created a separate, stricter regime.</h3></div>
+      <p>The 2024 regulations define an XL Bully using a physical-conformation standard. Since 1 February 2025, ownership requires a valid Certificate of Exemption. This later development reinforces the project’s central caution: legal classification can depend on rules and evidence that an image classifier cannot supply.</p>
+      <a href="https://www.irishstatutebook.ie/eli/2024/si/491/made/en/print" target="_blank" rel="noopener">Read the 2024 Regulations ↗</a>
+    </div>
+    <div class="source-line">Official context: <a href="https://www.gov.ie/en/department-of-agriculture-food-and-the-marine/policy-information/dog-control/" target="_blank" rel="noopener">Government of Ireland dog-control guidance ↗</a></div>
+  </div>
+</section>
 
 <section id="imagenet" class="section story-section">
   <div class="wrap">
@@ -95,6 +130,7 @@
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
     <div class="section-head"><div><p class="chapter">05 · My controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
+    <a class="metrics-callout" href="metrics.html"><span>New to model evaluation?</span><strong>Learn accuracy, precision, recall, F1, PR-AUC and MCC using this project’s results →</strong></a>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="grid-two"><div class="chart-box"><canvas id="benchmarkChart"></canvas></div><aside class="panel result-panel"><p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p><div id="tiles" class="tiles"></div></aside></div>
     <div id="deltas" class="deltas"></div>
@@ -111,6 +147,7 @@
 
 <section id="cm" class="section alt">
   <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false positives, but it also created three additional false negatives in the restricted class.</p></div>
+    <a class="inline-help" href="metrics.html#confusion-matrix">What do true positive, false positive and false negative mean? →</a>
     <div class="cm-wrap"><article class="cm-card"><div class="cm-title"><div><small>Frozen</small><h3>InceptionResNetV2</h3></div><span>97.08%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>811</b></div><div class="warn"><small>False positive</small><b>27</b></div><div class="badcell"><small>False negative</small><b>3</b></div><div class="ok"><small>True positive</small><b>187</b></div></div></article><div class="arrow">→</div><article class="cm-card selected"><div class="cm-title"><div><small>Fine-tuned</small><h3>InceptionResNetV2</h3></div><span>98.25%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>826</b><em>+15</em></div><div class="warn"><small>False positive</small><b>12</b><em>−15</em></div><div class="badcell"><small>False negative</small><b>6</b><em>+3</em></div><div class="ok"><small>True positive</small><b>184</b><em>−3</em></div></div></article></div>
   </div>
 </section>
