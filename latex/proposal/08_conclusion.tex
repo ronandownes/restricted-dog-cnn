@@ -1,0 +1,43 @@
+% ============================================================
+% 8. Conclusion
+% ============================================================
+\section{Conclusion}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{bandog.jpg}
+    \caption{The Bandog --- a restricted breed that is not a single standardised breed but a type of large, muscular cross, historically bred as a guard dog. The absence of a standardised phenotype makes visual classification particularly challenging, even for human experts.}
+    \label{fig:bandog}
+\end{figure}
+
+This proposal outlines a controlled investigation into the feasibility of automated restricted-breed classification using deep learning. The project is not a search for the highest accuracy number --- it is a systematic comparison of architectures, regularisation strategies, and evaluation metrics, grounded in a real legal problem that affects real animals and their owners.
+
+The design reflects three guiding principles:
+
+\textbf{Reproducibility.} Every random seed is fixed. Every dataset split is deterministic. Every hyperparameter search trial is logged. Another researcher with access to the Stanford Dogs Dataset and a Colab account should be able to reproduce every result in this project.
+
+\textbf{Interpretability.} No model is deployed as a black box. Grad-CAM visualisations accompany every prediction. The report includes both the model's best performances and its worst failures. Confidence scores are reported alongside binary predictions.
+
+\textbf{Honesty.} The project acknowledges what it cannot do. It cannot classify breeds absent from the training data. It cannot guarantee performance on field photographs taken in poor conditions. It cannot resolve the deeper question of whether breed-specific legislation is just. What it can do is provide evidence --- rigorous, transparent, reproducible evidence --- about what current technology can and cannot achieve in this domain.
+
+The project contributes to three audiences simultaneously. For the machine learning community, it provides a benchmark comparison of transfer learning architectures on a novel binary classification task. For policy makers and enforcement agencies, it demonstrates the potential and limitations of automated breed identification. For the general public, it offers a readable account of how deep learning works, what it can see, and where it struggles --- told through the lens of a question that matters to anyone who has ever walked past a dog and wondered what breed it was.
+
+\subsection{Timeline}
+
+\begin{table}[H]
+\centering
+\caption{Projected project timeline.}
+\label{tab:timeline}
+\begin{tabular}{ll}
+\toprule
+\textbf{Phase} & \textbf{Duration} \\
+\midrule
+Data acquisition, cleaning, and splitting & 1 week \\
+Architecture timeline experiments (AlexNet to ResNet) & 1 week \\
+Modern transfer learning zoo (6 models) & 1--2 weeks \\
+Hyperparameter search (Keras Tuner) & 1 week \\
+Evaluation, threshold optimisation, Grad-CAM & 1 week \\
+Report writing and revision & 2--3 weeks \\
+\bottomrule
+\end{tabular}
+\end{table}

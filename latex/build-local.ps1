@@ -1,5 +1,5 @@
 param(
-    [ValidateSet("report", "poster", "presentation", "slides", "all")]
+    [ValidateSet("proposal", "report", "poster", "presentation", "slides", "all")]
     [string]$Target = "report"
 )
 
@@ -60,6 +60,8 @@ Get-ChildItem (Join-Path $LatexDirectory "diagram_sources\*.tex") | ForEach-Obje
 
 $Documents = if ($Target -eq "all") {
     @("report", "poster", "presentation", "slides")
+} elseif ($Target -eq "proposal") {
+    @()
 } else {
     @($Target)
 }
@@ -123,6 +125,57 @@ try {
 }
 finally {
     Pop-Location
+}
+
+if ($Target -eq "proposal" -or $Target -eq "all") {
+    $ProposalDirectory = Join-Path $LatexDirectory "proposal"
+    Write-Host "Compiling proposal\main.tex..." -ForegroundColor Cyan
+
+    Push-Location $ProposalDirectory
+    try {
+        & pdflatex `
+            -file-line-error `
+            -halt-on-error `
+            -interaction=nonstopmode `
+            "main.tex"
+
+        if ($LASTEXITCODE -ne 0) {
+            throw "Compilation failed: proposal\main.tex"
+        }
+
+        if (
+            (Test-Path "main.aux") -and
+            (Select-String -Path "main.aux" -Pattern "\\bibdata" -Quiet)
+        ) {
+            Write-Host "Building bibliography for proposal..." -ForegroundColor Cyan
+            & bibtex main
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Bibliography compilation failed: proposal"
+            }
+        }
+
+        1..2 | ForEach-Object {
+            & pdflatex `
+                -file-line-error `
+                -halt-on-error `
+                -interaction=nonstopmode `
+                "main.tex"
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Compilation failed on final pass: proposal\main.tex"
+            }
+        }
+
+        Copy-Item `
+            (Join-Path $ProposalDirectory "main.pdf") `
+            (Join-Path $DocsDirectory "dog_cnn_research_proposal.pdf") -Force
+
+        Write-Host "Created docs\dog_cnn_research_proposal.pdf" -ForegroundColor Green
+    }
+    finally {
+        Pop-Location
+    }
 }
 
 Write-Host "Local LaTeX build complete." -ForegroundColor Green

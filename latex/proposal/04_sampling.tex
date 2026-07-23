@@ -1,0 +1,37 @@
+% ============================================================
+% 4. Sampling Strategy
+% ============================================================
+\section{Sampling Strategy}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{rhodesian_ridgeback.jpg}
+    \caption{The Rhodesian Ridgeback --- a restricted breed known for its distinctive dorsal ridge of backward-growing hair. In preliminary experiments, it achieved the highest per-breed classification accuracy (80.6\%), likely due to this unique visual feature.}
+    \label{fig:rhodesian_ridgeback}
+\end{figure}
+
+\subsection{Source Dataset}
+
+The Stanford Dogs Dataset \citep{khosla2011novel} provides the foundation: 20,580 images across 120 breeds, sourced from ImageNet and annotated with breed-level labels. The dataset was selected for three reasons: it is publicly available under a research licence, it is widely used in the literature (enabling comparison with published results), and it contains sufficient examples of most Irish restricted breeds.
+
+\subsection{Label Engineering: From 120 Breeds to Two Classes}
+
+The core task is binary: \textit{restricted} versus \textit{unrestricted}. The restricted class is constructed by mapping the eleven breeds listed in the Control of Dogs Regulations 1998 \citep{government1991} to their Stanford Dogs equivalents. Not all restricted breeds appear in the dataset --- the American Pit Bull Terrier, Japanese Tosa, Bandog, and XL Bully are absent from Stanford Dogs. The breeds successfully mapped are:
+
+\begin{itemize}
+    \item Bull Mastiff, Doberman Pinscher, German Shepherd, Rhodesian Ridgeback, Rottweiler, Staffordshire Bull Terrier
+\end{itemize}
+
+The unrestricted class is constructed by randomly sampling 24 breeds from the remaining 114, using a fixed random seed (58) for reproducibility. This deliberate over-representation of the unrestricted class (24 breeds versus 6) reflects the real-world prior: most dogs encountered by a warden will not be restricted.
+
+\subsection{Stratified Splitting}
+
+The combined dataset is split 60/20/20 into training, validation, and test sets using stratified random sampling at the breed level. This ensures that every breed appears in every split, preventing the model from encountering unseen breeds at evaluation time --- a form of data leakage that would inflate apparent performance.
+
+\subsection{Dataset Size and the Scaling Question}
+
+A key control experiment addresses the question: \textit{how much data is enough?} The full dataset will be compared against 75\% and 50\% subsets, with performance metrics logged at each level. If accuracy degrades gracefully, the model is robust; if it collapses, the dataset is at the minimum viable size. This informs any future deployment where additional labelled images may not be available.
+
+\subsection{Ethical Sourcing}
+
+All images are sourced from the Stanford Dogs Dataset, which is derived from ImageNet and available for academic research. No personally identifiable information is present in the dataset. No user-generated content is collected. The project complies with GDPR principles of data minimisation and purpose limitation \citep{voigt2017gdpr}.

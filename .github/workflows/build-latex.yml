@@ -17,10 +17,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Compile report, poster, presentation and slides
+      - name: Compile proposal, report, poster, presentation and slides
         uses: xu-cheng/latex-action@v4
         with:
           root_file: |
+            latex/proposal/main.tex
             latex/report.tex
             latex/poster.tex
             latex/presentation.tex
@@ -42,6 +43,7 @@ jobs:
 
       - name: Copy compiled PDFs into docs
         run: |
+          cp latex/proposal/main.pdf docs/dog_cnn_research_proposal.pdf
           cp latex/report.pdf docs/dog_cnn_report.pdf
           cp latex/poster.pdf docs/dog_cnn_poster.pdf
           cp latex/presentation.pdf docs/dog_cnn_presentation.pdf
@@ -52,6 +54,7 @@ jobs:
         with:
           name: restricted-dog-cnn-pdfs
           path: |
+            docs/dog_cnn_research_proposal.pdf
             docs/dog_cnn_report.pdf
             docs/dog_cnn_poster.pdf
             docs/dog_cnn_presentation.pdf
@@ -62,7 +65,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/dog_cnn_report.pdf docs/dog_cnn_poster.pdf \
+          git add docs/dog_cnn_research_proposal.pdf docs/dog_cnn_report.pdf docs/dog_cnn_poster.pdf \
             docs/dog_cnn_presentation.pdf docs/dog_cnn_slides.pdf
           if git diff --cached --quiet; then
             echo "Compiled PDFs are already current."

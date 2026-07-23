@@ -4,16 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
-  <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-32">
+  <title>Restricted Dog CNN Classifier</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20260723-33">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
   <script src="app.js?v=20260723-20" defer></script>
-  <script src="navigation.js?v=20260723-9" defer></script>
+  <script src="navigation.js?v=20260723-10" defer></script>
 </head>
 <body>
 <header class="site-header">
   <div class="wrap nav">
-    <a class="brand" href="#top"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
+    <a class="brand" href="#top"><span class="brand-mark four-dot-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>Restricted Dog CNN Classifier</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
       <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="menu-label">Menu</span>
@@ -114,6 +115,10 @@
         <strong>The experiment classifies the two dataset groups; it does not assess an individual dog’s behaviour.</strong>
       </article>
     </div>
+    <figure class="context-dog-visual">
+      <img src="assets/restricted-german-shepherd.jpg" alt="A German Shepherd standing on grass">
+      <figcaption><strong>One category, many visual forms.</strong> German Shepherds are one of the six represented restricted breeds in the project dataset. Image reproduced from the original research proposal; source: <a href="https://commons.wikimedia.org/wiki/Category:German_Shepherd_Dog" target="_blank" rel="noopener">Wikimedia Commons ↗</a>.</figcaption>
+    </figure>
     <div class="source-line">Official context: <a href="https://www.gov.ie/en/department-of-agriculture-food-and-the-marine/policy-information/dog-control/" target="_blank" rel="noopener">Government of Ireland dog-control guidance ↗</a></div>
   </div>
 </section>
@@ -323,9 +328,9 @@
 
 <section id="submissions" class="section resources">
   <div class="wrap"><div class="section-head"><div><p class="chapter">Project record</p><h2>Submissions</h2></div><p class="section-intro">Open the assessed report and its visual communication formats, or inspect the complete code repository.</p></div>
-    <div class="artefacts"><a href="documents.html?document=report">Report</a><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
+    <div class="artefacts"><a href="documents.html?document=proposal">Proposal</a><a href="documents.html?document=report">Report</a><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
   </div>
 </section>
 </main>
-<footer><div class="wrap footer-grid"><div><b>Restricted Dog CNN</b><span>ImageNet → CNN → Transfer Learning → Grad-CAM → ViT</span></div><div>Ronan Downes · MSc Data Analytics · 2026</div></div></footer>
+<footer><div class="wrap footer-grid"><div><b>Restricted Dog CNN Classifier</b><span>ImageNet → CNN → Transfer Learning → Grad-CAM → ViT</span></div><div>Ronan Downes · MSc Data Analytics · 2026</div></div></footer>
 </body></html>

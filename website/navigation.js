@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <details class="nav-dropdown">
       <summary>Submissions</summary>
       <div class="nav-dropdown-menu">
+        <a href="documents.html?document=proposal"><strong>Proposal</strong></a>
         <a href="documents.html?document=report"><strong>Report</strong></a>
         <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
         <a href="documents.html?document=poster"><strong>Poster</strong></a>

@@ -1,0 +1,50 @@
+% ============================================================
+% 2. Research Objectives and Hypotheses
+% ============================================================
+\section{Research Objectives and Hypotheses}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{english_bull_terrier.jpg}
+    \caption{The English Bull Terrier --- one of eleven restricted breeds under Irish law. Its distinctive egg-shaped head makes it relatively identifiable, but crossbred dogs present far greater challenges.}
+    \label{fig:english_bull_terrier}
+\end{figure}
+
+\subsection{Primary Objective}
+
+To evaluate and compare the performance of multiple CNN architectures --- spanning the full history of the ImageNet competition from AlexNet (2012) to modern architectures like InceptionResNetV2 and NASNetMobile --- on the binary classification of restricted versus unrestricted dog breeds under Irish legislation.
+
+This is not a single-model study. It is a controlled experiment across six to ten architectures, using identical data, identical evaluation metrics, and identical training conditions, to answer a specific empirical question: \textit{does architectural progress matter for this task, or does the size and quality of the dataset matter more?}
+
+\subsection{Secondary Objectives}
+
+\begin{enumerate}
+    \item \textbf{Curate a clean, reproducible dataset} from the Stanford Dogs collection, with legally grounded label engineering mapping each breed to its Irish regulatory status.
+
+    \item \textbf{Systematically search for optimal hyperparameters} rather than hand-tuning. Dropout rates, learning rates, augmentation intensity, and fine-tuning depth will be explored using Keras Tuner's Hyperband algorithm across 50--100 automated trials.
+
+    \item \textbf{Evaluate using metrics appropriate for imbalanced classification.} Accuracy alone is misleading when classes are unequal. This project will report precision, recall, F1-score, Matthews Correlation Coefficient (MCC), and PR-AUC, alongside threshold optimisation to calibrate the trade-off between false positives and false negatives.
+
+    \item \textbf{Interpret model decisions using Grad-CAM} \citep{selvaraju2017gradcam} to visualise which regions of a dog image the CNN focuses on when making its prediction. This is essential for trust: a model that looks at ears and snouts is plausible; a model that looks at grass or fencing is not.
+
+    \item \textbf{Tell the story of deep learning itself.} By running models from 2012 (AlexNet) through 2017 (SENet) and beyond, the project serves as a pedagogical timeline of how CNNs evolved --- from 8-layer networks with 60 million parameters to 152-layer residual networks that surpassed human performance on ImageNet.
+\end{enumerate}
+
+\subsection{Hypotheses}
+
+\textbf{H1:} Pre-trained CNN architectures using transfer learning will significantly outperform CNNs trained from scratch on the same restricted-breed dataset, achieving validation accuracy above 85\% compared to the 62--67\% baseline observed in preliminary experiments.
+
+\textbf{H2:} Automated hyperparameter search will identify configurations that outperform hand-tuned defaults, with the strongest improvements in recall for the restricted class (the safety-critical metric --- missing a restricted dog is worse than falsely flagging an unrestricted one).
+
+\textbf{H3:} Grad-CAM visualisations will confirm that high-performing models attend to morphologically meaningful features (head shape, ear position, body proportion) rather than dataset artefacts (background, image quality, photographer angle).
+
+\subsection{Alignment with the Real World}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{japanese_akita.jpg}
+    \caption{The Japanese Akita --- restricted under Irish law. Akitas are a large, powerful breed originally bred for guarding. Their thick double coat and curled tail are distinctive, but they share body mass and posture with several unrestricted breeds.}
+    \label{fig:akita}
+\end{figure}
+
+These objectives are deliberately practical. A dog warden in Thurles or Tralee does not need a Vision Transformer trained on 300 million parameters. They need a tool that works on a phone, gives a confidence score, and shows them \textit{why} it thinks a dog is restricted. Every design decision in this project --- from the choice of lightweight architectures to the emphasis on interpretability --- is guided by that end use.

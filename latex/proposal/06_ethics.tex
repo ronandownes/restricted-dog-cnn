@@ -1,0 +1,46 @@
+% ============================================================
+% 6. Ethical and Data Protection Considerations
+% ============================================================
+\section{Ethical and Data Protection Considerations}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{staffordshire_bull_terrier.jpg}
+    \caption{The Staffordshire Bull Terrier --- restricted under Irish law and frequently confused with the American Pit Bull Terrier and the American Staffordshire Terrier. This morphological ambiguity is the central ethical challenge: a misclassification can have life-or-death consequences for the animal.}
+    \label{fig:staffie}
+\end{figure}
+
+\subsection{The Stakes of Misclassification}
+
+Unlike most image classification projects, this one has direct consequences for living beings. A false positive (an unrestricted dog classified as restricted) could lead to seizure, mandatory muzzling, or legal proceedings against the owner. A false negative (a restricted dog classified as unrestricted) could leave the public at risk. Neither error is acceptable, but they carry different costs. The methodology explicitly addresses this through threshold optimisation: adjusting the decision boundary to reflect the relative severity of each type of error.
+
+\subsection{Data Sourcing and Compliance}
+
+All training data is sourced from the Stanford Dogs Dataset \citep{khosla2011novel}, which is derived from ImageNet and released for academic research. No personally identifiable information is present in the dataset --- the images depict dogs, not people. No web scraping of social media, personal websites, or enforcement databases is conducted.
+
+The project complies with GDPR principles \citep{voigt2017gdpr}:
+\begin{itemize}
+    \item \textbf{Purpose limitation:} data is used solely for breed classification research.
+    \item \textbf{Data minimisation:} only images necessary for the classification task are retained.
+    \item \textbf{Storage limitation:} all data is stored in the researcher's Google Drive and will be deleted upon project completion.
+\end{itemize}
+
+\subsection{Bias Awareness}
+
+The Stanford Dogs Dataset has known limitations. It was compiled from ImageNet, which over-represents certain breeds, angles, and photographic styles. Dogs are typically shown in well-lit, centred compositions --- conditions rarely matched in enforcement scenarios (poor lighting, motion blur, partial occlusion). The model's performance on curated test images will therefore represent an upper bound; real-world deployment would require additional validation on field photographs.
+
+Breed representation is also uneven. Some restricted breeds have 150+ images in the dataset; others (e.g., Staffordshire Bull Terrier) may have fewer. Data augmentation partially compensates, but cannot create diversity that does not exist in the source.
+
+\subsection{Transparency and Interpretability}
+
+The project adopts a transparency-by-design approach:
+\begin{itemize}
+    \item All code is versioned and will be published alongside the report.
+    \item Every model decision can be interrogated via Grad-CAM.
+    \item The report will include a ``failure gallery'' showing the model's worst misclassifications, not just its best performances.
+    \item Confidence scores accompany every prediction --- the model never says ``this is a Rottweiler'' without saying ``and I am 87\% sure.''
+\end{itemize}
+
+\subsection{Deployment Safeguards}
+
+This project is a proof of concept, not a production system. However, the report will discuss the governance required for deployment: human-in-the-loop review, appeal processes, regular retraining, and the principle that an algorithm should assist, never replace, a qualified assessor.

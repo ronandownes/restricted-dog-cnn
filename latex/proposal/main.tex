@@ -1,0 +1,81 @@
+% ============================================================
+% Research Proposal — Upgraded
+% Restricted Dog Breed Classification Using Deep Learning
+% Ronan Downes
+% ============================================================
+
+\documentclass[12pt]{article}
+\usepackage[a4paper, top=22mm, bottom=22mm, left=22mm, right=22mm]{geometry}
+\usepackage{setspace}
+\usepackage{times}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt
+}
+\usepackage[round]{natbib}
+
+\onehalfspacing
+\setlength{\parskip}{0.8em}
+
+% \title{\textbf{Research Proposal} \\
+%        \vspace{0.5em}
+%        \large\textit{Can a Machine classify a dog as  dangerous or not? Can I use transfer Learning and the Classification of Restricted Breeds Under Irish Law} \\
+%        \vspace{0.5em}
+%        \normalsize Ronan Downes}
+% \author{}
+% \date{\today}
+
+
+\title{\textbf{Research Proposal} \\
+       \vspace{0.5em}
+       \large\textit{Image-Based Restricted Dog Breed Classification Using CNN Transfer Learning and the Stanford Dogs Dataset} \\
+       \vspace{0.5em}
+       \normalsize Ronan Downes}
+\author{}
+\date{\today}
+\begin{document}
+
+\includepdf[pages=-]{rpecover.pdf}
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+
+\input{01_introduction}
+\newpage
+\input{02_objectives}
+\newpage
+\input{03_literature}
+\newpage
+\input{04_sampling}
+\newpage
+\input{05_methodology}
+\newpage
+\input{06_ethics}
+\newpage
+\input{07_challenges}
+\newpage
+\input{08_conclusion}
+\newpage
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

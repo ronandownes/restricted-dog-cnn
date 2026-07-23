@@ -1,0 +1,48 @@
+% ============================================================
+% 1. Introduction
+% ============================================================
+\section{Introduction: Why This Matters}
+
+On the afternoon of 4 June 2024, a child was attacked by an American XL Bully in Wexford. Within weeks, the Irish Government announced emergency legislation. By October 2024, importing, breeding, selling, or rehoming XL Bully dogs became illegal. By February 2025, ownership itself became prohibited without an exemption certificate requiring microchipping, licensing, and neutering \citep{rtenews2024}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.65\textwidth]{american_xl_bully.jpg}
+    \caption{The American XL Bully --- banned outright in Ireland since October 2024. Ownership requires a Certificate of Exemption from February 2025.}
+    \label{fig:xl_bully}
+\end{figure}
+
+But there is a deeper problem. Ireland's breed-specific legislation does not only cover the XL Bully. The Control of Dogs Regulations 1998 \citep{government1991} designates eleven additional breeds as \textit{restricted}: dogs that are not banned outright but must be muzzled, leashed (no longer than two metres), and handled by a person over sixteen years of age in all public places. The restricted breeds are:
+
+\begin{itemize}
+    \item American Pit Bull Terrier
+    \item Bull Mastiff
+    \item Doberman Pinscher
+    \item English Bull Terrier
+    \item German Shepherd (Alsatian)
+    \item Japanese Akita
+    \item Japanese Tosa
+    \item Rhodesian Ridgeback
+    \item Rottweiler
+    \item Staffordshire Bull Terrier
+    \item Bandog
+\end{itemize}
+
+Enforcement of these regulations depends almost entirely on a dog warden or Garda officer looking at a dog and making a visual judgement. That judgement is subjective, inconsistent, and prone to error --- particularly with crossbred dogs, dogs in poor condition, or breeds that share similar morphology \citep{clarke2018, voigt2017ethical}. A Staffordshire Bull Terrier and an American Pit Bull Terrier can look nearly identical to an untrained eye. A Labrador--Rottweiler cross may or may not trigger enforcement depending on which parent's features are more prominent.
+
+The consequences of misidentification are severe. A wrongly classified dog can be seized, quarantined, or destroyed. An owner who does not muzzle a restricted breed faces prosecution. The human cost is real: families separated from pets, dogs euthanised on the basis of appearance rather than behaviour.
+
+This project asks a simple question: \textbf{can a computer do better?}
+
+Specifically, it investigates whether convolutional neural networks (CNNs) --- the deep learning architectures that have dominated image classification since 2012 --- can learn to distinguish restricted from unrestricted dog breeds using photographs alone. The answer matters not just technically but ethically. If an algorithm can achieve higher accuracy and greater consistency than a human assessor, it could serve as a decision-support tool: not replacing the warden, but giving them a second opinion grounded in data rather than intuition.
+
+\subsection{Scope and Limitations of the Project}
+
+It is important to be clear about the scope of this study. This project does not claim that breed classification is, by itself, a valid basis for dangerous-dog policy; that is a separate ethical, veterinary and legal debate, well documented in the literature \citep{clarke2018}. Nor does the project propose a fully autonomous decision-making system. Instead, it offers a focused technical investigation: given the current legal reality of breed-specific legislation, can machine learning support more consistent and evidence-informed classification of restricted dog breeds?
+
+
+\subsection{The Broader Context: AI in Classification}
+
+Image classification powered by deep learning has transformed fields from medical imaging (detecting tumours in X-rays) to agriculture (identifying crop diseases from photographs) to everyday life (PlantNet, the app that identifies plants from a phone camera) \citep{PlantNet2025}. The core technology --- transfer learning from models pre-trained on millions of images --- is well understood and accessible. What varies is the quality of the question being asked, the rigour of the data preparation, and the honesty of the evaluation.
+
+This project sits at that intersection: a well-defined societal question (can we reliably classify restricted breeds?), a publicly available dataset (the Stanford Dogs collection of 20,000 labelled images), and a transparent methodology (systematic comparison of CNN architectures with interpretable outputs).

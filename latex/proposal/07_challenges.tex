@@ -1,0 +1,51 @@
+% ============================================================
+% 7. Expected Challenges
+% ============================================================
+\section{Expected Challenges and Mitigation Strategies}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{german_shepherd.jpg}
+        \caption{German Shepherd (restricted)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{bull_mastiff.jpg}
+        \caption{Bull Mastiff (restricted)}
+    \end{subfigure}
+    \caption{Two restricted breeds with very different morphology. The model must learn that ``restricted'' is a legal category, not a visual one --- these dogs share a legal status but not a body plan.}
+    \label{fig:two_restricted}
+\end{figure}
+
+\subsection{Challenge 1: Visual Similarity Between Classes}
+
+Some restricted and unrestricted breeds are nearly identical in appearance. A Staffordshire Bull Terrier (restricted) and a Boxer (unrestricted) share similar body proportions, coat types, and facial structure. The model must learn subtle discriminative features --- or acknowledge uncertainty when the visual signal is ambiguous.
+
+\textit{Mitigation:} Grad-CAM analysis will reveal whether the model has learned meaningful features or is relying on spurious correlations. Threshold optimisation will allow the model to express uncertainty rather than forcing a binary decision.
+
+\subsection{Challenge 2: Heterogeneous Positive Class}
+
+The restricted class is defined by law, not biology. A German Shepherd and a Japanese Akita are both restricted but share few visual features. This makes the positive class inherently heterogeneous, complicating the learning task.
+
+\textit{Mitigation:} Transfer learning from ImageNet provides rich, general-purpose features that can represent diverse breeds within a single class. The model learns ``restricted-ness'' as a combination of breed-specific patterns, not a single visual template.
+
+\subsection{Challenge 3: Limited Dataset Size}
+
+With approximately ten thousand images total and around two thousand in the restricted class, the dataset is small by deep learning standards. Training from scratch would overfit within a few epochs.
+
+\textit{Mitigation:} Transfer learning reduces the number of parameters that need to be learned from scratch. Data augmentation artificially expands the effective training set. Early stopping prevents overfitting. The scaling experiment (50\%, 75\%, 100\% of data) will quantify exactly how sensitive the model is to dataset size.
+
+\subsection{Challenge 4: Computational Resources}
+
+Training six to ten models, some with hyperparameter search across 50--100 trials, requires significant GPU time. A single training run of InceptionResNetV2 at 299$\times$299 takes approximately 20--30 minutes on a Colab T4 GPU.
+
+\textit{Mitigation:} Google Colab Pro provides access to T4 and A100 GPUs with extended session times. All intermediate results are saved to Google Drive, allowing training to resume after session timeouts. The Hyperband algorithm is specifically designed for efficient search, pruning unpromising configurations early.
+
+\subsection{Challenge 5: Missing Breeds}
+
+Several restricted breeds --- American Pit Bull Terrier, Japanese Tosa, Bandog, and XL Bully --- are absent from the Stanford Dogs Dataset. The model cannot learn to recognise breeds it has never seen.
+
+\textit{Mitigation:} The report will clearly document which breeds are included and which are absent, with an honest discussion of the implications for real-world deployment. Future work could incorporate web-scraped images of under-represented breeds, subject to appropriate licensing and quality control.

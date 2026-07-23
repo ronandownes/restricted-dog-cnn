@@ -1,0 +1,79 @@
+% ============================================================
+% 3. Literature Review
+% ============================================================
+\section{Literature Review}\label{sec:literature}
+
+This review traces three interconnected threads: the evolution of CNN architectures through the ImageNet competition, the application of transfer learning to small-dataset problems, and the specific challenges of dog breed classification in legal contexts.
+
+\subsection{The ImageNet Story: From Feature Engineering to Deep Learning}
+
+The ImageNet Large Scale Visual Recognition Challenge (ILSVRC), run annually from 2010 to 2017, is the single most important benchmark in the history of computer vision. Its trajectory tells the story of deep learning's rise.
+
+\begin{table}[H]
+\centering
+\caption{ILSVRC competition winners, 2010--2017. Human top-5 error rate is approximately 5.1\%.}
+\label{tab:ilsvrc}
+\begin{tabular}{lllrrl}
+\toprule
+\textbf{Year} & \textbf{Winner} & \textbf{Era} & \textbf{Top-5 Error} & \textbf{Depth} & \textbf{Key Innovation} \\
+\midrule
+2010 & NEC-UIUC   & Feature eng. & 28.2\% & --- & SIFT + Fisher vectors + SVM \\
+2011 & XRCE       & Feature eng. & 25.8\% & --- & Compressed Fisher vectors \\
+2012 & AlexNet    & Deep learning & 15.3\% & 8   & ReLU, dropout, multi-GPU \\
+2013 & ZFNet      & Deep learning & 11.2\% & 8   & Smaller filters (7$\times$7), feature visualisation \\
+2014 & GoogLeNet  & Deep learning &  6.7\% & 22  & Inception module --- parallel filter paths \\
+2014 & VGGNet$^*$ & Deep learning &  7.3\% & 16--19 & Deep stacks of 3$\times$3 convolutions \\
+2015 & ResNet     & Deep learning &  3.6\% & 152 & Skip connections; surpassed human performance \\
+2016 & Trimps-Soushen & Deep learning & 3.0\% & --- & Ensemble; no single canonical architecture \\
+2017 & SENet      & Deep learning &  2.3\% & 152+ & Channel attention --- learns which features matter \\
+\bottomrule
+\multicolumn{6}{l}{\footnotesize $^*$Runner-up in 2014 but equally influential as the winner.}
+\end{tabular}
+\end{table}
+
+Before 2012, the competition was won by classical machine learning methods: hand-crafted features (SIFT descriptors, histogram of oriented gradients) fed into support vector machines \citep{goodfellow2016deep}. Error rates hovered around 25--28\%. Then AlexNet arrived.
+
+\textbf{AlexNet (2012)} was the shock that launched the deep learning revolution. Alex Krizhevsky, Ilya Sutskever, and Geoffrey Hinton entered an eight-layer convolutional neural network that achieved a top-5 error of 15.3\% --- nearly ten percentage points ahead of the second-place entry \citep{krizhevsky2012imagenet}. AlexNet introduced three ideas that remain foundational: the ReLU activation function (replacing the slower sigmoid), dropout regularisation (randomly zeroing neurons during training to prevent overfitting), and training across multiple GPUs.
+
+\textbf{ZFNet (2013)} refined AlexNet with smaller convolutional filters (7$\times$7 instead of 11$\times$11), preserving more spatial information in early layers. Its more lasting contribution was a technique for visualising what CNNs learn at each layer --- demonstrating that early layers capture edges and textures, while deeper layers respond to complex object parts.
+
+\textbf{The 2014 double act} is the most interesting year in the competition's history. GoogLeNet (Inception V1) won with a 6.7\% error rate by introducing the Inception module: instead of choosing a single filter size at each layer, it applies 1$\times$1, 3$\times$3, and 5$\times$5 convolutions in parallel and concatenates the results. This produced a deeper network (22 layers) with far fewer parameters (6 million) than its competitors \citep{szegedy2015going}. VGGNet, the runner-up at 7.3\%, took the opposite approach: extreme simplicity, stacking sixteen to nineteen layers of 3$\times$3 convolutions. With 138 million parameters, VGG was computationally expensive but became the default backbone for transfer learning because its regular structure made it easy to adapt \citep{simonyan2014deep}.
+
+\textbf{ResNet (2015)} solved the problem that had limited all previous architectures: the vanishing gradient. As networks grow deeper, gradients shrink during backpropagation, making early layers nearly impossible to train. Kaiming He's solution was the residual connection --- a shortcut that adds the input of a block directly to its output, allowing gradients to flow through identity paths \citep{he2016resnet}. This enabled networks of 50, 101, and even 152 layers, achieving a 3.57\% top-5 error that surpassed human performance (estimated at 5.1\%) for the first time.
+
+\textbf{Why the competition stopped.} After 2017, the ILSVRC was discontinued. The problem had been largely solved --- error rates below 2.3\% left little room for architectural competition. Research shifted toward efficiency (MobileNet, EfficientNet), self-supervised learning, and Vision Transformers \citep{dosovitskiy2020image}. For a binary classification task like ours, the lesson is clear: the architectures available through standard libraries (VGG16, ResNet50, InceptionV3, Xception, InceptionResNetV2, NASNetMobile) represent decades of engineering and are more than sufficient.
+
+\subsection{Transfer Learning: Standing on the Shoulders of ImageNet}
+
+The reason these architectures are useful for dog breed classification is transfer learning. Rather than training a CNN from scratch on our ten thousand images (which would overfit quickly), we take a network that has already been trained on 1.2 million ImageNet images across 1,000 categories. The early layers --- which learn universal features like edges, textures, and colour gradients --- are frozen. Only the final classification layers are retrained on our specific task \citep{yosinski2014transferable}.
+
+This approach is well supported by the literature. \citet{yosinski2014transferable} demonstrated that the first few layers of CNNs trained on ImageNet learn features that generalise across tasks, while later layers become increasingly task-specific. \citet{tan2019efficientnet} showed that transfer learning from EfficientNet achieves state-of-the-art results on fine-grained classification tasks with as few as 5,000 training images.
+
+The practical implication is that architectural depth and pre-trained weight quality matter more than dataset size for our task. A VGG16 or ResNet50, pre-trained on ImageNet, arrives at our problem already knowing what fur, eyes, ears, and body proportions look like. Our fine-tuning merely teaches it which combinations of those features correspond to ``restricted'' versus ``unrestricted.''
+
+\subsection{Dog Breed Classification: The State of the Art}
+
+The Stanford Dogs Dataset \citep{khosla2011novel}, containing 20,580 images across 120 breeds, is the standard benchmark for fine-grained dog breed classification. \citet{liu2018dog} demonstrated that fine-tuning VGG16 on this dataset yields accuracy above 85\%, while more recent work with EfficientNet variants has pushed accuracy above 90\% on the full 120-class problem.
+
+However, binary classification of \textit{restricted versus unrestricted} breeds is a different problem. It requires the model to learn a legal boundary, not a biological one. A Rottweiler and a Doberman are both restricted but look very different. A Staffordshire Bull Terrier (restricted) and a Boxer (unrestricted) look very similar. This makes the task harder in some respects and easier in others --- the model must learn a heterogeneous positive class defined by law rather than morphology.
+
+No published study could be found that applies deep learning specifically to the classification of legally restricted breeds under Irish or UK legislation. This gap motivates the current project.
+
+\subsection{Interpretability: Grad-CAM and the Trust Problem}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{rottweiler.jpg}
+    \caption{The Rottweiler --- one of the more visually distinctive restricted breeds. Preliminary experiments showed it was the easiest breed for CNNs to classify, consistent with its strong morphological signal (black-and-tan colouring, blocky head, muscular build).}
+    \label{fig:rottweiler}
+\end{figure}
+
+A model that achieves 90\% accuracy but makes its decisions by looking at the grass behind the dog is not useful. Grad-CAM (Gradient-weighted Class Activation Mapping) \citep{selvaraju2017gradcam} addresses this by producing a heatmap showing which regions of an input image most influenced the prediction. For each image, three panels are generated: the original photograph, the Grad-CAM heatmap, and the heatmap overlaid on the original.
+
+This is not just a technical nicety --- it is an ethical requirement. In a regulatory context, any automated tool must be explainable. A dog warden shown a prediction alongside a heatmap highlighting the dog's head and shoulders can make an informed judgement. A prediction without explanation is a black box that cannot be challenged.
+
+\subsection{Algorithmic Fairness and Bias}
+
+\citet{buolamwini2018gender} demonstrated that commercial facial recognition systems performed significantly worse on darker-skinned faces --- a bias inherited from unbalanced training data. The same logic applies to animal classification: if the training set contains more images of Rottweilers than Bull Mastiffs, the model will be better at recognising Rottweilers. If most images show dogs in gardens with green backgrounds, the model may associate grass with ``restricted.''
+
+This project addresses bias through stratified sampling (ensuring each breed is represented proportionally in train, validation, and test splits), data augmentation (random flips, rotations, and zoom to reduce background dependence), and post-hoc analysis (Grad-CAM verification that the model attends to the dog, not the setting).

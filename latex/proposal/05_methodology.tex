@@ -1,0 +1,115 @@
+% ============================================================
+% 5. Methodology
+% ============================================================
+\section{Methodology}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{japanese_tosa.jpg}
+    \caption{The Japanese Tosa --- a restricted breed not present in the Stanford Dogs Dataset. Its absence illustrates a key limitation: the model can only classify breeds it has seen. Future work could incorporate web-scraped images of under-represented breeds.}
+    \label{fig:tosa}
+\end{figure}
+
+The methodology is structured as a six-notebook pipeline, each building on the previous one, designed to run on Google Colab with GPU acceleration and persistent storage via Google Drive.
+
+\subsection{Notebook 0: Data Preparation}
+
+The Stanford Dogs dataset is downloaded, extracted, and normalised. Breed folders are renamed from ImageNet synset notation (e.g., \texttt{n02106662-German\_Shepherd}) to readable slugs (\texttt{german\_shepherd}). Images are renamed sequentially within each breed. The restricted/unrestricted label mapping is applied, and the 60/20/20 stratified split is executed. A breed distribution analysis confirms balanced representation across splits.
+
+\subsection{Notebook 1: The Architecture Timeline}
+
+This notebook tells the story of ImageNet by training the canonical competition winners on our dataset: AlexNet (2012), VGG16 (2014), GoogLeNet/InceptionV3 (2014), and ResNet50 (2015). All use frozen ImageNet pre-trained weights with identical classification heads (GlobalAveragePooling2D, Dropout, Dense sigmoid). The purpose is pedagogical and comparative: how does 2012-era transfer learning compare with 2015-era transfer learning on the same binary task?
+
+\subsection{Notebook 2: Modern Transfer Learning Zoo}
+
+Six state-of-the-art architectures are trained under identical conditions:
+
+\begin{table}[H]
+\centering
+\caption{Model zoo: six architectures compared under identical conditions.}
+\label{tab:model_zoo}
+\begin{tabular}{llrr}
+\toprule
+\textbf{Architecture} & \textbf{Input Size} & \textbf{Parameters} & \textbf{Year} \\
+\midrule
+VGG16              & 224$\times$224 & 138M & 2014 \\
+ResNet50           & 224$\times$224 & 25M  & 2015 \\
+InceptionV3        & 299$\times$299 & 24M  & 2015 \\
+Xception           & 299$\times$299 & 23M  & 2016 \\
+InceptionResNetV2  & 299$\times$299 & 56M  & 2016 \\
+NASNetMobile       & 224$\times$224 & 5M   & 2018 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All models use frozen ImageNet backbones with a shared classification head: GlobalAveragePooling2D $\rightarrow$ Dropout(0.2) $\rightarrow$ Dense(1, sigmoid). Training runs for 22 epochs with early stopping (patience 3), Adam optimiser at $10^{-4}$, and data augmentation (random horizontal flips, 5\% rotation, 10\% zoom). Every epoch is logged to CSV. Model checkpoints are saved on validation loss improvement.
+
+\subsection{Notebook 3: Hyperparameter Search}
+
+Rather than guessing optimal hyperparameters, this notebook uses Keras Tuner's Hyperband algorithm to search over:
+
+\begin{itemize}
+    \item \textbf{Dropout rate:} 0.2, 0.3, 0.4, 0.5
+    \item \textbf{Learning rate:} $3 \times 10^{-5}$, $1 \times 10^{-4}$, $3 \times 10^{-4}$
+    \item \textbf{Fine-tuning depth:} freeze all, unfreeze last 10\%, 20\%, 30\% of base layers
+    \item \textbf{Augmentation intensity:} light (current), moderate (15\% rotation, 20\% zoom, brightness jitter), strong (30\% rotation, random erasing)
+\end{itemize}
+
+Hyperband is a principled early-stopping strategy for hyperparameter search: it allocates a small budget to many configurations, then progressively increases the budget for the most promising ones. Fifty to one hundred trials will be executed, with each trial lasting up to 8 epochs. The best configuration is then retrained for a full 30 epochs. All trial results are saved as CSV and JSON for the final report.
+
+\subsection{Notebook 4: Evaluation and Threshold Optimisation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{doberman_pinscher.jpg}
+    \caption{The Doberman Pinscher --- restricted under Irish law. In breed-specific binary classifiers, the Doberman achieved a validation accuracy of 77.7\%, placing it in the middle of the difficulty range.}
+    \label{fig:doberman}
+\end{figure}
+
+Standard evaluation reports accuracy, but for an imbalanced binary problem with real-world consequences, accuracy is insufficient. This notebook computes:
+
+\begin{itemize}
+    \item \textbf{Precision:} of dogs predicted as restricted, how many actually are? (False positives cause unnecessary enforcement.)
+    \item \textbf{Recall:} of dogs that are actually restricted, how many does the model catch? (False negatives are a safety risk.)
+    \item \textbf{F1-score:} the harmonic mean of precision and recall.
+    \item \textbf{Matthews Correlation Coefficient (MCC):} a balanced metric that accounts for all four cells of the confusion matrix, recommended for imbalanced datasets \citep{chicco2020mcc}.
+    \item \textbf{PR-AUC:} area under the precision--recall curve, more informative than ROC-AUC when classes are imbalanced.
+    \item \textbf{Threshold optimisation:} the default decision threshold is 0.5, but this may not be optimal. By sweeping thresholds from 0.1 to 0.9 and plotting precision, recall, and F1 at each, we can identify the threshold that best balances safety (recall) with fairness (precision).
+\end{itemize}
+
+\subsection{Notebook 5: Interpretability and Grad-CAM}
+
+For the best-performing model, Grad-CAM heatmaps are generated for one representative image per breed in the test set. Each output is a three-panel figure: original image, heatmap, and superimposed overlay. These visualisations are saved at 150 DPI for inclusion in the final report.
+
+The notebook also performs a \textit{failure case analysis}: examining the images where the model was most confident but wrong. This reveals systematic biases (e.g., does the model struggle with particular backgrounds, poses, or breeds?) and informs future data collection priorities.
+
+\subsection{Regularisation Techniques: What We Search For}
+
+The following regularisation and augmentation techniques are not assumed --- they are searched over:
+
+\begin{table}[H]
+\centering
+\caption{Regularisation and augmentation techniques explored in the hyperparameter search.}
+\label{tab:regularisation}
+\begin{tabular}{lp{8cm}}
+\toprule
+\textbf{Technique} & \textbf{Purpose} \\
+\midrule
+Dropout & Randomly zeros neurons during training; prevents co-adaptation of features \\
+Batch normalisation & Standardises layer activations per mini-batch; stabilises and accelerates training \\
+L2 weight decay & Penalises large weights; encourages simpler, more generalisable models \\
+Early stopping & Halts training when validation loss stops improving; prevents overfitting \\
+Random horizontal flip & Dogs face left or right equally; removes directional bias \\
+Random rotation & Simulates tilted photographs; improves robustness to camera angle \\
+Random zoom & Simulates distance variation; teaches the model to recognise dogs at different scales \\
+Random brightness & Simulates lighting conditions; reduces sensitivity to exposure \\
+Random erasing & Occludes random patches; forces the model to use multiple features, not just one \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The key principle is that these are not applied blindly. Each technique has a cost (computational time, potential under-fitting if too aggressive) and a benefit (reduced overfitting, better generalisation). The hyperparameter search finds the optimal combination for this specific dataset.
+
+\subsection{Why Not Vision Transformers?}
+
+Vision Transformers (ViT) \citep{dosovitskiy2020image} have shown impressive results on large-scale benchmarks, but they require substantially more data to outperform CNNs. ViT lacks the inductive bias of convolutions (translation equivariance, local connectivity), meaning it must learn spatial relationships from scratch. On a dataset of ten thousand images, a ViT would almost certainly overfit, whereas a CNN pre-trained on ImageNet arrives with that spatial knowledge built in. For completeness, the report will discuss ViT and its limitations in this context, but it will not be included in the experimental pipeline.
