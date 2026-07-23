@@ -104,6 +104,17 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .transfer-stack span{color:#9eb5cc;font-size:.8rem}
 .transfer-stack i{display:block;margin:7px 0 7px 18px;color:#88a9c9;font-style:normal}
 .transfer-stack .highlight{border-color:#6ea7dd;background:#173f73}
+.head-lesson{margin-top:48px;padding-top:38px;border-top:1px solid #294563}
+.head-route{display:grid;grid-template-columns:repeat(9,auto);gap:10px;align-items:stretch}
+.head-route>div{background:#142b47;border:1px solid #294563;border-radius:14px;padding:17px;min-width:0}
+.head-route small,.head-route b,.head-route span{display:block}
+.head-route small{color:#8fb5da;font-size:.68rem;font-weight:900;letter-spacing:.07em}
+.head-route span{color:#b7c8d9;font-size:.84rem;margin-top:8px}
+.head-route>i{align-self:center;color:#88a9c9;font-style:normal}
+.head-route .head-output{background:#173f73;border-color:#6ea7dd}
+.dense-definition{display:grid;grid-template-columns:.55fr 1.45fr;gap:28px;margin-top:24px;background:#fff;color:var(--ink);border-radius:16px;padding:27px}
+.dense-definition p{margin:0;color:var(--muted)}
+.dense-definition p+p{margin-top:12px}
 .stepper{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:25px 0}
 .stepper>div{text-align:center;display:flex;flex-direction:column}
 .stepper strong{font-size:1.45rem}
@@ -117,6 +128,14 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .tile{background:#f8fafc;border-top:4px solid var(--c);border-radius:10px;padding:12px}
 .tile small{display:block;color:var(--muted)}
 .tile b{font-size:1.25rem}
+.architecture-panel{margin-top:18px;background:#fff;border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:var(--radius);padding:25px;box-shadow:var(--shadow)}
+.architecture-panel small{color:var(--blue);font-weight:900;letter-spacing:.06em}
+.architecture-panel h3{margin:.35rem 0}
+.architecture-panel p{color:var(--muted)}
+.architecture-route{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:18px 0}
+.architecture-route b{background:var(--lightblue);color:var(--navy);padding:9px 12px;border-radius:9px}
+.architecture-route i{font-style:normal;color:var(--blue)}
+.architecture-why{margin-bottom:0}
 .deltas{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
 .delta{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;border-top:4px solid var(--orange)}
 .delta.up{border-top-color:var(--green)}
@@ -127,6 +146,14 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .trade b{font-size:1.9rem}
 .trade .good{border-top:5px solid var(--green)}
 .trade .bad{border-top:5px solid var(--red)}
+.fine-process{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.fine-process article{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;position:relative}
+.fine-process article>span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font-weight:900;margin-bottom:15px}
+.fine-process small{color:var(--blue);font-size:.67rem;font-weight:900;letter-spacing:.06em}
+.fine-process h3{font-size:1.05rem;margin:.4rem 0}
+.fine-process p{font-size:.9rem;color:var(--muted);margin-bottom:0}
+.fine-boundary{display:grid;grid-template-columns:auto 1fr;gap:14px;background:#fff2dd;border:1px solid #e7c99f;border-radius:13px;padding:18px 20px;margin-bottom:22px}
+.fine-boundary strong{color:#8a541c}
 .cm-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center}
 .cm-card{padding:24px}
 .cm-card.selected{outline:3px solid rgba(44,111,176,.18)}
@@ -206,6 +233,9 @@ footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted)}
 .nav-dropdown-menu a{padding:12px 13px}
 body.menu-open{overflow:hidden}
 .hero-grid,.section-head,.transfer-grid,.grid-two{grid-template-columns:1fr}
+.head-route{grid-template-columns:1fr}
+.head-route>i{transform:rotate(90deg);text-align:center}
+.fine-process{grid-template-columns:1fr 1fr}
 .concept-grid.four,.timeline{grid-template-columns:1fr 1fr}
 .hero-map{max-width:600px}
 .section-head{gap:15px}
@@ -227,6 +257,8 @@ body.menu-open{overflow:hidden}
 .footer-grid{flex-direction:column}
 .stepper{flex-direction:column}
 .chart-box{height:430px;padding:10px}
+.dense-definition,.fine-boundary{grid-template-columns:1fr}
+.fine-process{grid-template-columns:1fr}
 .btn{width:100%}
 h1{font-size:clamp(3rem,15vw,5rem)}
 }
