@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-11">
+  <link rel="stylesheet" href="styles.css?v=20260723-12">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-11" defer></script>
+  <script src="app.js?v=20260723-12" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -206,8 +206,12 @@
       <div><h2>Benchmarks</h2><p class="section-subtitle">Six ImageNet-pretrained CNNs compared on the same restricted-versus-unrestricted classification task.</p></div>
     </div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
+    <div class="visual-switch" aria-label="Benchmark visual">
+      <button id="benchmarkMetrics" class="active" type="button">Metrics</button>
+      <button id="benchmarkCurves" type="button">Learning curves</button>
+    </div>
     <div class="benchmark-results">
-      <div class="chart-box"><canvas id="benchmarkChart"></canvas></div>
+      <div class="chart-box result-visual"><canvas id="benchmarkChart"></canvas><div id="benchmarkCurveStage" class="learning-curve-stage" hidden></div></div>
       <aside class="panel result-panel">
         <p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p>
         <div id="benchmarkMatrix" class="compact-matrix" aria-live="polite"></div>
@@ -228,8 +232,12 @@
 <section id="fine" class="section">
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
     <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next view →</button></div>
+    <div class="visual-switch" aria-label="Fine-tuning visual">
+      <button id="fineMetrics" class="active" type="button">Metrics</button>
+      <button id="fineCurves" type="button">Learning curves</button>
+    </div>
     <div class="benchmark-results">
-      <div class="chart-box"><canvas id="fineChart"></canvas></div>
+      <div class="chart-box result-visual"><canvas id="fineChart"></canvas><div id="fineCurveStage" class="learning-curve-stage" hidden></div></div>
       <aside id="finePanel" class="panel result-panel" aria-live="polite"></aside>
     </div>
     <div id="fineDeltas" class="deltas"></div>
