@@ -21,7 +21,7 @@
     <nav id="primary-navigation" aria-label="Primary navigation">
       <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="#gradcam">Grad-CAM</a>
       <details class="nav-dropdown">
-        <summary>Education</summary>
+        <summary>Theory &amp; Methods</summary>
         <div class="nav-dropdown-menu">
           <a href="#imagenet"><strong>ImageNet</strong><small>Why scale transformed image recognition</small></a>
           <a href="#cnn"><strong>CNN foundations</strong><small>Convolution, filters and feature hierarchies</small></a>
@@ -66,13 +66,12 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Education</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Theory &amp; Methods</span></div></section>
 
 <section id="context" class="section context-section">
   <div class="wrap">
-    <div class="section-head">
-      <div><p class="chapter">00 · Why this project exists</p><h2>An Irish legal category created the classification question.</h2></div>
-      <p class="section-intro">This project began with a real policy context: Irish law places additional controls on specified dogs. The research asks whether transfer learning can distinguish a constructed restricted-versus-unrestricted image dataset—and, equally importantly, where that experiment stops being suitable for real-world use.</p>
+    <div class="section-head benchmark-heading">
+      <div><h2>Restricted Dog Breeds in Ireland</h2><p class="section-subtitle">Irish legislation created the classification context, while its limits make clear why image classification cannot determine legal identity or dangerousness.</p></div>
     </div>
     <div class="context-grid">
       <article class="context-card law-card">
@@ -105,9 +104,8 @@
 
 <section id="data" class="section data-section">
   <div class="wrap">
-    <div class="section-head">
-      <div><p class="chapter">01 · Data preparation</p><h2>The dataset defined the task before any model was trained.</h2></div>
-      <p class="section-intro">Notebook 1 acquired, extracted and validated Stanford Dogs, translated the project question into two reproducible classes, and created the fixed train, validation and held-out test folders used by every later experiment.</p>
+    <div class="section-head benchmark-heading">
+      <div><h2>Data Preparation</h2><p class="section-subtitle">Stanford Dogs was checked against Ireland’s 11 restricted categories: six were represented, and 24 other breeds were reproducibly sampled for comparison.</p></div>
     </div>
     <div class="data-pipeline" aria-label="Data preparation pipeline">
       <article><span>1</span><h3>Acquire</h3><p>Download and extract the Stanford Dogs image archive.</p></article>
@@ -248,7 +246,7 @@
 </section>
 
 <section id="gradcam" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">09 · Explainability</p><h2>Grad-CAM asks: where was the CNN looking?</h2></div><p class="section-intro">It projects class-relevant activation back onto the image. That can expose useful visual focus, suspicious background reliance or ambiguous morphology—but it is not a causal explanation.</p></div>
+  <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Grad-CAM</h2><p class="section-subtitle">Where was the CNN looking? Class-relevant activation can reveal useful focus or suspicious background reliance—but it is not a causal explanation.</p></div></div>
     <div class="grad-explain"><div class="layer-stack"><span></span><span></span><span></span><b>deep feature maps</b></div><i>+</i><div class="gradient-box">class gradients</div><i>→</i><div class="heat-box">heatmap</div><i>→</i><div class="overlay-box">image overlay</div></div>
     <div class="filters"><button class="filter active" data-f="all">All 12</button><button class="filter" data-f="TP">True positives</button><button class="filter" data-f="TN">True negatives</button><button class="filter" data-f="FP">False positives</button><button class="filter" data-f="FN">False negatives</button></div><div id="gallery" class="gallery"></div>
     <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction. It does not prove why the model decided, and it certainly does not establish behaviour, danger or legal identity.</span></div>
