@@ -1,5 +1,9 @@
 # Restricted Dog Image Classification Using CNN Transfer Learning
 
+## LaTeX documents
+
+The complete report, poster, presentation and slide sources are maintained in [`latex/`](latex/README.md). GitHub Actions compiles all four documents automatically and refreshes the PDFs in [`docs/`](docs/), so the project does not depend on Overleaf.
+
 **Benchmarking ImageNet-pretrained convolutional neural networks for restricted-versus-unrestricted dog image classification**
 
 **Ronan Downes**  
