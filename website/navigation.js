@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const button = document.querySelector(".menu-toggle");
   const navigation = document.querySelector("#primary-navigation");
-  const mobileQuery = window.matchMedia("(max-width: 1000px)");
+  const mobileQuery = window.matchMedia("(max-width: 1180px)");
 
   if (!button || !navigation) return;
 
@@ -11,16 +11,44 @@ document.addEventListener("DOMContentLoaded", () => {
     if (label === "Links & Resources" || label === "Resources") summary.textContent = "Links";
   });
 
+  const dataLink = [...navigation.querySelectorAll(":scope > a")]
+    .find((link) => link.textContent.trim() === "Data");
+  if (dataLink && ![...navigation.querySelectorAll(":scope > a")]
+    .some((link) => link.textContent.trim() === "Compute")) {
+    const computeLink = document.createElement("a");
+    computeLink.href = "index.html#compute";
+    computeLink.textContent = "Compute";
+    dataLink.insertAdjacentElement("afterend", computeLink);
+  }
+
+  const learningSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
+    .find((summary) => summary.textContent.trim() === "Learning Hub");
+  let outputsSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
+    .find((summary) => ["Outputs", "Submissions"].includes(summary.textContent.trim()));
+  if (!outputsSummary && learningSummary) {
+    const outputs = document.createElement("details");
+    outputs.className = "nav-dropdown";
+    outputs.innerHTML = `<summary>Submissions</summary><div class="nav-dropdown-menu"></div>`;
+    learningSummary.parentElement.insertAdjacentElement("beforebegin", outputs);
+    outputsSummary = outputs.querySelector("summary");
+  }
+  const outputsMenu = outputsSummary?.parentElement.querySelector(".nav-dropdown-menu");
+  if (outputsMenu) {
+    outputsSummary.textContent = "Submissions";
+    outputsMenu.innerHTML = `
+      <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
+      <a href="documents.html?document=poster"><strong>Poster</strong></a>
+      <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
+      <a href="documents.html?document=report"><strong>Report</strong></a>
+    `;
+  }
+
   const linksSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
     .find((summary) => summary.textContent.trim() === "Links");
   const linksMenu = linksSummary?.parentElement.querySelector(".nav-dropdown-menu");
   if (linksMenu) {
     linksMenu.innerHTML = `
       <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>Repository</strong></a>
-      <a href="documents.html?document=report"><strong>Report</strong></a>
-      <a href="documents.html?document=poster"><strong>Poster</strong></a>
-      <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>For students and self-study</small></a>
-      <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>For presenters · staged reveals</small></a>
       <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs" target="_blank" rel="noopener"><strong>All documents</strong></a>
       <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
       <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
@@ -30,8 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  const learningSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
-    .find((summary) => summary.textContent.trim() === "Learning Hub");
   const learningMenu = learningSummary?.parentElement.querySelector(".nav-dropdown-menu");
   if (learningMenu) {
     learningMenu.innerHTML = `
