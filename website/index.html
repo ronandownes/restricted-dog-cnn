@@ -8,12 +8,17 @@
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="navigation.js" defer></script>
 </head>
 <body>
 <header class="site-header">
   <div class="wrap nav">
     <a class="brand" href="#top"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
-    <nav aria-label="Primary navigation">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+      <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="menu-label">Menu</span>
+    </button>
+    <nav id="primary-navigation" aria-label="Primary navigation">
       <a href="#context">Context</a><a href="#data">Data preparation</a><a href="#benchmark">Benchmarking</a><a href="#fine">Fine-tuning</a><a href="#gradcam">Grad-CAM</a>
       <details class="nav-dropdown">
         <summary>Education</summary>
