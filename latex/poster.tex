@@ -1,0 +1,691 @@
+\documentclass[final]{beamer}
+
+%================================================
+% POSTER PAGE SIZE
+%================================================
+%
+% A0 landscape poster.
+%
+% scale=1.05 enlarges Beamer's default poster typography slightly.
+%
+% POSSIBLE CHANGES:
+%   scale=1.00  -> slightly smaller overall
+%   scale=1.05  -> current
+%   scale=1.10  -> larger, with greater overflow risk
+%
+\usepackage[
+  size=a0,
+  orientation=landscape,
+  scale=1.05
+]{beamerposter}
+
+\usetheme{default}
+
+%================================================
+% PACKAGES
+%================================================
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{ragged2e}
+
+% Figures must be stored in the figures folder.
+\graphicspath{{figures/}}
+
+% Remove Beamer navigation symbols.
+\setbeamertemplate{navigation symbols}{}
+
+%================================================
+% COLOURS
+%================================================
+
+\definecolor{projectblue}{RGB}{28,76,128}
+\definecolor{lightblue}{RGB}{235,242,249}
+
+\setbeamercolor{headline}{
+  bg=projectblue,
+  fg=white
+}
+
+\setbeamercolor{block title}{
+  bg=projectblue,
+  fg=white
+}
+
+\setbeamercolor{block body}{
+  bg=lightblue,
+  fg=black
+}
+
+%================================================
+% MAIN FONT-SIZE CONTROLS
+%================================================
+%
+% In \fontsize{A}{B}:
+%
+%   A = letter size
+%   B = line spacing
+%
+% B should normally be larger than A.
+%
+%------------------------------------------------
+% MAIN POSTER TITLE
+%------------------------------------------------
+%
+% CURRENT:
+%   98pt letters with 110pt line spacing.
+%
+% POSSIBLE CHANGES:
+%
+%   88/100   -> large and safe
+%   94/106   -> very large
+%   98/110   -> current
+%   104/118  -> extremely large
+%
+\newcommand{\PosterTitleFont}{%
+  \fontsize{98}{110}\selectfont
+}
+
+%------------------------------------------------
+% AUTHOR / COLLEGE / SUPERVISOR LINE
+%------------------------------------------------
+%
+% CURRENT:
+%   50pt letters with 60pt line spacing.
+%
+% POSSIBLE CHANGES:
+%
+%   42/50 -> smaller
+%   46/56 -> large
+%   50/60 -> current
+%   54/65 -> very large
+%
+\newcommand{\PosterSubtitleFont}{%
+  \fontsize{50}{60}\selectfont
+}
+
+%------------------------------------------------
+% CONTENT-BLOCK TITLES
+%------------------------------------------------
+%
+% Controls:
+%
+%   Research Aim
+%   Frozen Model Benchmark
+%   Model Explainability
+%   Reproducibility
+%   Conclusions
+%
+% POSSIBLE CHANGES:
+%
+%   32/38 -> slightly smaller
+%   34/40 -> current
+%   38/45 -> larger
+%   42/50 -> very large, increases vertical space
+%
+\setbeamerfont{block title}{
+  series=\bfseries,
+  size*={34pt}{40pt}
+}
+
+%------------------------------------------------
+% NORMAL BODY TEXT
+%------------------------------------------------
+%
+% POSSIBLE CHANGES:
+%
+%   \large -> smaller
+%   \Large -> current
+%   \LARGE -> larger, but substantial overflow risk
+%
+\setbeamerfont{block body}{
+  size=\Large
+}
+
+\setbeamerfont{itemize/enumerate body}{
+  size=\Large
+}
+
+\setbeamerfont{itemize/enumerate subbody}{
+  size=\large
+}
+
+%================================================
+% BULLET POSITIONING
+%================================================
+%
+% These margins keep the triangular bullets inside the coloured blocks.
+%
+% POSSIBLE CHANGES:
+%
+%   1.8em -> tighter
+%   2.1em -> current
+%   2.4em -> further inward
+%
+\setlength{\leftmargini}{2.1em}
+\setlength{\leftmarginii}{1.7em}
+
+\setbeamertemplate{itemize item}{%
+  \raisebox{0.15ex}{%
+    \color{projectblue}
+    \scriptsize$\blacktriangleright$%
+  }%
+}
+
+%================================================
+% BLOCK DESIGN
+%================================================
+
+\setbeamertemplate{block begin}{%
+
+  % Small vertical space above each block.
+  \vskip0.4ex
+
+  %----------------------------------------------
+  % DARK-BLUE BLOCK-TITLE BAR
+  %----------------------------------------------
+  %
+  % sep controls bar thickness.
+  %
+  %   0.75ex -> thinner
+  %   0.90ex -> current
+  %   1.10ex -> thicker
+  %
+  \begin{beamercolorbox}[
+    rounded=true,
+    shadow=true,
+    sep=0.9ex,
+    leftskip=0.6ex,
+    rightskip=0.6ex
+  ]{block title}
+
+    \usebeamerfont*{block title}
+    \insertblocktitle
+
+  \end{beamercolorbox}
+
+  \ifbeamercolorempty[bg]{block body}
+  {}
+  {\nointerlineskip\vskip-0.4pt}
+
+  \usebeamerfont{block body}
+
+  %----------------------------------------------
+  % PALE-BLUE BLOCK BODY
+  %----------------------------------------------
+  %
+  % leftskip and rightskip create internal margins.
+  %
+  % Increase leftskip if bullets still look close to the edge.
+  %
+  \begin{beamercolorbox}[
+    rounded=true,
+    shadow=true,
+    sep=0.9ex,
+    leftskip=1.6ex,
+    rightskip=1.2ex,
+    vmode
+  ]{block body}
+
+  \raggedright
+}
+
+\setbeamertemplate{block end}{%
+  \end{beamercolorbox}
+  \vskip0.45ex
+}
+
+%================================================
+% POSTER INFORMATION
+%================================================
+
+\title{
+  Benchmarking ImageNet Transfer Learning for\\
+  Restricted Dog Image Classification
+}
+
+\author{Ronan Downes}
+
+\institute{
+  MSc in Data Analytics, CCT College Dublin
+  \qquad
+  Supervisor: Sam Weiss
+}
+
+%================================================
+% DOCUMENT
+%================================================
+
+\begin{document}
+
+\begin{frame}[t]
+
+%================================================
+% MAIN TITLE BANNER
+%================================================
+%
+% ht controls the height of the dark-blue header.
+%
+% POSSIBLE CHANGES:
+%
+%   0.150 -> shallower
+%   0.160 -> current
+%   0.170 -> deeper
+%
+% A deeper header gives the large title more room but reduces the
+% vertical space available for the three content columns.
+%
+\begin{beamercolorbox}[
+  wd=\paperwidth,
+  ht=0.160\paperheight,
+  dp=1.25cm,
+  center
+]{headline}
+
+  {\PosterTitleFont
+   \bfseries
+   \inserttitle
+   \par}
+
+  % Space between main title and the author/institution line.
+  \vspace{0.45cm}
+
+  {\PosterSubtitleFont
+   \bfseries
+   \insertauthor
+   \hspace{1.5em}
+   \insertinstitute}
+
+\end{beamercolorbox}
+
+% Gap between the blue header and the poster content.
+\vspace{0.30cm}
+
+%================================================
+% MAIN POSTER COLUMNS
+%================================================
+%
+% IMPORTANT:
+%
+% The two narrow empty columns are deliberate white gutters.
+% They stop the first three blue title bars from appearing to form
+% one continuous bar.
+%
+% WIDTHS:
+%
+%   Left content column    = 0.305
+%   First white gutter     = 0.0125
+%   Centre content column  = 0.325
+%   Second white gutter    = 0.0125
+%   Right content column   = 0.305
+%
+% Total explicitly occupied width = 0.960 paper width.
+%
+% The whole column region is 0.98 paper width, leaving a little
+% additional outside breathing room.
+%
+% GUTTER OPTIONS:
+%
+%   0.008  -> narrow separation
+%   0.0125 -> current clear separation
+%   0.016  -> wider separation
+%
+% If you increase the gutters, reduce the three content columns.
+%
+\begin{columns}[t,totalwidth=0.98\paperwidth]
+
+%================================================
+% LEFT COLUMN
+%================================================
+
+\begin{column}{0.305\paperwidth}
+
+\begin{block}{Research Aim}
+
+To benchmark six ImageNet-pretrained CNNs for
+restricted-versus-unrestricted dog-image classification and evaluate
+the effect of limited fine-tuning.
+
+\end{block}
+
+\begin{block}{Dataset and Experimental Design}
+
+\begin{itemize}
+
+  % Vertical distance between bullet items.
+  %
+  % 0.10em -> tighter
+  % 0.18em -> current
+  % 0.28em -> more open
+  %
+  \setlength{\itemsep}{0.18em}
+  \setlength{\parskip}{0pt}
+
+  \item Stanford Dogs image dataset: \textbf{30 breeds}.
+
+  \item \textbf{6 restricted} and \textbf{24 unrestricted} breeds.
+
+  \item Fixed training, validation and held-out test splits.
+
+  \item Six ImageNet-pretrained CNNs benchmarked as frozen feature
+  extractors.
+
+  \item The selected model was fine-tuned by unfreezing its final
+  20 layers.
+
+  \item Evaluation used accuracy, precision, recall, F1, ROC-AUC,
+  PR-AUC, MCC and confusion counts.
+
+\end{itemize}
+
+\vspace{0.2cm}
+
+\centering
+
+% Pipeline diagram size.
+%
+% POSSIBLE HEIGHTS:
+%
+%   0.15 -> smaller
+%   0.17 -> current
+%   0.19 -> larger
+%
+\includegraphics[
+  width=0.98\linewidth,
+  height=0.17\paperheight,
+  keepaspectratio
+]{training_pipeline_diagram.pdf}
+
+\end{block}
+
+\begin{block}{Six Benchmark Architectures}
+
+\centering
+\textbf{VGG16 $\cdot$ ResNet50 $\cdot$ InceptionV3}\\[0.12cm]
+\textbf{Xception $\cdot$ InceptionResNetV2 $\cdot$ NASNetMobile}
+
+\end{block}
+
+\begin{block}{Reproducibility}
+
+% The filenames use a slightly smaller font because they are long.
+%
+% Change \large to \Large if there is enough width.
+%
+\begin{itemize}
+  \setlength{\itemsep}{0.12em}
+  \item Data preparation
+  \item Frozen-model benchmark
+  \item Selected-model fine-tuning
+  \item Grad-CAM explanation
+\end{itemize}
+
+The archive retains the four notebooks, figures, result tables,
+predictions, checkpoints and complete \LaTeX{} source.
+
+\end{block}
+
+\begin{block}{Ethical Boundary}
+
+\centering
+
+% Important statement size.
+%
+%   25/31 -> smaller
+%   27/33 -> current
+%   30/36 -> larger
+%
+\fontsize{27}{33}\selectfont
+\bfseries
+
+High predictive performance does not justify autonomous enforcement.
+
+\end{block}
+
+\end{column}
+
+%================================================
+% WHITE GUTTER BETWEEN LEFT AND CENTRE
+%================================================
+%
+% This empty column is intentional.
+%
+% Increase 0.0125 to 0.016 for a wider visual gap.
+% Do not place content inside it.
+%
+\begin{column}{0.0125\paperwidth}
+\end{column}
+
+%================================================
+% CENTRE COLUMN
+%================================================
+
+\begin{column}{0.325\paperwidth}
+
+\begin{block}{Frozen Model Benchmark}
+
+\centering
+
+% Frozen-model comparison chart.
+%
+%   0.19  -> smaller
+%   0.205 -> current
+%   0.22  -> larger
+%
+\includegraphics[
+  width=\linewidth,
+  height=0.205\paperheight,
+  keepaspectratio
+]{model_zoo_four_metric_comparison_presentation.pdf}
+
+\vspace{0.22cm}
+
+\raggedright
+
+\textbf{Best frozen model: InceptionResNetV2}\\[0.1cm]
+97.08\% accuracy $\cdot$ 98.42\% recall $\cdot$ 92.57\% F1
+
+\end{block}
+
+\begin{block}{Fine-Tuning Result}
+
+\centering
+
+% Table-row spacing.
+%
+%   1.05 -> tighter
+%   1.17 -> current
+%   1.30 -> more open
+%
+\renewcommand{\arraystretch}{1.17}
+
+\begin{tabular}{lcc}
+
+\toprule
+
+\textbf{Metric}
+&
+\textbf{Frozen}
+&
+\textbf{Fine-tuned}
+\\
+
+\midrule
+
+Accuracy
+&
+97.08\%
+&
+\textbf{98.25\%}
+\\
+
+Precision
+&
+87.38\%
+&
+\textbf{93.88\%}
+\\
+
+Recall
+&
+\textbf{98.42\%}
+&
+96.84\%
+\\
+
+F1
+&
+92.57\%
+&
+\textbf{95.34\%}
+\\
+
+MCC
+&
+0.9101
+&
+\textbf{0.9428}
+\\
+
+\bottomrule
+
+\end{tabular}
+
+\vspace{0.28cm}
+
+\raggedright
+
+\textbf{Key trade-off:}
+\textbf{15 fewer false positives}, but \textbf{3 additional false negatives}.
+
+Fine-tuning improved overall balance and precision, but slightly
+reduced recall.
+
+\end{block}
+
+\begin{block}{Fine-Tuned Confusion Matrix}
+
+\centering
+
+% Confusion-matrix size.
+%
+% WIDTH:
+%   0.78 -> smaller
+%   0.84 -> current
+%   0.90 -> larger
+%
+% HEIGHT:
+%   0.15 -> smaller
+%   0.17 -> current
+%   0.19 -> larger
+%
+\includegraphics[
+  width=0.84\linewidth,
+  height=0.17\paperheight,
+  keepaspectratio
+]{FineTuned_InceptionResNetV2_confusion_matrix.png}
+
+\end{block}
+
+\end{column}
+
+%================================================
+% WHITE GUTTER BETWEEN CENTRE AND RIGHT
+%================================================
+
+\begin{column}{0.0125\paperwidth}
+\end{column}
+
+%================================================
+% RIGHT COLUMN
+%================================================
+
+\begin{column}{0.305\paperwidth}
+
+\begin{block}{Model Explainability}
+
+\centering
+
+% German Shepherd Grad-CAM image.
+%
+%   0.105 -> smaller
+%   0.115 -> current
+%   0.125 -> larger
+%
+\includegraphics[
+  width=0.95\linewidth,
+  height=0.115\paperheight,
+  keepaspectratio
+]{TP_german_shepherd_n02106662_13368_gradcam.png}
+
+\vspace{0.06cm}
+
+{\Large\bfseries True positive: German Shepherd}
+
+\vspace{0.12cm}
+
+\raggedright
+
+Attention concentrated around the head and ears, which contributed
+strongly to the restricted prediction.
+
+\vspace{0.22cm}
+
+\centering
+
+% Weimaraner false-positive Grad-CAM image.
+\includegraphics[
+  width=0.95\linewidth,
+  height=0.115\paperheight,
+  keepaspectratio
+]{FP_weimaraner_n02092339_3028_gradcam.png}
+
+\vspace{0.06cm}
+
+{\Large\bfseries False positive: Weimaraner}
+
+\vspace{0.12cm}
+
+\raggedright
+
+Body shape, pose, coat contrast and contextual structure may have
+contributed to the incorrect restricted prediction.
+
+\vspace{0.18cm}
+
+\textbf{Interpretive boundary:}
+Grad-CAM heatmaps are post-hoc visual diagnostics. They indicate
+regions associated with a prediction, but they do not provide causal,
+behavioural or legal explanations.
+
+\end{block}
+
+\begin{block}{Conclusions}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.18em}
+  \setlength{\parskip}{0pt}
+
+  \item Six frozen ImageNet CNNs were benchmarked under one pipeline.
+
+  \item InceptionResNetV2 produced the strongest frozen result.
+
+  \item Fine-tuning improved precision and overall balance but reduced recall.
+
+  \item The classifier cannot establish legal identity, ancestry,
+  behaviour or dangerousness.
+
+\end{itemize}
+
+\end{block}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+\end{document}
