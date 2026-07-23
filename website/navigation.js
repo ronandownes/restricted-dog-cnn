@@ -5,78 +5,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!button || !navigation) return;
 
-  navigation.querySelectorAll(".nav-dropdown > summary").forEach((summary) => {
-    const label = summary.textContent.trim();
-    if (label === "Theory & Methods" || label === "Theory") summary.textContent = "Learning Hub";
-    if (label === "Links & Resources" || label === "Resources") summary.textContent = "Links";
-  });
-
-  const learningSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
-    .find((summary) => summary.textContent.trim() === "Learning Hub");
-  const plainComputeLink = [...navigation.querySelectorAll(":scope > a")]
-    .find((link) => link.textContent.trim() === "Compute");
-  plainComputeLink?.remove();
-  let computeSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
-    .find((summary) => summary.textContent.trim() === "Compute");
-  if (!computeSummary && learningSummary) {
-    const compute = document.createElement("details");
-    compute.className = "nav-dropdown";
-    compute.innerHTML = `<summary>Compute</summary><div class="nav-dropdown-menu"></div>`;
-    learningSummary.parentElement.insertAdjacentElement("beforebegin", compute);
-    computeSummary = compute.querySelector("summary");
-  }
-  const computeMenu = computeSummary?.parentElement.querySelector(".nav-dropdown-menu");
-  if (computeMenu) {
-    computeMenu.innerHTML = `
-      <a href="index.html#compute"><strong>Compute overview</strong></a>
-      <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
-      <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
-      <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning InceptionResNetV2</strong></a>
-      <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM</strong></a>
-      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/notebooks" target="_blank" rel="noopener"><strong>Notebook folder</strong></a>
-    `;
-  }
-  let outputsSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
-    .find((summary) => ["Outputs", "Submissions"].includes(summary.textContent.trim()));
-  if (!outputsSummary && learningSummary) {
-    const outputs = document.createElement("details");
-    outputs.className = "nav-dropdown";
-    outputs.innerHTML = `<summary>Submissions</summary><div class="nav-dropdown-menu"></div>`;
-    learningSummary.parentElement.insertAdjacentElement("beforebegin", outputs);
-    outputsSummary = outputs.querySelector("summary");
-  }
-  const outputsMenu = outputsSummary?.parentElement.querySelector(".nav-dropdown-menu");
-  if (outputsMenu) {
-    outputsSummary.textContent = "Submissions";
-    outputsMenu.innerHTML = `
-      <a href="documents.html?document=report"><strong>Report</strong></a>
-      <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
-      <a href="documents.html?document=poster"><strong>Poster</strong></a>
-      <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
-      <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>GitHub repository</strong></a>
-    `;
-  }
-
-  const linksSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
-    .find((summary) => summary.textContent.trim() === "Links");
-  linksSummary?.parentElement.remove();
-
-  const learningMenu = learningSummary?.parentElement.querySelector(".nav-dropdown-menu");
-  if (learningMenu) {
-    learningMenu.innerHTML = `
-      <a href="theory.html"><strong>Learning Hub</strong></a>
-      <a href="theory.html#binary-classifier"><strong>Binary classifier</strong></a>
-      <a href="theory.html#bitter-lesson"><strong>Feature engineering</strong></a>
-      <a href="theory.html#imagenet"><strong>ImageNet</strong></a>
-      <a href="theory.html#cnn"><strong>CNN foundations</strong></a>
-      <a href="theory.html#training"><strong>Training methods</strong></a>
-      <a href="theory.html#architectures"><strong>CNN architectures</strong></a>
-      <a href="metrics.html"><strong>Metrics guide</strong></a>
-      <a href="learning-curves.html"><strong>Learning curves</strong></a>
-      <a href="theory.html#gradcam"><strong>Grad-CAM theory</strong></a>
-      <a href="theory.html#transformers"><strong>Beyond CNNs</strong></a>
-    `;
-  }
+  navigation.innerHTML = `
+    <details class="nav-dropdown">
+      <summary>Study</summary>
+      <div class="nav-dropdown-menu">
+        <a href="index.html#context"><strong>Irish context</strong></a>
+        <a href="index.html#data"><strong>Data preparation</strong></a>
+        <a href="index.html#compute"><strong>Compute and Colab</strong></a>
+        <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation notebook</strong></a>
+        <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmark notebook</strong></a>
+        <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning notebook</strong></a>
+        <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM notebook</strong></a>
+      </div>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Results</summary>
+      <div class="nav-dropdown-menu">
+        <a href="index.html#benchmark"><strong>Six-CNN benchmark</strong></a>
+        <a href="index.html#fine"><strong>Fine-tuning</strong></a>
+        <a href="gradcam.html"><strong>Grad-CAM study</strong></a>
+      </div>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Discussion</summary>
+      <div class="nav-dropdown-menu">
+        <a href="theory.html"><strong>Discussion overview</strong></a>
+        <a href="metrics.html"><strong>Metrics guide</strong></a>
+        <a href="learning-curves.html"><strong>Learning curves</strong></a>
+        <a href="theory.html#bitter-lesson"><strong>Feature engineering</strong></a>
+        <a href="theory.html#benchmark-lifecycle"><strong>Benchmark lifecycle</strong></a>
+        <a href="theory.html#cnn"><strong>CNN foundations</strong></a>
+        <a href="theory.html#training"><strong>Training methods</strong></a>
+        <a href="theory.html#architectures"><strong>CNN architectures</strong></a>
+        <a href="theory.html#transformers"><strong>Transformers and LLMs</strong></a>
+      </div>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Submissions</summary>
+      <div class="nav-dropdown-menu">
+        <a href="documents.html?document=report"><strong>Report</strong></a>
+        <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
+        <a href="documents.html?document=poster"><strong>Poster</strong></a>
+        <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
+        <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>GitHub repository</strong></a>
+      </div>
+    </details>
+  `;
 
   const computeSection = document.querySelector("#compute");
   const gradcamSection = document.querySelector("#gradcam");
