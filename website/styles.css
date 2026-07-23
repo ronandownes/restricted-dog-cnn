@@ -57,6 +57,7 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .section.alt{background:#edf2f7}
 .section-head{display:grid;grid-template-columns:1.25fr .75fr;gap:70px;align-items:end;margin-bottom:45px}
 .section-intro{font-size:1.08rem;color:var(--muted);margin:0}
+.section-subtitle{max-width:820px;margin:0;color:var(--muted);font-size:1.18rem;line-height:1.55}
 .concept-grid{display:grid;gap:18px}
 .concept-grid.three{grid-template-columns:repeat(3,1fr)}
 .concept-grid.four{grid-template-columns:repeat(4,1fr)}
