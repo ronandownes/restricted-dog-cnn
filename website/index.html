@@ -153,17 +153,17 @@
   <div class="wrap">
     <div class="section-head benchmark-heading">
       <div><h2>Compute</h2><p class="section-subtitle">Use accelerated hardware where it changes the runtime; use ordinary CPU compute where it does not.</p></div>
-      <p class="section-intro">The project used Google Colab because the local Surface laptop had no suitable training GPU. Free Colab GPU access was useful but dynamic, limited and not guaranteed.</p>
+      <p class="section-intro">The project used Jupyter Notebooks in Google Colab because the local Surface laptop had no suitable training GPU. The same notebooks can run in a local Jupyter environment after adapting the setup cell and file paths.</p>
     </div>
     <div class="compute-route" aria-label="Project compute allocation">
       <article class="cpu"><small>CPU</small><h3>Data Preparation</h3><p>File handling, class mapping, seeded sampling and dataset splitting did not need a GPU.</p></article>
-      <article class="gpu"><small>GPU</small><h3>CNN Benchmark</h3><p>Six ImageNet-pretrained CNNs were trained and evaluated using a Colab GPU when available.</p></article>
+      <article class="gpu"><small>GPU</small><h3>CNN benchmarks</h3><p>ImageNet-pretrained CNNs were trained and evaluated using a Colab GPU when available.</p></article>
       <article class="gpu"><small>GPU</small><h3>Fine-tuning</h3><p>Updating the selected model’s trainable layers was the other compute-intensive stage.</p></article>
       <article class="cpu"><small>CPU</small><h3>Grad-CAM</h3><p>The fixed explanation cases could be generated without occupying scarce training-GPU time.</p></article>
     </div>
     <div class="compute-notes">
       <article><h3>Why the GPU mattered</h3><p>CNN training performs large numbers of matrix and tensor operations in parallel. A GPU can execute this workload far faster than the laptop CPU.</p></article>
-      <article><h3>Why try at quieter times?</h3><p>In practice, GPU access was sometimes easier outside busy periods. This was a working strategy, not a guaranteed Colab rule: availability and usage limits fluctuate.</p></article>
+      <article><h3>Observed T4 availability</h3><p>In my experience from Ireland, mid-afternoon and evening were the busiest periods. Late night and early morning were often the best times to obtain a T4, reflecting heavier global demand including US usage. After a week or two without using Colab, GPU access was often available at any time. This is a practical observation, not a guaranteed Google policy.</p></article>
     </div>
     <details class="compute-history">
       <summary><span>Open lesson</span><h3>Why gaming hardware became AI hardware</h3><p>CPU versus GPU, parallel computing, AlexNet and the later cryptocurrency demand for GPUs.</p></summary>
@@ -185,6 +185,7 @@
       <div class="section-head benchmark-heading"><div><h3>Executed notebooks</h3><p class="section-subtitle">The saved notebooks are the software record of how each project stage ran. Opening them here displays committed code, charts and outputs without rerunning the analysis.</p></div></div>
       <div class="notebooks"><a href="notebooks.html?notebook=data"><b>01</b><span>Data Preparation</span><small>CPU-suitable preparation</small></a><a href="notebooks.html?notebook=benchmark"><b>02</b><span>Benchmarking CNNs</span><small>GPU training evidence</small></a><a href="notebooks.html?notebook=fine"><b>03</b><span>Fine-tuning</span><small>GPU adaptation evidence</small></a><a href="notebooks.html?notebook=gradcam"><b>04</b><span>Grad-CAM</span><small>saved explainability analysis</small></a></div>
     </div>
+    <div class="key-line"><strong>Colab or local Jupyter</strong><span>Colab supplied cloud GPU compute, but it is not required for reproduction. Download the committed notebooks, open them in Jupyter locally, and adapt the first setup cell for the local dataset and folder paths.</span></div>
     <div class="key-line"><strong>Compute discipline</strong><span>The workflow reserved GPU access for benchmarking and fine-tuning, while data preparation and the saved Grad-CAM study used CPU-suitable execution. <a href="https://research.google.com/colaboratory/faq.html#resource-limits" target="_blank" rel="noopener">Read Google Colab’s resource guidance ↗</a></span></div>
   </div>
 </section>
@@ -263,7 +264,7 @@
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
     <div class="section-head benchmark-heading">
-      <div><h2>Benchmarks</h2><p class="section-subtitle">Six ImageNet-pretrained CNNs compared on the same restricted-versus-unrestricted classification task.</p></div>
+      <div><h2>Benchmarks</h2><p class="section-subtitle">ImageNet-pretrained CNNs compared on the same restricted-versus-unrestricted classification task.</p></div>
     </div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="benchmark-results">

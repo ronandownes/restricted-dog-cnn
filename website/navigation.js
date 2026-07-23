@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <details class="nav-dropdown">
       <summary>Results</summary>
       <div class="nav-dropdown-menu">
-        <a href="index.html#benchmark"><strong>Six-CNN benchmark</strong></a>
+        <a href="index.html#benchmark"><strong>CNN benchmarks</strong></a>
         <a href="index.html#fine"><strong>Fine-tuning</strong></a>
         <a href="gradcam.html"><strong>Grad-CAM study</strong></a>
       </div>
