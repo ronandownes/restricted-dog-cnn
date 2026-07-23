@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="An interactive visual journey from ImageNet and convolutional neural networks to transfer learning, Grad-CAM and Vision Transformers, grounded in a six-model restricted-dog classification benchmark.">
-  <title>From ImageNet to Vision Transformers · Restricted Dog CNN</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-6">
+  <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
+  <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
+  <link rel="stylesheet" href="styles.css?v=20260723-7">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-6" defer></script>
+  <script src="app.js?v=20260723-7" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -19,7 +19,7 @@
       <span class="menu-label">Menu</span>
     </button>
     <nav id="primary-navigation" aria-label="Primary navigation">
-      <a href="#context">Context</a><a href="#data">Data preparation</a><a href="#benchmark">Benchmarking</a><a href="#fine">Fine-tuning</a><a href="#gradcam">Grad-CAM</a>
+      <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="#gradcam">Grad-CAM</a>
       <details class="nav-dropdown">
         <summary>Education</summary>
         <div class="nav-dropdown-menu">
@@ -28,7 +28,7 @@
           <a href="#evolution"><strong>Architecture evolution</strong><small>AlexNet, VGG, ResNet, Inception and more</small></a>
           <a href="metrics.html"><strong>Metrics guide</strong><small>Accuracy, precision, recall, F1 and MCC</small></a>
           <a href="learning-curves.html"><strong>Learning curves</strong><small>Training and validation accuracy and loss</small></a>
-          <a href="#transformers"><strong>Vision Transformers</strong><small>From convolution to patch-based attention</small></a>
+          <a href="#transformers"><strong>Before and beyond CNNs</strong><small>What preceded CNNs and how Transformers followed</small></a>
         </div>
       </details>
       <details class="nav-dropdown">
@@ -52,8 +52,8 @@
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow">MSc Data Analytics · Computer Vision Learning Site</p>
-      <h1>From <span>ImageNet</span> to CNNs to <span>Vision Transformers</span></h1>
-      <p class="lede">Learn the ideas by following the problems that forced computer vision to change. Then see those ideas tested in a real six-model transfer-learning benchmark.</p>
+      <h1>Restricted Dog Breed Classification <span>Using Deep Learning</span> and the <span>Stanford Dogs Dataset</span></h1>
+      <p class="lede">Explore the Irish context, the dataset and a six-model transfer-learning benchmark—then learn how CNNs developed and how vision moved toward Transformers.</p>
       <div class="buttons"><a class="btn primary" href="#context">Start with the Irish context</a><a class="btn" href="#benchmark">Jump to the benchmark</a></div>
       <p class="byline">Ronan Downes · MSc Data Analytics · CCT College Dublin · 2026</p>
     </div>
@@ -66,7 +66,7 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data preparation</span><i>→</i><span>Benchmarking</span><i>→</i><span>Fine-tuning</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Education</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Education</span></div></section>
 
 <section id="context" class="section context-section">
   <div class="wrap">
@@ -251,7 +251,7 @@
 </section>
 
 <section id="transformers" class="section transformer-section">
-  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">10 · The next paradigm</p><h2>If CNNs worked so well, why did Transformers enter vision?</h2></div><p class="section-intro">CNNs build in strong assumptions: local connectivity and translation-friendly weight sharing. Transformers relax those assumptions and learn relationships between image patches through attention.</p></div>
+  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">10 · Before and beyond CNNs</p><h2>What came before CNNs—and what followed them?</h2></div><p class="section-intro">Before deep CNNs, computer-vision systems relied heavily on hand-designed features and separate classifiers. CNNs learned useful features directly from images. Transformers later relaxed CNN assumptions and learned relationships between image patches through attention.</p></div>
     <div class="versus"><article><span class="label">CNN</span><h3>Locality is built in.</h3><div class="cnn-route"><b>Pixels</b><i>→</i><b>Local filters</b><i>→</i><b>Feature hierarchy</b><i>→</i><b>Prediction</b></div><p>Excellent inductive bias for images; efficient learning of local spatial structure.</p></article><div class="vs">VS</div><article class="transformer-card"><span class="label">ViT</span><h3>Relationships are learned.</h3><div class="patches"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div><p>Split the image into patches, embed them as tokens, add position information, then let self-attention model patch-to-patch relationships.</p></article></div>
     <div class="attention-flow"><div><small>STEP 1</small><b>Image</b></div><i>→</i><div><small>STEP 2</small><b>Patches</b></div><i>→</i><div><small>STEP 3</small><b>Embeddings + position</b></div><i>→</i><div class="attention"><small>STEP 4</small><b>Self-attention</b></div><i>→</i><div><small>STEP 5</small><b>Classification</b></div></div>
     <div class="transformer-note"><b>The important historical point:</b> ViT did not prove that convolution was “wrong”. It showed that, given enough data and compute, a less image-specific architecture could become extremely competitive in vision.</div>
