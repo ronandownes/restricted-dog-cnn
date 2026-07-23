@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\caption{Frozen transfer-learning model-zoo test results.}
+\label{tab:model-zoo-results}
+\scriptsize
+\setlength{\tabcolsep}{2.6pt}
+\renewcommand{\arraystretch}{1.85}
+\begin{tabularx}{\textwidth}{
+>{\raggedright\arraybackslash}X
+*{7}{>{\centering\arraybackslash}p{0.054\textwidth}}
+*{4}{>{\centering\arraybackslash}p{0.033\textwidth}}
+}
+\toprule
+Model & Acc. & Prec. & Recall & F1 & \shortstack{ROC\\AUC} & \shortstack{PR\\AUC} & MCC & TN & FP & FN & TP \\
+\midrule
+VGG16 & 0.86 & 0.59 & 0.91 & 0.71 & 0.94 & 0.81 & 0.65 & 717 & 121 & 18 & 172 \\
+ResNet50 & 0.91 & 0.69 & 0.93 & 0.80 & 0.97 & 0.89 & 0.75 & 760 & 78 & 13 & 177 \\
+InceptionV3 & 0.96 & 0.82 & 0.97 & 0.89 & 0.99 & 0.96 & 0.87 & 797 & 41 & 5 & 185 \\
+Xception & 0.95 & 0.79 & 0.97 & 0.87 & 0.99 & 0.97 & 0.85 & 789 & 49 & 5 & 185 \\
+InceptionResNetV2 & \textbf{0.97} & \textbf{0.87} & \textbf{0.98} & \textbf{0.93} & \textbf{1.00} & \textbf{0.99} & \textbf{0.91} & 811 & 27 & 3 & 187 \\
+NASNetMobile & 0.95 & 0.81 & 0.97 & 0.88 & 0.99 & 0.96 & 0.86 & 794 & 44 & 6 & 184 \\
+\bottomrule
+\end{tabularx}
+\end{table}
