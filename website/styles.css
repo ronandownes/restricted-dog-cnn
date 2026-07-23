@@ -575,6 +575,10 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .deep-dive h4{margin:1.15rem 0 0;color:var(--navy);font-size:1.04rem}
 .deep-dive h4:first-child{margin-top:0}
 .deep-dive p{max-width:900px;margin:.4rem 0 0;color:var(--muted);line-height:1.7}
+.binary-evaluation{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0}
+.binary-evaluation>div{padding:23px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.binary-evaluation h3{margin-top:0}
+.binary-evaluation p{margin-bottom:0;color:var(--muted)}
 .formula-chip{display:inline-block;background:#edf2f7;border-radius:8px;padding:8px 11px;font-family:ui-monospace,monospace;font-weight:800}
 .receptive-mini{display:flex;align-items:center;gap:8px;margin-top:18px}
 .receptive-mini i{display:block;border:3px solid var(--blue);width:28px;height:28px}
@@ -712,6 +716,7 @@ body.visual-open{overflow:hidden}
   .learning-route{flex-direction:column}
   .learning-route>i{transform:rotate(90deg);text-align:center}
   .theory-grid,.architecture-gallery,.paradigm-grid{grid-template-columns:1fr}
+  .binary-evaluation{grid-template-columns:1fr}
   .gradcam-case{grid-template-columns:1fr}
   .visual-switch button{flex:1}
   .curve-pair{grid-template-columns:1fr}
