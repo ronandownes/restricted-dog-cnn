@@ -11,18 +11,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (label === "Links & Resources" || label === "Resources") summary.textContent = "Links";
   });
 
-  const dataLink = [...navigation.querySelectorAll(":scope > a")]
-    .find((link) => link.textContent.trim() === "Data");
-  if (dataLink && ![...navigation.querySelectorAll(":scope > a")]
-    .some((link) => link.textContent.trim() === "Compute")) {
-    const computeLink = document.createElement("a");
-    computeLink.href = "index.html#compute";
-    computeLink.textContent = "Compute";
-    dataLink.insertAdjacentElement("afterend", computeLink);
-  }
-
   const learningSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
     .find((summary) => summary.textContent.trim() === "Learning Hub");
+  const plainComputeLink = [...navigation.querySelectorAll(":scope > a")]
+    .find((link) => link.textContent.trim() === "Compute");
+  plainComputeLink?.remove();
+  let computeSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
+    .find((summary) => summary.textContent.trim() === "Compute");
+  if (!computeSummary && learningSummary) {
+    const compute = document.createElement("details");
+    compute.className = "nav-dropdown";
+    compute.innerHTML = `<summary>Compute</summary><div class="nav-dropdown-menu"></div>`;
+    learningSummary.parentElement.insertAdjacentElement("beforebegin", compute);
+    computeSummary = compute.querySelector("summary");
+  }
+  const computeMenu = computeSummary?.parentElement.querySelector(".nav-dropdown-menu");
+  if (computeMenu) {
+    computeMenu.innerHTML = `
+      <a href="index.html#compute"><strong>Compute overview</strong></a>
+      <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
+      <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
+      <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning InceptionResNetV2</strong></a>
+      <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM</strong></a>
+      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/notebooks" target="_blank" rel="noopener"><strong>Notebook folder</strong></a>
+    `;
+  }
   let outputsSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
     .find((summary) => ["Outputs", "Submissions"].includes(summary.textContent.trim()));
   if (!outputsSummary && learningSummary) {
@@ -36,27 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (outputsMenu) {
     outputsSummary.textContent = "Submissions";
     outputsMenu.innerHTML = `
+      <a href="documents.html?document=report"><strong>Report</strong></a>
       <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
       <a href="documents.html?document=poster"><strong>Poster</strong></a>
       <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
-      <a href="documents.html?document=report"><strong>Report</strong></a>
+      <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>GitHub repository</strong></a>
     `;
   }
 
   const linksSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
     .find((summary) => summary.textContent.trim() === "Links");
-  const linksMenu = linksSummary?.parentElement.querySelector(".nav-dropdown-menu");
-  if (linksMenu) {
-    linksMenu.innerHTML = `
-      <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>Repository</strong></a>
-      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs" target="_blank" rel="noopener"><strong>All documents</strong></a>
-      <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
-      <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
-      <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning InceptionResNetV2</strong></a>
-      <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM</strong></a>
-      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/notebooks" target="_blank" rel="noopener"><strong>All notebooks</strong></a>
-    `;
-  }
+  linksSummary?.parentElement.remove();
 
   const learningMenu = learningSummary?.parentElement.querySelector(".nav-dropdown-menu");
   if (learningMenu) {
@@ -73,6 +76,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="theory.html#gradcam"><strong>Grad-CAM theory</strong></a>
       <a href="theory.html#transformers"><strong>Beyond CNNs</strong></a>
     `;
+  }
+
+  const computeSection = document.querySelector("#compute");
+  const gradcamSection = document.querySelector("#gradcam");
+  if (computeSection && gradcamSection) {
+    gradcamSection.insertAdjacentElement("afterend", computeSection);
   }
 
   const closeMenu = () => {
