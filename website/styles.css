@@ -618,6 +618,20 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .paradigm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .paradigm-grid article{background:#fff;color:var(--ink);border-radius:17px;padding:24px}
 .paradigm-grid small{color:var(--blue);font-weight:900}
+.source-line{margin-top:24px;font-size:1.08rem}
+.source-line a,.benchmark-example-grid a{color:var(--blue);font-weight:850}
+.benchmark-lifecycle{color:var(--ink)}
+.benchmark-lifecycle .section-intro{color:#42566d;font-size:clamp(1.12rem,1.5vw,1.3rem);line-height:1.65}
+.benchmark-key{margin:24px 0;padding:26px 28px;border:2px solid #7895b3;border-radius:16px;background:#fff;color:var(--ink)}
+.benchmark-key h3{font-size:clamp(1.45rem,2vw,1.9rem);margin-bottom:10px}
+.benchmark-key p{font-size:clamp(1.08rem,1.35vw,1.22rem);line-height:1.7;color:#31465d}
+.benchmark-key.conclusion{border-color:var(--blue);background:#eaf3fc}
+.benchmark-example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.benchmark-example-grid article{min-width:0;padding:26px;border:1px solid #9eb2c7;border-top:6px solid var(--blue);border-radius:16px;background:#fff}
+.benchmark-example-grid article:last-child{grid-column:1/-1}
+.benchmark-example-grid small{color:#155fa8;font-size:.82rem;font-weight:950;letter-spacing:.08em}
+.benchmark-example-grid h3{font-size:clamp(1.35rem,2vw,1.75rem);margin:8px 0}
+.benchmark-example-grid p{font-size:clamp(1.04rem,1.25vw,1.16rem);line-height:1.68;color:#31465d}
 .caution{border-left-color:var(--red)}
 .gradcam-case{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr)}
 .gradcam-case img{height:auto;min-height:0}
@@ -719,7 +733,8 @@ body.visual-open{overflow:hidden}
   .gradcam-preview .btn{width:100%}
   .learning-route{flex-direction:column}
   .learning-route>i{transform:rotate(90deg);text-align:center}
-  .theory-grid,.architecture-gallery,.paradigm-grid{grid-template-columns:1fr}
+  .theory-grid,.architecture-gallery,.paradigm-grid,.benchmark-example-grid{grid-template-columns:1fr}
+  .benchmark-example-grid article:last-child{grid-column:auto}
   .binary-evaluation{grid-template-columns:1fr}
   .gradcam-case{grid-template-columns:1fr}
   .visual-switch button{flex:1}
