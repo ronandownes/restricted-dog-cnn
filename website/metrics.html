@@ -97,6 +97,7 @@
         <article class="metric-explainer precision">
           <div class="metric-name"><span>Precision</span><b>92.89%</b></div>
           <h3>When the model said “restricted”, how often was it right?</h3>
+          <div class="formula-chip">Percentage of Restricted predictions that really were Restricted</div>
           <p>Precision focuses on the reliability of positive predictions. False positives lower precision.</p>
           <code>TP ÷ (TP + FP)</code>
           <div class="worked">183 ÷ (183 + 14) = 92.89%</div>
@@ -105,6 +106,7 @@
         <article class="metric-explainer recall">
           <div class="metric-name"><span>Recall</span><b>96.32%</b></div>
           <h3>Of all restricted images, how many did the model find?</h3>
+          <div class="formula-chip">Percentage of actual Restricted images correctly found</div>
           <p>Recall focuses on coverage of the positive class. False negatives lower recall.</p>
           <code>TP ÷ (TP + FN)</code>
           <div class="worked">183 ÷ (183 + 7) = 96.32%</div>
