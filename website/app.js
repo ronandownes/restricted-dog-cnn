@@ -54,7 +54,7 @@ function updateFine(){
       performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>mutedColors[k])),
       performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))
     ];
-    finePanel.innerHTML=`<div class="visual-identity"><small>BEFORE–AFTER COMPARISON</small><strong>InceptionResNetV2</strong></div><p class="eyebrow">What changed?</p><h3>Fine-tuning improved three metrics.</h3><div class="change-list"><div><span>Accuracy</span><b>+1.17 pts</b></div><div><span>Precision</span><b>+6.04 pts</b></div><div class="down"><span>Recall</span><b>−1.05 pts</b></div><div><span>F1</span><b>+2.76 pts</b></div></div>`;
+    finePanel.innerHTML=`<div class="visual-identity"><small>CONFUSION MATRICES · SIDE BY SIDE</small><strong>InceptionResNetV2</strong></div><div class="fine-matrices"><div><p class="eyebrow">Frozen</p><div class="compact-matrix">${matrixMarkup(frozenMatrix)}</div></div><div><p class="eyebrow">Fine-tuned</p><div class="compact-matrix">${matrixMarkup(fineTunedMatrix)}</div></div></div>`;
   }else{
     fChart.data.datasets=[{label:'Difference',data:differences,unit:'points',backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:8,maxBarThickness:88}];
     finePanel.innerHTML=`<div class="visual-identity"><small>ERROR-COUNT DIFFERENCES</small><strong>InceptionResNetV2</strong></div><p class="eyebrow">Error trade-off</p><h3>Fewer false positives, but two more false negatives.</h3><div class="change-list errors"><div><span>False positives</span><b>28 → 14</b><small>14 fewer</small></div><div class="down"><span>False negatives</span><b>5 → 7</b><small>2 more</small></div><div><span>Correct predictions</span><b>995 → 1,007</b><small>12 more</small></div></div>`;
@@ -67,11 +67,11 @@ function updateFine(){
   const values=fineView===0?frozen:fineView===1?fineTuned:differences;
   fineDeltas.innerHTML=metricKeys.map((k,j)=>`<div class="delta metric-change" style="--c:${colors[k]}"><span>${k}</span><b>${fineView<2?values[j].toFixed(2)+'%':`${values[j]>0?'+':''}${values[j].toFixed(2)} pts`}</b></div>`).join('');
   const frozenUrl=`${RAW}/benchmark/figures/InceptionResNetV2_learning_curves.png`,tunedUrl=`${RAW}/fine_tuning/figures/FineTuned_InceptionResNetV2_learning_curves.png`;
-  if(fineView===0){fineCurveTitle.textContent='InceptionResNetV2 · before fine-tuning accuracy and loss';fineCurveStrip.innerHTML=`<img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning">`}
-  else if(fineView===1){fineCurveTitle.textContent='InceptionResNetV2 · after fine-tuning accuracy and loss';fineCurveStrip.innerHTML=`<img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning">`}
-  else{fineCurveTitle.textContent=fineView===2?'InceptionResNetV2 · learning curves side by side':'InceptionResNetV2 · learning curves behind the measured differences';fineCurveStrip.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning"><figcaption>InceptionResNetV2 · before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning"><figcaption>InceptionResNetV2 · after fine-tuning</figcaption></figure></div>`}
+  fineCurveVisual.hidden=fineView>=2;
+  if(fineView===0){fineCurveTitle.textContent='InceptionResNetV2 · frozen learning curve';fineCurveStrip.innerHTML=`<img src="${frozenUrl}" alt="InceptionResNetV2 learning curve with its CNN base frozen">`}
+  else if(fineView===1){fineCurveTitle.textContent='InceptionResNetV2 · fine-tuned learning curve';fineCurveStrip.innerHTML=`<img src="${tunedUrl}" alt="InceptionResNetV2 learning curve after fine-tuning">`}
   fChart.options.plugins.title.text=`InceptionResNetV2 · ${view.title}`;
-  fChart.update();
+  fChart.update('none');
 }
 function setupExpandableVisuals(){
   const overlay=document.createElement('div');
@@ -115,8 +115,9 @@ function setupExpandableVisuals(){
     nextButton.hidden=!canNavigate;
     previousButton.textContent=isFine?'← Previous view':'← Previous model';
     nextButton.textContent=isFine?'Next view →':'Next model →';
+    const finalFineView=source.id==='fineCurveVisual'?1:fineViews.length-1;
     previousButton.disabled=isFine?fineView===0:i===0;
-    nextButton.disabled=isFine?fineView===fineViews.length-1:i===models.length-1;
+    nextButton.disabled=isFine?fineView===finalFineView:i===models.length-1;
   };
   const close=async()=>{if(document.fullscreenElement)await document.exitFullscreen().catch(()=>{});overlay.hidden=true;activeSource=null;content.replaceChildren();document.body.classList.remove('visual-open')};
   const open=async source=>{
@@ -134,12 +135,13 @@ function setupExpandableVisuals(){
       i=nextIndex;
       update();
     }else if(fineVisuals.has(activeSource.id)){
-      const nextView=Math.max(0,Math.min(fineViews.length-1,fineView+direction));
+      const finalFineView=activeSource.id==='fineCurveVisual'?1:fineViews.length-1;
+      const nextView=Math.max(0,Math.min(finalFineView,fineView+direction));
       if(nextView===fineView)return;
       fineView=nextView;
       updateFine();
     }else return;
-    requestAnimationFrame(()=>render(activeSource));
+    render(activeSource);
   };
   document.querySelectorAll('.expandable-visual').forEach(source=>{
     source.addEventListener('click',event=>{if(event.target.closest('a,button'))return;open(source)});
@@ -154,7 +156,7 @@ function setupExpandableVisuals(){
 }
 window.addEventListener('DOMContentLoaded',()=>{
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Model · test metrics',color:'#10294b',font:{size:17,weight:'bold'},padding:{bottom:18}}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
-  fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',onClick:()=>{}},title:{display:true,text:'InceptionResNetV2',color:'#10294b',font:{size:17,weight:'bold'},padding:{bottom:18}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
+  fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',onClick:()=>{}},title:{display:true,text:'InceptionResNetV2',color:'#10294b',font:{size:17,weight:'bold'},padding:{bottom:18}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   prev.onclick=()=>{if(i){i--;update()}};
   next.onclick=()=>{if(i<5){i++;update()}};
   finePrev.onclick=()=>{if(fineView){fineView--;updateFine()}};
