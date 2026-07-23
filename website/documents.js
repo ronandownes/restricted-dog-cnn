@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const selectDocument = (key, updateAddress = true) => {
     const selected = documents[key] || documents.report;
-    const pdfUrl = `https://raw.githubusercontent.com/ronandownes/restricted-dog-cnn/main/docs/${selected.file}`;
+    const pdfUrl = `docs/${selected.file}`;
 
     title.textContent = selected.title;
     description.textContent = selected.description;
