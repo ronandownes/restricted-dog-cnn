@@ -10,7 +10,7 @@ const models=[
 {name:'InceptionResNetV2',year:'2016 · Inception + residual',input:'299×299',idea:'Multi-branch Inception processing is combined with residual shortcut connections in a large, expressive feature extractor.',route:['Inception branches','Feature concatenation','Residual addition'],why:'It joins multi-scale representation learning with easier gradient flow. It produced the best frozen balance here and became the fine-tuning backbone.',cm:{tn:810,fp:28,fn:5,tp:185},Accuracy:96.8,Precision:86.9,Recall:97.4,F1:91.8},
 {name:'NASNetMobile',year:'2017 · Architecture search',input:'224×224',idea:'Repeated normal and reduction cells were discovered through neural architecture search rather than designed entirely by hand.',route:['Normal cells','Reduction cells','Mobile feature extractor'],why:'It targets efficiency on constrained hardware, but architecture-search pedigree did not make it the best model for this particular dataset.',cm:{tn:792,fp:46,fn:7,tp:183},Accuracy:94.8,Precision:79.9,Recall:96.3,F1:87.4}
 ];
-let i=0,fineView=0,benchmarkVisual='metrics',fineVisual='metrics',bChart,fChart;
+let i=0,fineView=0,bChart,fChart;
 const valueLabels={id:'values',afterDatasetsDraw(c){const x=c.ctx;x.save();x.font='800 13px system-ui';x.textAlign='center';x.fillStyle='#122033';c.data.datasets.forEach((d,di)=>c.getDatasetMeta(di).data.forEach((bar,j)=>{if(d.data[j]!=null){const v=Number(d.data[j]),suffix=d.unit==='points'?' pts':'%';x.fillText(`${v>0&&d.unit==='points'?'+':''}${v.toFixed(d.unit==='points'?2:1)}${suffix}`,bar.x,v<0?bar.y+17:bar.y-7)}}));x.restore()}};Chart.register(valueLabels);
 function story(n){return [
 ['Baseline established','VGG16 begins with strong recall, but precision and F1 leave substantial room for improvement.'],
@@ -20,17 +20,7 @@ function story(n){return [
 ['Best frozen balance','InceptionResNetV2 improves accuracy, precision and F1 while recall stays level. It is selected for fine-tuning.'],
 ['Historical progress is not task-specific progress','NASNetMobile is historically later, yet all four headline metrics decline relative to InceptionResNetV2.']][n]}
 function matrixMarkup(cm){return `<div class="matrix-axis top">Predicted class</div><div class="matrix-axis side">True class</div><div class="matrix-labels columns"><span>Unrestricted</span><span>Restricted</span></div><div class="matrix-labels rows"><span>Unrestricted</span><span>Restricted</span></div><div class="matrix-cells"><div class="cm-tn"><small>True negative</small><b>${cm.tn}</b></div><div class="cm-fp"><small>False positive</small><b>${cm.fp}</b></div><div class="cm-fn"><small>False negative</small><b>${cm.fn}</b></div><div class="cm-tp"><small>True positive</small><b>${cm.tp}</b></div></div>`}
-function setBenchmarkVisual(view){
-  benchmarkVisual=view;
-  const curves=view==='curves';
-  benchmarkChart.hidden=curves;
-  benchmarkCurveStage.hidden=!curves;
-  benchmarkMetrics.classList.toggle('active',!curves);
-  benchmarkCurves.classList.toggle('active',curves);
-  if(curves)benchmarkCurveStage.innerHTML=`<img src="${RAW}/benchmark/figures/${models[i].name}_learning_curves.png" alt="${models[i].name} training and validation learning curves"><a href="learning-curves.html#project-curves">Learn how to interpret these curves →</a>`;
-  else bChart.resize();
-}
-function update(){const m=models[i],s=story(i),keys=['Accuracy','Precision','Recall','F1'];count.textContent=`${i+1} of 6`;model.textContent=m.name;year.textContent=m.year;headline.textContent=s[0];commentary.textContent=s[1];prev.disabled=i===0;next.disabled=i===5;tiles.innerHTML=keys.map(k=>`<div class="tile" style="--c:${colors[k]}"><small>${k}</small><b>${m[k].toFixed(1)}%</b></div>`).join('');benchmarkMatrix.innerHTML=matrixMarkup(m.cm);architecture.innerHTML=`<div><small>HIGH-LEVEL ARCHITECTURE · INPUT ${m.input}</small><h3>${m.name}: what happens inside?</h3><p>${m.idea}</p></div><div class="architecture-route">${m.route.map((x,j)=>`${j?'<i>→</i>':''}<b>${x}</b>`).join('')}</div><p class="architecture-why"><strong>Why it matters:</strong> ${m.why}</p><a class="return-link" href="theory.html#${architectureSlugs[m.name]}">Open the ${m.name} architecture explanation →</a>`;if(i===0)deltas.innerHTML='<div class="delta"><span>Comparison</span><b>Starting point</b></div>';else{const p=models[i-1];deltas.innerHTML=keys.map(k=>{const d=+(m[k]-p[k]).toFixed(1),cl=Math.abs(d)<.05?'':d>0?'up':'down',ar=Math.abs(d)<.05?'→':d>0?'↑':'↓';return `<div class="delta ${cl}"><span>${k} vs ${p.name}</span><b>${ar} ${d>0?'+':''}${d.toFixed(1)} pts</b></div>`}).join('')}bChart.data.datasets[0].data=keys.map(k=>m[k]);bChart.update();setBenchmarkVisual(benchmarkVisual)}
+function update(){const m=models[i],s=story(i),keys=['Accuracy','Precision','Recall','F1'];count.textContent=`${i+1} of 6`;model.textContent=m.name;year.textContent=m.year;headline.textContent=s[0];commentary.textContent=s[1];prev.disabled=i===0;next.disabled=i===5;tiles.innerHTML=keys.map(k=>`<div class="tile" style="--c:${colors[k]}"><small>${k}</small><b>${m[k].toFixed(1)}%</b></div>`).join('');benchmarkMatrix.innerHTML=matrixMarkup(m.cm);benchmarkCurveTitle.textContent=`${m.name} learning curves`;benchmarkCurveImage.src=`${RAW}/benchmark/figures/${m.name}_learning_curves.png`;benchmarkCurveImage.alt=`${m.name} training and validation accuracy and loss curves`;architecture.innerHTML=`<div><small>HIGH-LEVEL ARCHITECTURE · INPUT ${m.input}</small><h3>${m.name}: what happens inside?</h3><p>${m.idea}</p></div><div class="architecture-route">${m.route.map((x,j)=>`${j?'<i>→</i>':''}<b>${x}</b>`).join('')}</div><p class="architecture-why"><strong>Why it matters:</strong> ${m.why}</p><a class="return-link" href="theory.html#${architectureSlugs[m.name]}">Open the ${m.name} architecture explanation →</a>`;if(i===0)deltas.innerHTML='<div class="delta"><span>Comparison</span><b>Starting point</b></div>';else{const p=models[i-1];deltas.innerHTML=keys.map(k=>{const d=+(m[k]-p[k]).toFixed(1),cl=Math.abs(d)<.05?'':d>0?'up':'down',ar=Math.abs(d)<.05?'→':d>0?'↑':'↓';return `<div class="delta ${cl}"><span>${k} vs ${p.name}</span><b>${ar} ${d>0?'+':''}${d.toFixed(1)} pts</b></div>`}).join('')}bChart.data.datasets[0].data=keys.map(k=>m[k]);bChart.update()}
 const metricKeys=['Accuracy','Precision','Recall','F1'];
 const frozen=[96.79,86.85,97.37,91.81];
 const fineTuned=[97.96,92.89,96.32,94.57];
@@ -44,23 +34,6 @@ const fineViews=[
   {title:'Difference after fine-tuning',summary:'Positive bars improved; the negative recall bar shows the trade-off.'}
 ];
 function performanceDataset(label,data,backgroundColor){return{label,data,backgroundColor,borderRadius:8,maxBarThickness:88}}
-function setFineVisual(view){
-  if(fineView===3)view='metrics';
-  fineVisual=view;
-  const curves=view==='curves';
-  fineChart.hidden=curves;
-  fineCurveStage.hidden=!curves;
-  fineMetrics.classList.toggle('active',!curves);
-  fineCurves.classList.toggle('active',curves);
-  fineCurves.disabled=fineView===3;
-  if(curves){
-    const frozenUrl=`${RAW}/benchmark/figures/InceptionResNetV2_learning_curves.png`;
-    const tunedUrl=`${RAW}/fine_tuning/figures/FineTuned_InceptionResNetV2_learning_curves.png`;
-    if(fineView===0)fineCurveStage.innerHTML=`<img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning"><a href="learning-curves.html#project-curves">Interpret the frozen-base curves →</a>`;
-    else if(fineView===1)fineCurveStage.innerHTML=`<img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning"><a href="learning-curves.html#project-curves">Interpret the fine-tuned curves →</a>`;
-    else fineCurveStage.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="Learning curves before fine-tuning"><figcaption>Before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="Learning curves after fine-tuning"><figcaption>After fine-tuning</figcaption></figure></div><a href="learning-curves.html#project-curves">Learn how to compare these curves →</a>`;
-  }else fChart.resize();
-}
 function updateFine(){
   const view=fineViews[fineView];
   fineCount.textContent=`${fineView+1} of 4`;
@@ -92,8 +65,11 @@ function updateFine(){
   fChart.options.scales.y.ticks.callback=fineView===3?v=>(v>0?'+':'')+v:v=>v+'%';
   const values=fineView===0?frozen:fineView===1?fineTuned:differences;
   fineDeltas.innerHTML=metricKeys.map((k,j)=>`<div class="delta metric-change" style="--c:${colors[k]}"><span>${k}</span><b>${fineView<2?values[j].toFixed(2)+'%':`${values[j]>0?'+':''}${values[j].toFixed(2)} pts`}</b></div>`).join('');
+  const frozenUrl=`${RAW}/benchmark/figures/InceptionResNetV2_learning_curves.png`,tunedUrl=`${RAW}/fine_tuning/figures/FineTuned_InceptionResNetV2_learning_curves.png`;
+  if(fineView===0){fineCurveTitle.textContent='Before fine-tuning';fineCurveStrip.innerHTML=`<img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning">`}
+  else if(fineView===1){fineCurveTitle.textContent='After fine-tuning';fineCurveStrip.innerHTML=`<img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning">`}
+  else{fineCurveTitle.textContent='Before and after learning curves';fineCurveStrip.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="Learning curves before fine-tuning"><figcaption>Before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="Learning curves after fine-tuning"><figcaption>After fine-tuning</figcaption></figure></div>`}
   fChart.update();
-  setFineVisual(fineVisual);
 }
 window.addEventListener('DOMContentLoaded',()=>{
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
@@ -102,10 +78,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   next.onclick=()=>{if(i<5){i++;update()}};
   finePrev.onclick=()=>{if(fineView){fineView--;updateFine()}};
   fineNext.onclick=()=>{if(fineView<3){fineView++;updateFine()}};
-  benchmarkMetrics.onclick=()=>setBenchmarkVisual('metrics');
-  benchmarkCurves.onclick=()=>setBenchmarkVisual('curves');
-  fineMetrics.onclick=()=>setFineVisual('metrics');
-  fineCurves.onclick=()=>setFineVisual('curves');
   update();
   updateFine();
 });
