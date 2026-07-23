@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navigation.querySelectorAll(".nav-dropdown > summary").forEach((summary) => {
     const label = summary.textContent.trim();
-    if (label === "Theory & Methods") summary.textContent = "Theory";
-    if (label === "Links & Resources") summary.textContent = "Resources";
+    if (label === "Theory & Methods" || label === "Theory") summary.textContent = "Learning Hub";
+    if (label === "Links & Resources" || label === "Resources") summary.textContent = "Links";
   });
 
   const closeMenu = () => {
