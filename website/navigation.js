@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!button || !navigation) return;
 
+  navigation.querySelectorAll(".nav-dropdown > summary").forEach((summary) => {
+    const label = summary.textContent.trim();
+    if (label === "Theory & Methods") summary.textContent = "Theory";
+    if (label === "Links & Resources") summary.textContent = "Resources";
+  });
+
   const closeMenu = () => {
     navigation.classList.remove("is-open");
     button.setAttribute("aria-expanded", "false");
