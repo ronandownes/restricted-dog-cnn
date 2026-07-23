@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Read or download the Restricted Dog CNN report, poster, presentation and slides.">
   <title>Project documents · Restricted Dog CNN</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-24">
-  <script type="module" src="documents.js?v=20260723-5"></script>
+  <link rel="stylesheet" href="styles.css?v=20260723-25">
+  <script src="documents.js?v=20260723-6" defer></script>
 </head>
 <body class="document-page">
 <header class="document-header">
@@ -46,17 +46,9 @@
         </div>
       </div>
       <div id="document-stage" class="document-stage">
-        <div id="pdf-presentation" class="pdf-presentation">
-          <div id="pdf-loading" class="pdf-loading">Preparing document reader…</div>
-          <div id="pdf-pages" class="pdf-pages" aria-label="Continuously scrolling PDF pages"></div>
-        </div>
-        <div id="pdf-page-controls" class="pdf-page-controls" aria-label="PDF page controls">
-          <button id="pdf-previous" type="button" aria-label="Previous PDF page">← Previous</button>
-          <span><b id="pdf-current-page">1</b> / <span id="pdf-total-pages">1</span></span>
-          <button id="pdf-next" type="button" aria-label="Next PDF page">Next →</button>
-        </div>
+        <iframe id="document-viewer" title="Project PDF viewer" loading="eager"></iframe>
       </div>
-      <p class="document-note">Scroll naturally through the compiled LaTeX pages, or select Full screen for a distraction-free reader. Use the controls, ←/→, Page Up/Page Down or Space to move between pages.</p>
+      <p class="document-note">Tip: rotate a phone sideways for presentation slides. Use pinch-to-zoom in your browser or select Full screen for the largest reading area.</p>
     </div>
   </section>
 </main>
