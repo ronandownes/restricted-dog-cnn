@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-13">
+  <link rel="stylesheet" href="styles.css?v=20260723-14">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-13" defer></script>
+  <script src="app.js?v=20260723-14" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -207,14 +207,14 @@
     </div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="benchmark-results">
-      <div class="chart-box"><canvas id="benchmarkChart"></canvas></div>
-      <aside class="panel result-panel">
+      <div id="benchmarkMetricsVisual" class="chart-box expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark metrics chart"><canvas id="benchmarkChart"></canvas></div>
+      <aside id="benchmarkMatrixVisual" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark confusion matrix">
         <p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p>
         <div id="benchmarkMatrix" class="compact-matrix" aria-live="polite"></div>
         <a class="matrix-help" href="metrics.html#confusion-matrix">How to read this matrix →</a>
       </aside>
     </div>
-    <div class="curve-strip"><div class="curve-strip-heading"><div><small>TRAINING HISTORY</small><h3 id="benchmarkCurveTitle"></h3></div><a href="learning-curves.html#project-curves">How to interpret this plot →</a></div><img id="benchmarkCurveImage" alt=""></div>
+    <div id="benchmarkCurveVisual" class="curve-strip expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark learning curves"><div class="curve-strip-heading"><div><small>TRAINING HISTORY</small><h3 id="benchmarkCurveTitle"></h3></div><a href="learning-curves.html#project-curves">How to interpret this plot →</a></div><img id="benchmarkCurveImage" alt=""></div>
     <div id="tiles" class="benchmark-tiles tiles"></div>
     <article id="architecture" class="architecture-panel" aria-live="polite"></article>
     <div id="deltas" class="deltas"></div>
@@ -230,10 +230,10 @@
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
     <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next view →</button></div>
     <div class="benchmark-results">
-      <div class="chart-box"><canvas id="fineChart"></canvas></div>
-      <aside id="finePanel" class="panel result-panel" aria-live="polite"></aside>
+      <div id="fineMetricsVisual" class="chart-box expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning metrics chart"><canvas id="fineChart"></canvas></div>
+      <aside id="finePanel" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning confusion matrix or differences" aria-live="polite"></aside>
     </div>
-    <div class="curve-strip"><div class="curve-strip-heading"><div><small>TRAINING HISTORY</small><h3 id="fineCurveTitle"></h3></div><a href="learning-curves.html#project-curves">How to interpret these plots →</a></div><div id="fineCurveStrip"></div></div>
+    <div id="fineCurveVisual" class="curve-strip expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning learning curves"><div class="curve-strip-heading"><div><small>TRAINING HISTORY</small><h3 id="fineCurveTitle"></h3></div><a href="learning-curves.html#project-curves">How to interpret these plots →</a></div><div id="fineCurveStrip"></div></div>
     <div id="fineDeltas" class="deltas"></div>
     <div class="fine-process">
       <article><span>1</span><div><small>START FROM THE SELECTED MODEL</small><h3>Load its best checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Before fine-tuning, its ImageNet CNN base was frozen and only its classification head had learned this task.</p></div></article>
