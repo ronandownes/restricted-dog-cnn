@@ -2,7 +2,7 @@ name: Deploy website to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ["website/**", "docs/*.pdf", ".github/workflows/pages.yml"]
+    paths: ["website/**", "docs/*.pdf", "notebooks/*.ipynb", ".github/workflows/pages.yml"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,6 +24,10 @@ jobs:
         run: |
           mkdir -p website/docs
           cp docs/*.pdf website/docs/
+      - name: Add executed notebooks to the site
+        run: |
+          mkdir -p website/notebooks
+          cp notebooks/*.ipynb website/notebooks/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./website
