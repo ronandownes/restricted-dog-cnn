@@ -1,0 +1,1228 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ============================================================
+% THEME AND PACKAGES
+% ============================================================
+
+\usetheme{Singapore}
+\usecolortheme{default}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{siunitx}
+
+\graphicspath{{figures/}}
+
+% ============================================================
+% DRIP-FEED SWITCH
+% ============================================================
+%
+% \dripfeedtrue  = reveal points gradually
+% \dripfeedfalse = show complete slides
+%
+% ============================================================
+
+\newif\ifdripfeed
+
+\dripfeedtrue
+% \dripfeedfalse
+
+\ifdripfeed
+  % Future items remain visible but faint.
+  \setbeamercovered{transparent=18}
+
+  \newcommand{\stepitem}{\item<+->}
+  \newcommand{\reveal}[2]{\uncover<#1->{#2}}
+\else
+  \setbeamercovered{invisible}
+
+  \newcommand{\stepitem}{\item}
+  \newcommand{\reveal}[2]{#2}
+\fi
+
+% ============================================================
+% GENERAL APPEARANCE
+% ============================================================
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+
+% IMPORTANT:
+% Do not remove the Singapore headline.
+% This preserves the soft shaded strip at the top.
+
+% Slide title:
+% - slightly lower than the previous version
+% - minimal space beneath it
+\setbeamertemplate{frametitle}{
+  \nointerlineskip
+  \vspace*{0.22cm}
+  \hspace*{0.12cm}
+  \insertframetitle\par
+  \vspace*{-0.14cm}
+}
+
+% ============================================================
+% COLOURS
+% ============================================================
+
+\definecolor{projectblue}{RGB}{28,76,128}
+\definecolor{lightblue}{RGB}{232,240,248}
+\definecolor{verylightblue}{RGB}{246,249,252}
+\definecolor{tableStripe}{RGB}{239,245,250}
+\definecolor{winnerRow}{RGB}{218,237,224}
+
+% Pipeline stage colours.
+\definecolor{stageone}{RGB}{224,237,249}
+\definecolor{stagetwo}{RGB}{224,241,228}
+\definecolor{stagethree}{RGB}{250,239,214}
+
+\setbeamercolor{structure}{fg=projectblue}
+\setbeamercolor{frametitle}{fg=projectblue}
+
+% ============================================================
+% GLOBAL FONT SIZE
+% OPTION 2 — MODERATELY COMPACT
+% ============================================================
+
+\setbeamerfont{frametitle}{
+  size=\fontsize{24}{25},
+  series=\bfseries
+}
+
+\setbeamerfont{itemize/enumerate body}{
+  size=\fontsize{17}{21}
+}
+
+\setbeamerfont{itemize/enumerate subbody}{
+  size=\fontsize{14.5}{18.5}
+}
+
+% Title-page sizes.
+\setbeamerfont{title}{
+  size=\fontsize{31}{37},
+  series=\bfseries
+}
+
+\setbeamerfont{author}{
+  size=\fontsize{20}{25}
+}
+
+\setbeamerfont{institute}{
+  size=\fontsize{17}{22}
+}
+
+\setbeamerfont{date}{
+  size=\fontsize{16}{20}
+}
+
+\setlength{\leftmargini}{1.3em}
+
+\newcommand{\bigbulletlist}{
+  \setlength{\itemsep}{0.62em}
+  \setlength{\parskip}{0pt}
+}
+
+% ============================================================
+% TABLE SETTINGS
+% ============================================================
+
+\sisetup{
+  table-format=2.2,
+  table-number-alignment=center,
+  detect-weight=true,
+  detect-inline-weight=math
+}
+
+\renewcommand{\arraystretch}{1.28}
+\setlength{\tabcolsep}{6pt}
+
+% ============================================================
+% TITLE INFORMATION
+% ============================================================
+
+\title[Restricted Dog Classification]
+{Restricted Dog Breed Classification\\Using CNN Transfer Learning}
+
+\author{Ronan Downes}
+
+\institute{
+  MSc in Data Analytics\\
+  CCT College Dublin\\[0.25em]
+  Supervisor: Sam Weiss
+}
+
+\date{April 2025}
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+
+\begin{document}
+
+% ============================================================
+% TITLE SLIDE
+% ============================================================
+
+\begin{frame}
+
+\centering
+
+% Moves the title down slightly.
+\vspace*{0.55cm}
+
+{\usebeamerfont{title}
+ \color{projectblue}
+ {\Huge Restricted Dog Breed Classification\\[0.28em]
+ Using CNN Transfer Learning
+}}
+
+\vspace{1.05em}
+ {\LARGE
+{\usebeamerfont{author}
+ Ronan Downes
+}
+
+\vspace{0.78em}
+
+{\usebeamerfont{institute}
+ MSc in Data Analytics\\
+ CCT College Dublin\\[0.20em]
+ Supervisor: Sam Weiss
+}}
+
+\vspace{0.78em}
+
+{\usebeamerfont{date}
+ April 2025
+}
+
+\end{frame}
+
+% ============================================================
+% RESEARCH PROBLEM
+% ============================================================
+
+\begin{frame}{Research problem}
+
+\vspace{-0.3em}
+
+\begin{itemize}
+  \bigbulletlist
+
+  \stepitem Benchmark six pretrained CNNs
+  \stepitem Binary dog-image classification
+  \stepitem Irish restricted-breed context
+  \stepitem Stanford Dogs dataset
+  \stepitem Controlled model comparison
+\end{itemize}
+
+\end{frame}
+
+% SAY ORALLY:
+% One common transfer-learning pipeline was used to benchmark
+% six ImageNet-pretrained CNN architectures.
+%
+% The classes were informed by the Irish restricted-dog
+% regulations, but this was a controlled image-classification
+% experiment rather than legal breed identification.
+
+% ============================================================
+% RESEARCH QUESTIONS
+% ============================================================
+
+\begin{frame}{Research questions}
+
+\vspace{-0.3em}
+
+\begin{enumerate}
+  \bigbulletlist
+
+  \stepitem How do six frozen CNNs compare?
+  \stepitem Does fine-tuning improve performance?
+  \stepitem What does Grad-CAM reveal?
+  \stepitem What limits real-world use?
+\end{enumerate}
+
+\end{frame}
+
+% ============================================================
+% RESTRICTED-BREED COVERAGE
+% ============================================================
+
+\begin{frame}{Stanford Dogs Restricted-breeds}
+
+\vspace{-0.35em}
+
+\centering
+
+{\fontsize{15.5}{19}\selectfont
+
+\begin{tabularx}{0.92\textwidth}{
+  >{\raggedright\arraybackslash}X
+  >{\raggedright\arraybackslash}X
+}
+
+\textbf{\color{projectblue}Represented}
+&
+\textbf{\color{projectblue}Not represented}
+\\[-0.15em]
+
+\cmidrule(r){1-1}
+\cmidrule(l){2-2}
+
+Rottweiler
+&
+{American Pit Bull Terrier}
+\\
+
+\rowcolor{tableStripe}
+German Shepherd
+&
+English Bull Terrier
+\\
+
+Doberman Pinscher
+&
+Japanese Akita
+\\
+
+\rowcolor{tableStripe}
+Bull Mastiff
+&
+Japanese Tosa
+\\
+
+Rhodesian Ridgeback
+&
+Bandog
+\\
+
+\rowcolor{tableStripe}
+Staffordshire Bull Terrier
+&
+\\
+
+\end{tabularx}
+}
+
+\end{frame}
+
+% ============================================================
+% DATASET CONSTRUCTION
+% ============================================================
+
+\begin{frame}{Dataset construction}
+
+\vspace{-0.25em}
+
+\begin{columns}[c,onlytextwidth]
+
+\column{0.38\textwidth}
+
+\centering
+
+{\fontsize{36}{40}\selectfont\bfseries 6}
+
+\vspace{0.08em}
+
+{\large restricted breeds}
+
+\column{0.12\textwidth}
+
+\centering
+{\Large\bfseries vs.}
+
+\column{0.38\textwidth}
+
+\centering
+
+{\fontsize{36}{40}\selectfont\bfseries 24}
+
+\vspace{0.08em}
+
+{\large unrestricted breeds}
+
+\end{columns}
+
+\vspace{0.6em}
+
+\centering
+
+{\normalsize
+24 breeds reproducibly selected\\
+from the remaining 114 Stanford categories
+}
+
+\vspace{0.55em}
+
+\begin{center}
+\begin{minipage}{0.68\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.42em}
+
+  \stepitem Broader negative class
+  \stepitem Manageable computational scope
+  \stepitem Fixed data splits
+\end{itemize}
+
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+% SAY ORALLY:
+% Stanford Dogs contains 120 breed categories.
+% Six mapped to represented restricted breeds.
+% The unrestricted class was reproducibly sampled from the
+% remaining 114 categories.
+%
+% This provided a broader negative class while keeping the
+% benchmark computationally manageable.
+
+% ============================================================
+% EXPERIMENTAL PIPELINE
+% ============================================================
+
+\begin{frame}{Experimental pipeline}
+
+\vspace{-0.25em}
+
+\centering
+
+% ------------------------------------------------------------
+% STAGE 1 — FROZEN BENCHMARK
+% First four cells
+% ------------------------------------------------------------
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.235\textwidth}
+\reveal{1}{
+\centering
+\fcolorbox{projectblue}{stageone}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Dataset\\construction
+  }
+}
+}
+
+\column{0.235\textwidth}
+\reveal{2}{
+\centering
+\fcolorbox{projectblue}{stageone}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Resize and\\normalise
+  }
+}
+}
+
+\column{0.235\textwidth}
+\reveal{3}{
+\centering
+\fcolorbox{projectblue}{stageone}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Training-data\\augmentation
+  }
+}
+}
+
+\column{0.235\textwidth}
+\reveal{4}{
+\centering
+\fcolorbox{projectblue}{stageone}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Frozen CNN\\benchmark
+  }
+}
+}
+
+\end{columns}
+
+\vspace{0.75em}
+
+% ------------------------------------------------------------
+% STAGE 2 AND STAGE 3
+% ------------------------------------------------------------
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.22\textwidth}
+
+\column{0.26\textwidth}
+\reveal{5}{
+\centering
+\fcolorbox{projectblue}{stagetwo}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Fine-tune\\selected CNN
+  }
+}
+}
+
+\column{0.26\textwidth}
+\reveal{6}{
+\centering
+\fcolorbox{projectblue}{stagethree}{
+  \parbox[c][1.55cm][c]{0.88\linewidth}{
+    \centering
+    \normalsize\bfseries
+    Grad-CAM\\explainability
+  }
+}
+}
+
+\column{0.22\textwidth}
+
+\end{columns}
+
+\vspace{0.5em}
+
+\reveal{7}{
+\centering
+
+{\small
+\colorbox{stageone}{\strut Stage 1: frozen benchmark}
+\hspace{0.7em}
+\colorbox{stagetwo}{\strut Stage 2: fine-tuning}
+\hspace{0.7em}
+\colorbox{stagethree}{\strut Stage 3: explainability}
+}
+}
+
+\end{frame}
+
+% SAY ORALLY:
+% Images were resized to the input resolution required by each
+% architecture: either 224 x 224 or 299 x 299.
+%
+% Each architecture's own preprocess_input function was used.
+%
+% Training augmentation included horizontal flipping,
+% small rotations and small zoom transformations.
+
+% ============================================================
+% SHORT ARCHITECTURE TIMELINE
+% ============================================================
+
+\begin{frame}{ILSVRC Winners Record}
+
+\vspace{-0.37em}
+
+\centering
+
+{\fontsize{14.5}{17.5}\selectfont
+
+\begin{tabularx}{0.92\textwidth}{
+  >{\centering\arraybackslash}p{0.12\textwidth}
+  >{\raggedright\arraybackslash}p{0.30\textwidth}
+  >{\raggedright\arraybackslash}X
+}
+
+\textbf{\color{projectblue}Year}
+&
+\textbf{\color{projectblue}Architecture}
+&
+\textbf{\color{projectblue}Key idea}
+\\[-0.15em]
+
+\cmidrule(r){1-1}
+\cmidrule(lr){2-2}
+\cmidrule(l){3-3}
+
+2010
+&
+SIFT/LBP + SVM
+&
+Hand-crafted features 
+\\
+
+\rowcolor{tableStripe}
+2011
+&
+Fisher vectors
+&
+Best pre-CNN 
+\\
+
+2012
+&
+AlexNet
+&
+Deep-CNN breakthrough
+\\
+
+2014
+&
+VGG16
+&
+Uniform deep CNN
+\\
+
+\rowcolor{tableStripe}
+2015
+&
+ResNet50
+&
+Residual connections
+\\
+
+2015
+&
+InceptionV3
+&
+Multi-scale processing
+\\
+
+\rowcolor{tableStripe}
+2016
+&
+Xception
+&
+Separable convolutions
+\\
+
+2016
+&
+InceptionResNetV2
+&
+Inception plus residual
+\\
+
+\rowcolor{tableStripe}
+2017
+&
+NASNetMobile
+&
+Neural architecture search
+\end{tabularx}
+}
+
+
+
+
+\end{frame}
+
+% ============================================================
+% SIX BENCHMARKED CNNs
+% ============================================================
+
+\begin{frame}{Six benchmarked CNN models}
+
+\vspace{-0.25em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.48\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.7em}
+
+  \stepitem \textbf{VGG16}\\
+        {\small Uniform deep baseline}
+
+  \stepitem \textbf{ResNet50}\\
+        {\small Residual connections}
+
+  \stepitem \textbf{InceptionV3}\\
+        {\small Multi-scale processing}
+\end{itemize}
+
+\column{0.48\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.7em}
+
+  \stepitem \textbf{Xception}\\
+        {\small Separable convolutions}
+
+  \stepitem \textbf{InceptionResNetV2}\\
+        {\small Multi-scale residual model}
+
+  \stepitem \textbf{NASNetMobile}\\
+        {\small Architecture-search model}
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% ============================================================
+% FROZEN BENCHMARK METHOD
+% ============================================================
+
+\begin{frame}{Frozen Benchmark Approach}
+
+\vspace{-0.25em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.48\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.63em}
+
+  \stepitem ImageNet weights
+  \stepitem Frozen feature extractors
+  \stepitem Common classification head
+\end{itemize}
+
+\column{0.48\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.63em}
+
+  \stepitem Class weighting
+  \stepitem Early stopping
+  \stepitem Best validation checkpoint
+\end{itemize}
+
+\end{columns}
+
+\reveal{7}{
+\vspace{0.4em}
+
+\centering
+{\large\bfseries Multiple metrics—not accuracy alone}
+}
+
+\end{frame}
+
+
+% ============================================================
+% BENCHMARK SCOPE
+% ============================================================
+
+
+% ============================================================
+% FROZEN RESULTS — NATIVE LATEX TABLE
+% ============================================================
+
+\begin{frame}{Frozen Benchmark Results Table}
+
+\vspace{-0.4em}
+
+\centering
+
+{\fontsize{16.2}{19.5}\selectfont
+
+\rowcolors{2}{white}{tableStripe}
+
+\begin{tabularx}{0.97\textwidth}{
+  >{\raggedright\arraybackslash}p{0.37\textwidth}
+  S[table-column-width=0.12\textwidth]
+  S[table-column-width=0.12\textwidth]
+  S[table-column-width=0.12\textwidth]
+  S[table-column-width=0.10\textwidth]
+}
+\textbf{\color{projectblue}CNN}
+&
+{\textbf{\color{projectblue}Acc.}}
+&
+{\textbf{\color{projectblue}Prec.}}
+&
+{\textbf{\color{projectblue}Recall}}
+&
+{\textbf{\color{projectblue}F1}}
+\\[-0.12em]
+
+\cmidrule(r){1-1}
+\cmidrule(lr){2-2}
+\cmidrule(lr){3-3}
+\cmidrule(lr){4-4}
+\cmidrule(l){5-5}
+
+VGG16
+& 87.4
+& 60.3
+& 92.1
+& 72.9
+\\
+
+ResNet50
+& 91.7
+& 70.9
+& 93.7
+& 80.7
+\\
+
+InceptionV3
+& 96.1
+& 84.4
+& 96.8
+& 90.2
+\\
+
+Xception
+& 96.0
+& 83.7
+& 97.4
+& 90.0
+\\
+
+\rowcolor{winnerRow}
+\textbf{InceptionResNetV2}
+& \bfseries 96.8
+& \bfseries 86.9
+& \bfseries 97.4
+& \bfseries 91.8
+\\
+
+NASNetMobile
+& 94.8
+& 79.9
+& 96.3
+& 87.4
+\\
+
+\end{tabularx}
+}
+
+\vspace{0.22em}
+
+{\scriptsize Percentages shown; bold and shading are selected model.}
+
+\end{frame}
+
+% ============================================================
+% FROZEN BAR CHART
+% ============================================================
+
+\begin{frame}{Frozen Benchmark Results Chart}
+
+\vspace{-0.35em}
+
+\centering
+
+\includegraphics[
+  width=0.99\textwidth,
+  height=0.81\textheight,
+  keepaspectratio
+]{model_zoo_four_metric_comparison_presentation.pdf}
+
+\end{frame}
+
+% ============================================================
+% MODEL SELECTION
+% ============================================================
+
+% ============================================================
+% FINE-TUNING STRATEGY
+% ============================================================
+
+\begin{frame}{Fine-tuning strategy}
+
+\vspace{-0.3em}
+
+\centering
+
+{\normalsize\bfseries
+Task adaptation without destabilising pretrained features
+}
+
+\vspace{0.55em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.47\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.62em}
+
+  \stepitem Last 20 layers unfrozen
+  \stepitem Learning rate: \(10^{-5}\)
+  \stepitem Maximum 15 epochs
+\end{itemize}
+
+\column{0.47\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.62em}
+
+  \stepitem Class weighting retained
+  \stepitem Early stopping
+  \stepitem Best validation checkpoint
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+% ============================================================
+% EFFECT OF FINE-TUNING
+% ============================================================
+
+\begin{frame}{Fine-tuning results}
+
+\vspace{-0.3em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.4\textwidth}
+
+\centering
+
+{\small
+
+\renewcommand{\arraystretch}{1.22}
+
+\begin{tabular}{lcc}
+\toprule
+Metric & Frozen & Fine-tuned\\
+\midrule
+Accuracy  & 96.79\% & \textbf{98.25\%}\\
+Precision & 86.85\% & \textbf{93.88\%}\\
+Recall    & \textbf{97.37\%} & 96.84\%\\
+F1        & 91.81\% & \textbf{95.34\%}\\
+MCC       & 0.9005 & \textbf{0.9428}\\
+\bottomrule
+\end{tabular}
+}
+
+\vspace{0.5em}
+
+{\normalsize\bfseries
+Fewer false positives\\
+Slightly more false negatives
+}
+
+\column{0.6\textwidth}
+
+\centering
+
+\includegraphics[
+  width=\linewidth,
+  height=0.84\textheight,
+  keepaspectratio
+]{FineTuned_InceptionResNetV2_confusion_matrix.png}
+
+\end{columns}
+
+\end{frame}
+
+% ============================================================
+% LEARNING BEHAVIOUR
+% ============================================================
+
+\begin{frame}{Learning behaviour}
+
+\vspace{-0.35em}
+
+\centering
+
+\includegraphics[
+  width=0.94\textwidth,
+  height=0.77\textheight,
+  keepaspectratio
+]{FineTuned_InceptionResNetV2_learning_curves.png}
+
+{\small\bfseries Best validation checkpoint retained}
+
+\end{frame}
+
+% ============================================================
+% GRAD-CAM — ALL FOUR SHOWN
+% ============================================================
+
+\begin{frame}{Grad-CAM explainability}
+
+\vspace{-0.35em}
+
+\centering
+
+% Top row
+\begin{columns}[T,onlytextwidth]
+
+\column{0.48\textwidth}
+
+\centering
+
+\includegraphics[
+  width=0.82\linewidth,
+  height=0.29\textheight,
+  keepaspectratio
+]{TP_rottweiler_n02106550_4962_gradcam.png}
+
+{\small True positive}
+
+\column{0.48\textwidth}
+
+\centering
+
+\includegraphics[
+  width=0.82\linewidth,
+  height=0.29\textheight,
+  keepaspectratio
+]{TN_kelpie_n02105412_7810_gradcam.png}
+
+{\small True negative}
+
+\end{columns}
+
+\vspace{0.28em}
+
+% Bottom row
+\begin{columns}[T,onlytextwidth]
+
+\column{0.48\textwidth}
+
+\centering
+
+\includegraphics[
+  width=0.82\linewidth,
+  height=0.29\textheight,
+  keepaspectratio
+]{FP_weimaraner_n02092339_3028_gradcam.png}
+
+{\small False positive}
+
+\column{0.48\textwidth}
+
+\centering
+
+\includegraphics[
+  width=0.82\linewidth,
+  height=0.29\textheight,
+  keepaspectratio
+]{FN_staffordshire_bullterrier_n02093256_5988_gradcam.png}
+
+{\small False negative}
+
+\end{columns}
+
+\vspace{0.12em}
+
+{\scriptsize Diagnostic evidence—not proof of causal reasoning.}
+
+\end{frame}
+
+
+
+% ============================================================
+% REPRODUCIBILITY
+% ============================================================
+% ============================================================
+% PROJECT NOTEBOOKS AND EXECUTION ENVIRONMENT
+% ============================================================
+% ============================================================
+% COLAB NOTEBOOKS
+% ============================================================
+
+
+\begin{frame}{Project Contribution}
+
+\vspace{-0.3em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.47\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.65em}
+
+  \stepitem Reproducible pipeline
+  \stepitem Six-CNN benchmarks
+  \stepitem Multi-metric model selection
+\end{itemize}
+
+\column{0.47\textwidth}
+
+\begin{itemize}
+  \setlength{\itemsep}{0.65em}
+
+  \stepitem Fine-tuning analysis
+  \stepitem Error trade-off analysis
+  \stepitem Grad-CAM explainability
+\end{itemize}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{IPYNB Notebook Execution}
+
+\vspace{-0.25em}
+
+\begin{enumerate}
+\setlength{\itemsep}{0.62em}
+
+\stepitem \texttt{01\_Data\_Preparation.ipynb}
+\hfill {\small\color{projectblue}\textbf{CPU}}
+
+\stepitem \texttt{02\_Benchmarking.ipynb}
+\hfill {\small\color{projectblue}\textbf{GPU required}}
+
+\stepitem \texttt{03\_Fine\_Tuning.ipynb}
+\hfill {\small\color{projectblue}\textbf{GPU required}}
+
+\stepitem \texttt{04\_Gradcam.ipynb}
+\hfill {\small\color{projectblue}\textbf{CPU}}
+
+\end{enumerate}
+
+\vspace{0.45em}
+
+\centering
+{\small
+Local hardware did not provide a suitable GPU, so Google Colab was used to
+accelerate benchmarking and fine-tuning with a \textbf{GPU hardware accelerator}
+(NVIDIA T4 when available). Free-tier compute limits occasionally restricted
+GPU access, so some runs were completed during off-peak periods.
+}
+
+\end{frame}
+% ============================================================
+% CONCLUSIONS
+% ============================================================
+% ============================================================
+% LIMITATIONS — VIVA PROMPT
+% ============================================================
+% \begin{frame}[fragile]{GPU Runtime Configuration}
+
+% \vspace{-0.3em}
+
+% \begin{block}{Google Colab runtime}
+% \small
+% Benchmarking and fine-tuning were executed in Google Colab using a
+% \textbf{GPU hardware accelerator}. When available, Colab assigned an
+% \textbf{NVIDIA T4 GPU}.
+% \end{block}
+
+% \vspace{0.35em}
+
+% \begin{block}{TensorFlow GPU check}
+% \begin{verbatim}
+% import tensorflow as tf
+
+% gpus = tf.config.list_physical_devices("GPU")
+
+% if not gpus:
+%     raise RuntimeError("No GPU detected")
+% \end{verbatim}
+% \end{block}
+
+% \vspace{0.3em}
+
+% \centering
+% {\small
+% The notebook did not request a specific GPU model;
+% it verified that a GPU had been assigned to the Colab runtime.
+% }
+
+% \end{frame}
+\begin{frame}
+
+\centering
+\vfill
+
+{\fontsize{40}{46}\selectfont
+ \color{projectblue}
+ \bfseries
+ Limitations?
+}
+
+\vfill
+
+\end{frame}
+
+% TALK ABOUT:
+% - only 6 of 11 restricted categories represented
+% - no mixed ancestry
+% - image-only evidence
+% - breed-level variation hidden by aggregate metrics
+% - dataset bias and distribution shift
+
+% ============================================================
+% ETHICAL AND LEGAL BOUNDARY — VIVA PROMPT
+% ============================================================
+
+\begin{frame}
+
+\centering
+\vfill
+
+{\fontsize{36}{43}\selectfont
+ \color{projectblue}
+ \bfseries
+Deployment?
+}
+
+\vfill
+
+\end{frame}
+
+
+
+\begin{frame}
+
+\centering
+\vfill
+
+{\fontsize{36}{43}\selectfont
+ \color{projectblue}
+ \bfseries
+Further Questions?
+}
+
+\vfill
+
+\end{frame}
+% TALK ABOUT:
+% - statistical class is not ancestry
+% - class label is not dangerousness
+% - photographs cannot establish legal status
+% - false positives and false negatives have different consequences
+% - research prototype, not an enforcement system
+\begin{frame}{Conclusions}
+
+\vspace{-0.3em}
+
+\begin{columns}[T,onlytextwidth]
+
+\column{0.49\textwidth}
+
+\begin{enumerate}
+  \setlength{\itemsep}{0.55em}
+
+  \stepitem Transfer learning performed strongly
+  \stepitem InceptionResNetV2 ranked first
+  \stepitem Fine-tuning improved overall balance
+\end{enumerate}
+
+\column{0.45\textwidth}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \setlength{\itemsep}{0.55em}
+
+  \reveal{4}{\item Fine-tuning changed the error trade-off}
+  \reveal{5}{\item Current limitations do not justify real-world deployment}
+\end{enumerate}
+
+\end{columns}
+
+
+
+\end{frame}
+% ============================================================
+% QUESTIONS
+% ============================================================
+
+
+
+\end{document}
