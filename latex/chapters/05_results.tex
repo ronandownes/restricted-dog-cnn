@@ -1,0 +1,131 @@
+\chapter{Results}
+\label{chap:results}
+
+\section{Frozen model-zoo comparison}
+Table~\ref{tab:modelzoo} presents the principal frozen-model metrics. Values are shown to two decimal places as percentages in the narrative and to two decimal places on the zero-to-one scale in the table. InceptionResNetV2 achieved the strongest overall result. VGG16 was clearly weakest, while the remaining four modern architectures formed a stronger group.
+
+\begin{table}[H]
+\centering
+\caption{Frozen model-zoo test performance.}
+\label{tab:modelzoo}
+\small
+\renewcommand{\arraystretch}{1.85}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X c c c c c}
+\toprule
+Model & Accuracy & Precision & Recall & F1 & PR-AUC \\
+\midrule
+VGG16 & 0.86 & 0.59 & 0.91 & 0.71 & 0.81 \\
+ResNet50 & 0.91 & 0.69 & 0.93 & 0.80 & 0.89 \\
+InceptionV3 & 0.96 & 0.82 & 0.97 & 0.89 & 0.96 \\
+Xception & 0.95 & 0.79 & 0.97 & 0.87 & 0.97 \\
+InceptionResNetV2 & \textbf{0.97} & \textbf{0.87} & \textbf{0.98} & \textbf{0.93} & \textbf{0.99} \\
+NASNetMobile & 0.95 & 0.81 & 0.97 & 0.88 & 0.96 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\textwidth]{model_zoo_four_metric_comparison_presentation.pdf}
+\caption{Comparison of accuracy, precision, recall and F1 across the frozen model zoo.}
+\label{fig:modelzoocomparison}
+\end{figure}
+
+The contrast between VGG16 and the Inception-family models is especially visible in precision. VGG16 recovered 90.53\% of restricted images, but only 58.70\% of its restricted predictions were correct. This suggests a broad positive decision region that generated many false alarms. ResNet50 improved precision to 69.41\%, while InceptionV3, Xception, NASNetMobile and InceptionResNetV2 exceeded 79\%.
+
+InceptionV3 and Xception both achieved recall of 97.37\%. Their difference lay primarily in precision and ranking metrics. InceptionV3 reached 81.86\% precision and 88.94\% F1; Xception reached 79.06\% precision and 87.26\% F1. NASNetMobile reached 80.70\% precision, 96.84\% recall and 88.04\% F1. The compact NASNet model was therefore competitive, although not the strongest.
+
+
+\subsection{Benchmark decision}
+The benchmark identified InceptionResNetV2 as the strongest frozen model overall. Its principal advantage was not accuracy alone: it combined the highest recall and F1 with strong precision, PR-AUC and MCC. The model was therefore advanced to fine-tuning under the selection rule defined in Chapter~\ref{chap:methodology}.
+
+\section{Selected frozen model}
+InceptionResNetV2 achieved 97.08\% accuracy, 87.38\% precision, 98.42\% recall, 92.57\% F1, 0.9974 ROC-AUC, 0.9891 PR-AUC and 0.9101 MCC. Its confusion matrix contained 811 true negatives, 27 false positives, 3 false negatives and 187 true positives.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{InceptionResNetV2_confusion_matrix.png}
+\caption{Confusion matrix for frozen InceptionResNetV2.}
+\label{fig:frozenconfusion}
+\end{figure}
+
+The model missed only three of 190 restricted images. This is a recall of $187/190=98.42\%$. However, 27 unrestricted images were labelled restricted. Specificity was $811/838=96.78\%$. The result is excellent as a controlled benchmark, but the absolute counts matter: a high percentage does not erase the practical meaning of thirty incorrect decisions.
+
+\section{Fine-tuned performance}
+Fine-tuning improved accuracy to 98.25\%, precision to 93.88\%, F1 to 95.34\% and MCC to 0.9428. Recall declined to 96.84\%. The fine-tuned confusion matrix contained 826 true negatives, 12 false positives, 6 false negatives and 184 true positives.
+
+\begin{table}[H]
+\centering
+\caption{Frozen and fine-tuned InceptionResNetV2 comparison.}
+\label{tab:frozenfine}
+\renewcommand{\arraystretch}{1.85}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{lrrrr}
+\toprule
+Stage & Accuracy & Precision & Recall & F1 \\
+\midrule
+Frozen & 0.97 & 0.87 & \textbf{0.98} & 0.93 \\
+Fine-tuned & \textbf{0.98} & \textbf{0.94} & 0.97 & \textbf{0.95} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{quote}
+\textbf{Central result.} Fine-tuning improved overall balance and positive predictive reliability, but slightly reduced sensitivity to restricted examples. False positives fell by 15, from 27 to 12, while false negatives increased by 3, from 3 to 6.
+\end{quote}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{FineTuned_InceptionResNetV2_confusion_matrix.png}
+\caption{Confusion matrix for fine-tuned InceptionResNetV2.}
+\label{fig:fineconfusion}
+\end{figure}
+
+The most important change is not the 1.17 percentage-point increase in accuracy. False positives fell from 27 to 12, a reduction of 15 cases or 55.56\%. False negatives increased from 3 to 6. Fine-tuning therefore made the classifier more conservative about assigning the restricted label. This improved precision by 6.50 percentage points but reduced recall by 1.58 points.
+
+Specificity increased from 96.78\% to 98.57\%. The positive predictive value increased because fewer unrestricted images were included among positive predictions. Whether this is preferable depends on the cost model. If missing any restricted case is considered paramount, the frozen model's three false negatives may be preferred. If false designation of unrestricted dogs is considered especially harmful, the fine-tuned model provides a better balance.
+
+\section{Learning behaviour}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\textwidth]{FineTuned_InceptionResNetV2_learning_curves.png}
+\caption{Training and validation curves for fine-tuned InceptionResNetV2.}
+\label{fig:finecurves}
+\end{figure}
+
+The curves show the optimisation trajectory used for checkpoint selection. Training performance alone is not the selection criterion because a high-capacity model can continue to improve on training examples while validation loss worsens. The saved checkpoint and early-stopping controls protect against simply reporting the final epoch.
+
+The curves should also be interpreted cautiously. Validation performance is a noisy estimate based on 1,002 images, and small fluctuations can alter the nominal best epoch. A repeated-seed study or cross-validation would provide stronger estimates of variance. The available results demonstrate one reproducible run rather than a confidence interval over possible training histories.
+
+\section{Metric consistency}
+The fine-tuned model's higher accuracy, precision, F1 and MCC are mutually consistent with the confusion matrix. Its ROC-AUC and PR-AUC were marginally lower than the frozen model in the saved comparison, despite better thresholded performance. This is possible because AUC measures ranking across thresholds, whereas confusion-matrix metrics describe one threshold. Fine-tuning improved the chosen operating point without necessarily improving score ordering everywhere.
+
+This distinction is central to responsible reporting. Saying that the fine-tuned model is ``better'' without qualification would hide the loss in recall and the small AUC changes. The defensible conclusion is that fine-tuning produced a more balanced thresholded classifier with substantially fewer false positives, while the frozen model retained the highest sensitivity to restricted examples.
+
+\section{Error concentration}
+All three selected false-negative explanation cases were Staffordshire Bull Terriers. This does not prove that every false negative in the complete model is from that breed without a full per-breed table, but it identifies an important diagnostic pattern in the fixed sample. Staffordshire Bull Terriers display substantial variation in pose, expression, body condition and photographic framing, and they can share features with both restricted and unrestricted bull-type breeds.
+
+The false-positive examples included a Black-and-Tan Coonhound, a Kelpie and a Weimaraner. These cases demonstrate different routes to error: colour and head pattern, shepherd-like silhouette and contextual or compositional cues. The next chapter examines these examples through Grad-CAM.
+
+\section{Relative improvement and practical interpretation}
+The change from 97.08\% to 98.25\% accuracy is a relative reduction in total error from 30 incorrect cases to 18. This is a 40\% reduction in the number of test errors. The distribution of that reduction matters: fifteen false positives were removed while three additional false negatives were introduced. The net change of twelve fewer errors therefore conceals movement in opposite directions.
+
+Precision rose because the denominator $TP+FP$ became substantially cleaner. The frozen model made 214 positive predictions, of which 187 were correct. The fine-tuned model made 196 positive predictions, of which 184 were correct. It generated fewer positive alerts and a larger fraction of those alerts were correct. Recall declined because three of the previously recovered positives moved below the threshold.
+
+The F1 increase from 92.57\% to 95.34\% reflects the stronger harmonic balance. MCC also increased, indicating improvement across all four confusion cells rather than only the majority class. These measures support selection of the fine-tuned model as the more balanced final classifier, provided the stated preference does not demand maximum possible recall.
+
+\section{Why AUC and threshold metrics can disagree}
+AUC statistics consider all possible thresholds and are based on score ordering. A confusion matrix considers one threshold. Fine-tuning can move scores so that the 0.5 boundary becomes better aligned with the classes while slightly worsening the global ordering of some pairs. This explains why thresholded precision and F1 can improve even when ROC-AUC or PR-AUC changes marginally in the other direction.
+
+For deployment, both views matter. AUC indicates whether a useful operating point may exist; threshold metrics describe the selected operating point. A model with excellent AUC still requires a justified threshold. Conversely, a strong confusion matrix at one threshold can mask poor calibration or instability when prevalence changes.
+
+\section{Class prevalence and predictive value}
+Precision depends on prevalence. The test prevalence of restricted images is about 18.48\%. In a population with a much lower prevalence, the same sensitivity and specificity could produce a lower positive predictive value because false positives would arise from a larger negative pool. This is the base-rate effect.
+
+Therefore, the reported 93.88\% precision cannot be transferred directly to an operational population without knowing its case selection process and prevalence. If the model were applied only after expert triage, prevalence could be higher; if applied indiscriminately to general dog photographs, prevalence could be much lower. This is another reason to avoid interpreting benchmark precision as a universal property.
+
+\section{Results in relation to the hypotheses}
+The results support the hypothesis that pretrained deep architectures can distinguish the constructed classes effectively. They also support the expectation that architectures differ materially under common conditions. The result for InceptionResNetV2 is consistent with the hypothesis that modern multi-scale residual features would transfer strongly.
+
+The fine-tuning hypothesis is only partly supported. Fine-tuning improved several headline metrics, but it did not improve recall or every ranking measure. The correct conclusion is conditional: fine-tuning improved the balance of the chosen threshold, not every dimension of performance. This partial confirmation is more informative than forcing the outcome into a simple success/failure statement.
