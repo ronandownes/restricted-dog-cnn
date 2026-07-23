@@ -9,14 +9,24 @@ This directory is the authoritative source for the project documents:
 
 The report chapters, appendices, tables, references and editable TikZ diagram sources are stored alongside the four root documents.
 
-## Automatic GitHub build
+## Local editing and compilation
 
-The workflow at `.github/workflows/build-latex.yml`:
+From the repository root in PowerShell:
 
-1. collects the existing benchmark, fine-tuning and Grad-CAM figures;
-2. compiles the editable TikZ diagrams;
-3. compiles all four LaTeX documents;
-4. uploads the four PDFs as one workflow artifact;
-5. refreshes the corresponding PDFs in `docs/`.
+```powershell
+.\latex\build-local.ps1 report
+```
 
-Overleaf is not required. Locally, open the repository in VS Code with LaTeX Workshop and compile any of the four root `.tex` files.
+Replace `report` with `poster`, `presentation`, `slides` or `all`. The script prepares the figures, compiles the requested document and copies the finished PDF into `docs/`.
+
+After the first preparation run, LaTeX Workshop can also compile the root `.tex` file directly while you edit. Overleaf is not required.
+
+## Manual GitHub build
+
+Pushing LaTeX source does not regenerate the public PDFs. When a public rebuild is wanted:
+
+1. open the repository's **Actions** tab;
+2. select **Build LaTeX documents**;
+3. choose **Run workflow**.
+
+That manual workflow collects the figures, compiles all four documents, uploads the four-PDF artifact and refreshes the corresponding files in `docs/`. Visitors only receive the last completed PDFs; opening one never starts a build.
