@@ -2,7 +2,7 @@ name: Deploy website to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ["website/**", ".github/workflows/pages.yml"]
+    paths: ["website/**", "docs/*.pdf", ".github/workflows/pages.yml"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Add project documents to the site
+        run: |
+          mkdir -p website/docs
+          cp docs/*.pdf website/docs/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./website
