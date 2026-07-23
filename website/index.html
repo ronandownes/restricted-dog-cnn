@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="An interactive visual journey from ImageNet and convolutional neural networks to transfer learning, Grad-CAM and Vision Transformers, grounded in a six-model restricted-dog classification benchmark.">
   <title>From ImageNet to Vision Transformers · Restricted Dog CNN</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-3">
+  <link rel="stylesheet" href="styles.css?v=20260723-4">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-3" defer></script>
+  <script src="app.js?v=20260723-4" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -224,6 +224,11 @@
     </div>
     <div class="fine-boundary"><strong>Important correction:</strong><span>fine-tuning does not “work backwards deeper into the model” by permanently opening one layer after another. The chosen final 20 layers were trainable together. Backpropagation then carried gradients backwards through that trainable region on every batch.</span></div>
     <a class="inline-help" href="learning-curves.html#project-curves">How should I read the frozen and fine-tuned learning curves? →</a>
+    <div class="stepper fine-stepper">
+      <button id="finePrev" class="btn">← Previous</button>
+      <div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div>
+      <button id="fineNext" class="btn primary">Next view →</button>
+    </div>
     <div class="chart-box tall"><canvas id="fineChart"></canvas></div><div id="fineDeltas" class="deltas"></div>
     <div class="trade"><div class="good"><b>−15</b><span>false positives</span><small>27 → 12</small></div><div class="bad"><b>+3</b><span>false negatives</span><small>3 → 6</small></div><div><b>+0.0327</b><span>MCC</span><small>0.9101 → 0.9428</small></div></div>
   </div>
