@@ -25,9 +25,9 @@ const frozen=[97.08,87.38,98.42,92.57];
 const fineTuned=[98.25,93.88,96.84,95.34];
 const differences=fineTuned.map((v,j)=>+(v-frozen[j]).toFixed(2));
 const fineViews=[
-  {title:'Frozen model',summary:'The selected InceptionResNetV2 before its CNN layers were fine-tuned.'},
-  {title:'Fine-tuned model',summary:'The result after the final 20 base layers were allowed to adapt.'},
-  {title:'Frozen and fine-tuned',summary:'The two sets of test values shown directly beside one another.'},
+  {title:'Selected model — before fine-tuning',summary:'InceptionResNetV2 with its pretrained CNN base still frozen.'},
+  {title:'Selected model — after fine-tuning',summary:'The result after its final 20 base layers were allowed to adapt.'},
+  {title:'Before versus after',summary:'The two sets of test values shown directly beside one another.'},
   {title:'Change after fine-tuning',summary:'Three metrics improved; recall decreased by 1.58 percentage points.'}
 ];
 function performanceDataset(label,data,backgroundColor){return{label,data,backgroundColor,borderRadius:8,maxBarThickness:88}}
@@ -40,26 +40,26 @@ function updateFine(){
   fineNext.disabled=fineView===3;
   fChart.options.plugins.legend.display=fineView===2;
   if(fineView===0){
-    fChart.data.datasets=[performanceDataset('Frozen',frozen,metricKeys.map(k=>colors[k]))];
+    fChart.data.datasets=[performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>colors[k]))];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
-    fChart.options.scales.y.title.text='Frozen test performance (%)';
+    fChart.options.scales.y.title.text='Performance before fine-tuning (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else if(fineView===1){
-    fChart.data.datasets=[performanceDataset('Fine-tuned',fineTuned,metricKeys.map(k=>colors[k]))];
+    fChart.data.datasets=[performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
-    fChart.options.scales.y.title.text='Fine-tuned test performance (%)';
+    fChart.options.scales.y.title.text='Performance after fine-tuning (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else if(fineView===2){
     fChart.data.datasets=[
-      performanceDataset('Frozen',frozen,'#9aa8ba'),
-      performanceDataset('Fine-tuned',fineTuned,metricKeys.map(k=>colors[k]))
+      performanceDataset('Before fine-tuning',frozen,'#9aa8ba'),
+      performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))
     ];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
     fChart.options.scales.y.title.text='Test performance (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else{
     fChart.data.datasets=[{label:'Difference',data:differences,unit:'points',backgroundColor:differences.map(v=>v>=0?'#22865a':'#c84444'),borderRadius:8,maxBarThickness:88}];
-    fChart.options.scales.y.min=-2.5;fChart.options.scales.y.max=7;
+    fChart.options.scales.y.min=-7;fChart.options.scales.y.max=7;
     fChart.options.scales.y.title.text='Change (percentage points)';
     fChart.options.scales.y.ticks.callback=v=>(v>0?'+':'')+v;
   }
