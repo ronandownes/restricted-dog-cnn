@@ -1,14 +1,6 @@
 name: Build LaTeX documents
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "latex/**"
-      - "benchmark/figures/**"
-      - "fine_tuning/figures/**"
-      - "gradcam/figures/**"
-      - ".github/workflows/build-latex.yml"
   workflow_dispatch:
 
 permissions:
