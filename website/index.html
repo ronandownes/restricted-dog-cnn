@@ -14,7 +14,7 @@
   <div class="wrap nav">
     <a class="brand" href="#top"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
     <nav aria-label="Primary navigation">
-      <a href="#context">Context</a><a href="#benchmark">Benchmarking</a><a href="#fine">Fine-tuning</a><a href="#gradcam">Grad-CAM</a>
+      <a href="#context">Context</a><a href="#data">Data preparation</a><a href="#benchmark">Benchmarking</a><a href="#fine">Fine-tuning</a><a href="#gradcam">Grad-CAM</a>
       <details class="nav-dropdown">
         <summary>Education</summary>
         <div class="nav-dropdown-menu">
@@ -60,7 +60,7 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Irish context</span><i>→</i><span>Dataset</span><i>→</i><span>Convolution</span><i>→</i><span>Architecture</span><i>→</i><span>Evaluation</span><i>→</i><span>Attention</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data preparation</span><i>→</i><span>Benchmarking</span><i>→</i><span>Fine-tuning</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Education</span></div></section>
 
 <section id="context" class="section context-section">
   <div class="wrap">
@@ -97,9 +97,36 @@
   </div>
 </section>
 
+<section id="data" class="section data-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div><p class="chapter">01 · Data preparation</p><h2>The dataset defined the task before any model was trained.</h2></div>
+      <p class="section-intro">Notebook 1 acquired, extracted and validated Stanford Dogs, translated the project question into two reproducible classes, and created the fixed train, validation and held-out test folders used by every later experiment.</p>
+    </div>
+    <div class="data-pipeline" aria-label="Data preparation pipeline">
+      <article><span>1</span><h3>Acquire</h3><p>Download and extract the Stanford Dogs image archive.</p></article>
+      <article><span>2</span><h3>Map</h3><p>Match six represented restricted breeds to their Stanford folders.</p></article>
+      <article><span>3</span><h3>Sample</h3><p>Select 24 unrestricted breeds reproducibly using seed 58.</p></article>
+      <article><span>4</span><h3>Split</h3><p>Shuffle each breed and divide its images 60% / 20% / 20%.</p></article>
+      <article><span>5</span><h3>Verify</h3><p>Check that every class folder exists and contains images.</p></article>
+    </div>
+    <div class="split-summary">
+      <article><small>TRAIN</small><b>3,023</b><span>561 restricted · 2,462 unrestricted</span></article>
+      <article><small>VALIDATION</small><b>1,002</b><span>186 restricted · 816 unrestricted</span></article>
+      <article><small>HELD-OUT TEST</small><b>1,028</b><span>190 restricted · 838 unrestricted</span></article>
+      <article class="total"><small>TOTAL PREPARED</small><b>5,053</b><span>937 restricted · 4,116 unrestricted</span></article>
+    </div>
+    <div class="data-rules">
+      <div><strong>Fixed label meaning</strong><span>0 = unrestricted · 1 = restricted</span></div>
+      <div><strong>Why imbalance matters</strong><span>With many more unrestricted images, accuracy alone cannot describe model quality.</span></div>
+      <a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/01_Data_Preparation.ipynb" target="_blank" rel="noopener">Open Data Preparation notebook ↗</a>
+    </div>
+  </div>
+</section>
+
 <section id="imagenet" class="section story-section">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">01 · The catalyst</p><h2>ImageNet changed what computer vision could become.</h2></div><p class="section-intro">The breakthrough was not merely a new neural network. It was the combination of a huge labelled dataset, a demanding competition and enough compute to train deep models at scale.</p></div>
+    <div class="section-head"><div><p class="chapter">02 · The catalyst</p><h2>ImageNet changed what computer vision could become.</h2></div><p class="section-intro">The breakthrough was not merely a new neural network. It was the combination of a huge labelled dataset, a demanding competition and enough compute to train deep models at scale.</p></div>
     <div class="concept-grid three">
       <article class="concept"><span class="number">1</span><h3>Before ImageNet</h3><p>Vision systems often depended heavily on engineered features. Researchers designed descriptors first, then trained a classifier on top.</p><div class="mini-flow"><b>Image</b><i>→</i><b>Hand-crafted features</b><i>→</i><b>Classifier</b></div></article>
       <article class="concept featured"><span class="number">2</span><h3>ImageNet + ILSVRC</h3><p>A very large labelled image collection created a common arena where models could be compared on the same recognition task.</p><div class="big-stat"><b>1,000</b><span>classes in the classic ILSVRC classification task</span></div></article>
@@ -111,7 +138,7 @@
 
 <section id="cnn" class="section alt">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">02 · CNN mechanics</p><h2>How does a CNN actually see an image?</h2></div><p class="section-intro">A CNN does not “see a dog” in one step. It repeatedly applies local learned filters and builds more useful feature representations layer by layer.</p></div>
+    <div class="section-head"><div><p class="chapter">03 · CNN mechanics</p><h2>How does a CNN actually see an image?</h2></div><p class="section-intro">A CNN does not “see a dog” in one step. It repeatedly applies local learned filters and builds more useful feature representations layer by layer.</p></div>
     <div class="cnn-demo">
       <div class="image-grid"><span></span><span></span><span></span><span></span><span class="hot"></span><span class="hot"></span><span></span><span class="hot"></span><span></span></div>
       <div class="demo-arrow">×</div>
@@ -131,7 +158,7 @@
 
 <section id="evolution" class="section timeline-section">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">03 · Architecture evolution</p><h2>Every famous CNN solved a problem left by the previous generation.</h2></div><p class="section-intro">Do not memorise architecture names. Memorise the design pressure that produced each one.</p></div>
+    <div class="section-head"><div><p class="chapter">04 · Architecture evolution</p><h2>Every famous CNN solved a problem left by the previous generation.</h2></div><p class="section-intro">Do not memorise architecture names. Memorise the design pressure that produced each one.</p></div>
     <div class="timeline">
       <article><time>2012</time><h3>AlexNet</h3><b>Can deep CNNs win at scale?</b><p>GPU training, ReLU, dropout and data augmentation helped produce the ImageNet breakthrough.</p></article>
       <article><time>2014</time><h3>VGG</h3><b>Can depth be made systematic?</b><p>Repeated small 3×3 convolutions created a clean, uniform architecture and showed the power of going deeper.</p></article>
@@ -146,12 +173,12 @@
 </section>
 
 <section class="section transfer-band">
-  <div class="wrap transfer-grid"><div><p class="chapter light">04 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. This experiment reuses those representations rather than learning vision from scratch.</p></div><div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div></div>
+  <div class="wrap transfer-grid"><div><p class="chapter light">05 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. This experiment reuses those representations rather than learning vision from scratch.</p></div><div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div></div>
 </section>
 
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">05 · Controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
+    <div class="section-head"><div><p class="chapter">06 · Controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
     <a class="metrics-callout" href="metrics.html"><span>New to model evaluation?</span><strong>Learn accuracy, precision, recall, F1, PR-AUC and MCC using this project’s results →</strong></a>
     <a class="metrics-callout curve-callout" href="learning-curves.html"><span>How did training behave?</span><strong>Learn to interpret training accuracy, validation accuracy, training loss and validation loss →</strong></a>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
@@ -162,7 +189,7 @@
 </section>
 
 <section id="fine" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">06 · Fine-tuning</p><h2>Better overall performance can still change the error trade-off.</h2></div><p class="section-intro">Accuracy alone hides the important question: which mistakes disappeared, and which mistakes increased?</p></div>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>Better overall performance can still change the error trade-off.</h2></div><p class="section-intro">Accuracy alone hides the important question: which mistakes disappeared, and which mistakes increased?</p></div>
     <a class="inline-help" href="learning-curves.html#project-curves">How should I read the frozen and fine-tuned learning curves? →</a>
     <div class="chart-box tall"><canvas id="fineChart"></canvas></div><div id="fineDeltas" class="deltas"></div>
     <div class="trade"><div class="good"><b>−15</b><span>false positives</span><small>27 → 12</small></div><div class="bad"><b>+3</b><span>false negatives</span><small>3 → 6</small></div><div><b>+0.0327</b><span>MCC</span><small>0.9101 → 0.9428</small></div></div>
@@ -170,14 +197,14 @@
 </section>
 
 <section id="cm" class="section alt">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false positives, but it also created three additional false negatives in the restricted class.</p></div>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">08 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false positives, but it also created three additional false negatives in the restricted class.</p></div>
     <a class="inline-help" href="metrics.html#confusion-matrix">What do true positive, false positive and false negative mean? →</a>
     <div class="cm-wrap"><article class="cm-card"><div class="cm-title"><div><small>Frozen</small><h3>InceptionResNetV2</h3></div><span>97.08%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>811</b></div><div class="warn"><small>False positive</small><b>27</b></div><div class="badcell"><small>False negative</small><b>3</b></div><div class="ok"><small>True positive</small><b>187</b></div></div></article><div class="arrow">→</div><article class="cm-card selected"><div class="cm-title"><div><small>Fine-tuned</small><h3>InceptionResNetV2</h3></div><span>98.25%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>826</b><em>+15</em></div><div class="warn"><small>False positive</small><b>12</b><em>−15</em></div><div class="badcell"><small>False negative</small><b>6</b><em>+3</em></div><div class="ok"><small>True positive</small><b>184</b><em>−3</em></div></div></article></div>
   </div>
 </section>
 
 <section id="gradcam" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">08 · Explainability</p><h2>Grad-CAM asks: where was the CNN looking?</h2></div><p class="section-intro">It projects class-relevant activation back onto the image. That can expose useful visual focus, suspicious background reliance or ambiguous morphology—but it is not a causal explanation.</p></div>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">09 · Explainability</p><h2>Grad-CAM asks: where was the CNN looking?</h2></div><p class="section-intro">It projects class-relevant activation back onto the image. That can expose useful visual focus, suspicious background reliance or ambiguous morphology—but it is not a causal explanation.</p></div>
     <div class="grad-explain"><div class="layer-stack"><span></span><span></span><span></span><b>deep feature maps</b></div><i>+</i><div class="gradient-box">class gradients</div><i>→</i><div class="heat-box">heatmap</div><i>→</i><div class="overlay-box">image overlay</div></div>
     <div class="filters"><button class="filter active" data-f="all">All 12</button><button class="filter" data-f="TP">True positives</button><button class="filter" data-f="TN">True negatives</button><button class="filter" data-f="FP">False positives</button><button class="filter" data-f="FN">False negatives</button></div><div id="gallery" class="gallery"></div>
     <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction. It does not prove why the model decided, and it certainly does not establish behaviour, danger or legal identity.</span></div>
@@ -185,7 +212,7 @@
 </section>
 
 <section id="transformers" class="section transformer-section">
-  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">09 · The next paradigm</p><h2>If CNNs worked so well, why did Transformers enter vision?</h2></div><p class="section-intro">CNNs build in strong assumptions: local connectivity and translation-friendly weight sharing. Transformers relax those assumptions and learn relationships between image patches through attention.</p></div>
+  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">10 · The next paradigm</p><h2>If CNNs worked so well, why did Transformers enter vision?</h2></div><p class="section-intro">CNNs build in strong assumptions: local connectivity and translation-friendly weight sharing. Transformers relax those assumptions and learn relationships between image patches through attention.</p></div>
     <div class="versus"><article><span class="label">CNN</span><h3>Locality is built in.</h3><div class="cnn-route"><b>Pixels</b><i>→</i><b>Local filters</b><i>→</i><b>Feature hierarchy</b><i>→</i><b>Prediction</b></div><p>Excellent inductive bias for images; efficient learning of local spatial structure.</p></article><div class="vs">VS</div><article class="transformer-card"><span class="label">ViT</span><h3>Relationships are learned.</h3><div class="patches"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div><p>Split the image into patches, embed them as tokens, add position information, then let self-attention model patch-to-patch relationships.</p></article></div>
     <div class="attention-flow"><div><small>STEP 1</small><b>Image</b></div><i>→</i><div><small>STEP 2</small><b>Patches</b></div><i>→</i><div><small>STEP 3</small><b>Embeddings + position</b></div><i>→</i><div class="attention"><small>STEP 4</small><b>Self-attention</b></div><i>→</i><div><small>STEP 5</small><b>Classification</b></div></div>
     <div class="transformer-note"><b>The important historical point:</b> ViT did not prove that convolution was “wrong”. It showed that, given enough data and compute, a less image-specific architecture could become extremely competitive in vision.</div>
@@ -193,7 +220,7 @@
 </section>
 
 <section id="notebooks" class="section resources">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">10 · Go deeper</p><h2>Move from explanation to reproducible evidence.</h2></div><p class="section-intro">Every major project stage is available as an executed notebook, with the dissertation, poster and viva slides alongside it.</p></div>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">11 · Go deeper</p><h2>Move from explanation to reproducible evidence.</h2></div><p class="section-intro">Every major project stage is available as an executed notebook, with the dissertation, poster and viva slides alongside it.</p></div>
     <div class="notebooks"><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/01_Data_Preparation.ipynb"><b>01</b><span>Data Preparation</span><small>dataset construction</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/02_Frozen_Model_Benchmarking.ipynb"><b>02</b><span>Frozen Benchmark</span><small>six CNN comparison</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/03_Selected_Model_Fine_Tuning.ipynb"><b>03</b><span>Fine-Tuning</span><small>selected model</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/04_Model_Explainability.ipynb"><b>04</b><span>Grad-CAM</span><small>model explanation</small></a></div>
     <div class="artefacts"><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/docs/dog_cnn_report.pdf">Dissertation ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/docs/dog_cnn_poster.pdf">Poster ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/docs/dog_cnn_slides.pdf">Viva slides ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
   </div>
