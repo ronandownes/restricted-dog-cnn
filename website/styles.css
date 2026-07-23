@@ -275,10 +275,15 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .document-toolbar p{margin-bottom:0;color:var(--muted)}
 .document-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 .document-actions .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px}
-.document-stage{height:min(78vh,940px);min-height:600px;background:#293442;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.document-stage{position:relative;height:min(78vh,940px);min-height:600px;background:#293442;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
 .document-stage object,.document-stage iframe{display:block;width:100%;height:100%;border:0}
 .document-stage:fullscreen{height:100vh;min-height:0;border-radius:0}
 .document-stage:fullscreen object{height:100vh}
+.pdf-page-controls{position:absolute;left:50%;bottom:18px;z-index:8;display:flex;align-items:center;gap:12px;transform:translateX(-50%);padding:8px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(13,29,48,.94);box-shadow:0 8px 26px rgba(0,0,0,.28);color:#fff}
+.pdf-page-controls button{min-height:40px;padding:8px 14px;border:0;border-radius:999px;background:#fff;color:var(--navy);font:inherit;font-weight:850;cursor:pointer}
+.pdf-page-controls button:disabled{cursor:not-allowed;opacity:.38}
+.pdf-page-controls>span{min-width:64px;text-align:center;font-variant-numeric:tabular-nums}
+.document-stage:fullscreen .pdf-page-controls{bottom:22px}
 .pdf-fallback{margin:40px;padding:30px;background:#fff;border-radius:15px;color:var(--ink)}
 .document-note{color:var(--muted);font-size:.94rem}
 footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted)}
@@ -338,7 +343,9 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .document-toolbar{align-items:stretch;flex-direction:column}
 .document-actions{display:grid;grid-template-columns:1fr 1fr;justify-content:stretch}
 .document-actions .btn:first-child{grid-column:1/-1}
-.document-stage{height:68vh;min-height:480px;border-radius:12px}
+  .document-stage{height:68vh;min-height:480px;border-radius:12px}
+  .pdf-page-controls{bottom:9px;width:calc(100% - 18px);justify-content:space-between}
+  .pdf-page-controls button{padding:8px 11px;font-size:.84rem}
 }
 
 /* Irish context */
