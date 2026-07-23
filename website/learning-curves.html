@@ -7,12 +7,17 @@
   <title>Learning Curves · Restricted Dog CNN</title>
   <link rel="stylesheet" href="styles.css">
   <script src="learning-curves.js" defer></script>
+  <script src="navigation.js" defer></script>
 </head>
 <body class="curve-page">
 <header class="site-header">
   <div class="wrap nav">
     <a class="brand" href="index.html"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
-    <nav aria-label="Primary navigation">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu">
+      <span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="menu-label">Menu</span>
+    </button>
+    <nav id="primary-navigation" aria-label="Primary navigation">
       <a href="index.html#context">Context</a><a href="index.html#data">Data preparation</a><a href="index.html#benchmark">Benchmarking</a><a href="index.html#fine">Fine-tuning</a><a href="index.html#gradcam">Grad-CAM</a>
       <details class="nav-dropdown">
         <summary>Education</summary>
