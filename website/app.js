@@ -11,7 +11,7 @@ const models=[
 ];
 const cases=[
 ['FN','Staffordshire Bull Terrier','FN_staffordshire_bullterrier_n02093256_2987_gradcam.png'],['FN','Staffordshire Bull Terrier','FN_staffordshire_bullterrier_n02093256_5325_gradcam.png'],['FN','Staffordshire Bull Terrier','FN_staffordshire_bullterrier_n02093256_5988_gradcam.png'],['FP','Black-and-tan Coonhound','FP_black-and-tan_coonhound_n02089078_1454_gradcam.png'],['FP','Kelpie','FP_kelpie_n02105412_7370_gradcam.png'],['FP','Weimaraner','FP_weimaraner_n02092339_3028_gradcam.png'],['TN','Curly-coated Retriever','TN_curly-coated_retriever_n02099429_1465_gradcam.png'],['TN','Greater Swiss Mountain Dog','TN_greater_swiss_mountain_dog_n02107574_2662_gradcam.png'],['TN','Kelpie','TN_kelpie_n02105412_7810_gradcam.png'],['TP','German Shepherd','TP_german_shepherd_n02106662_13368_gradcam.png'],['TP','Rottweiler','TP_rottweiler_n02106550_4962_gradcam.png'],['TP','Staffordshire Bull Terrier','TP_staffordshire_bullterrier_n02093256_8205_gradcam.png']];
-let i=0,bChart,fChart;
+let i=0,fineView=0,bChart,fChart;
 const valueLabels={id:'values',afterDatasetsDraw(c){const x=c.ctx;x.save();x.font='800 13px system-ui';x.textAlign='center';x.fillStyle='#122033';c.data.datasets.forEach((d,di)=>c.getDatasetMeta(di).data.forEach((bar,j)=>{if(d.data[j]!=null){const v=Number(d.data[j]),suffix=d.unit==='points'?' pts':'%';x.fillText(`${v>0&&d.unit==='points'?'+':''}${v.toFixed(d.unit==='points'?2:1)}${suffix}`,bar.x,v<0?bar.y+17:bar.y-7)}}));x.restore()}};Chart.register(valueLabels);
 function story(n){return [
 ['Baseline established','VGG16 begins with strong recall, but precision and F1 leave substantial room for improvement.'],
@@ -26,23 +26,57 @@ const metricKeys=['Accuracy','Precision','Recall','F1'];
 const frozen=[96.79,86.85,97.37,91.81];
 const fineTuned=[97.96,92.89,96.32,94.57];
 const differences=fineTuned.map((v,j)=>+(v-frozen[j]).toFixed(2));
+const frozenMatrix={tn:810,fp:28,fn:5,tp:185};
+const fineTunedMatrix={tn:824,fp:14,fn:7,tp:183};
+const fineViews=[
+  {title:'Before fine-tuning',summary:'InceptionResNetV2 with its pretrained CNN base frozen.'},
+  {title:'After fine-tuning',summary:'The same model after its final 20 base layers were allowed to adapt.'},
+  {title:'Side-by-side comparison',summary:'Muted bars show before; richer bars show after fine-tuning.'},
+  {title:'Difference after fine-tuning',summary:'Positive bars improved; the negative recall bar shows the trade-off.'}
+];
 function performanceDataset(label,data,backgroundColor){return{label,data,backgroundColor,borderRadius:8,maxBarThickness:88}}
 function updateFine(){
-  fChart.data.datasets=[
-    performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>mutedColors[k])),
-    performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))
-  ];
+  const view=fineViews[fineView];
+  fineCount.textContent=`${fineView+1} of 4`;
+  fineTitle.textContent=view.title;
+  fineSummary.textContent=view.summary;
+  finePrev.disabled=fineView===0;
+  fineNext.disabled=fineView===3;
+  fChart.options.plugins.legend.display=fineView===2;
+  if(fineView===0){
+    fChart.data.datasets=[performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>mutedColors[k]))];
+    finePanel.innerHTML=`<p class="eyebrow">Frozen CNN base</p><h3>Confusion matrix</h3><div class="compact-matrix">${matrixMarkup(frozenMatrix)}</div><a class="matrix-help" href="metrics.html#confusion-matrix">How to read this matrix →</a>`;
+  }else if(fineView===1){
+    fChart.data.datasets=[performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))];
+    finePanel.innerHTML=`<p class="eyebrow">Final 20 layers trainable</p><h3>Confusion matrix</h3><div class="compact-matrix">${matrixMarkup(fineTunedMatrix)}</div><a class="matrix-help" href="metrics.html#confusion-matrix">How to read this matrix →</a>`;
+  }else if(fineView===2){
+    fChart.data.datasets=[
+      performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>mutedColors[k])),
+      performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))
+    ];
+    finePanel.innerHTML=`<p class="eyebrow">What changed?</p><h3>Fine-tuning improved three metrics.</h3><div class="change-list"><div><span>Accuracy</span><b>+1.17 pts</b></div><div><span>Precision</span><b>+6.04 pts</b></div><div class="down"><span>Recall</span><b>−1.05 pts</b></div><div><span>F1</span><b>+2.76 pts</b></div></div>`;
+  }else{
+    fChart.data.datasets=[{label:'Difference',data:differences,unit:'points',backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:8,maxBarThickness:88}];
+    finePanel.innerHTML=`<p class="eyebrow">Error trade-off</p><h3>Fewer false positives, but two more false negatives.</h3><div class="change-list errors"><div><span>False positives</span><b>28 → 14</b><small>14 fewer</small></div><div class="down"><span>False negatives</span><b>5 → 7</b><small>2 more</small></div><div><span>Correct predictions</span><b>995 → 1,007</b><small>12 more</small></div></div>`;
+  }
+  const differenceView=fineView>=2;
+  fChart.options.scales.y.min=differenceView&&fineView===3?-7:84;
+  fChart.options.scales.y.max=differenceView&&fineView===3?7:100;
+  fChart.options.scales.y.title.text=fineView===3?'Change (percentage points)':'Test performance (%)';
+  fChart.options.scales.y.ticks.callback=fineView===3?v=>(v>0?'+':'')+v:v=>v+'%';
+  const values=fineView===0?frozen:fineView===1?fineTuned:differences;
+  fineDeltas.innerHTML=metricKeys.map((k,j)=>`<div class="delta metric-change" style="--c:${colors[k]}"><span>${k}</span><b>${fineView<2?values[j].toFixed(2)+'%':`${values[j]>0?'+':''}${values[j].toFixed(2)} pts`}</b></div>`).join('');
   fChart.update();
 }
 window.addEventListener('DOMContentLoaded',()=>{
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',onClick:()=>{}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
-  const fr={Accuracy:96.79,Precision:86.85,Recall:97.37,F1:91.81},ft={Accuracy:97.96,Precision:92.89,Recall:96.32,F1:94.57};
-  fineDeltas.innerHTML=metricKeys.map(k=>{const d=+(ft[k]-fr[k]).toFixed(2),ar=d>0?'↑':'↓';return `<div class="delta metric-change" style="--c:${colors[k]}"><span>${k}</span><b>${ar} ${d>0?'+':''}${d.toFixed(2)} pts</b></div>`}).join('');
   gallery.innerHTML=cases.map(([cat,breed,file])=>{const url=`${RAW}/gradcam/figures/${file}`,lab={TP:'True positive',TN:'True negative',FP:'False positive',FN:'False negative'}[cat];let note='Representative case from the fixed twelve-image explanation sample.';if(file.includes('german_shepherd'))note='Attention concentrated around the head and ears in this correctly restricted prediction.';if(file.includes('weimaraner'))note='Body shape, pose, coat contrast and contextual structure may have contributed to this false positive.';return `<article class="card" data-cat="${cat}"><a href="${url}" target="_blank"><img src="${url}" alt="${lab}: ${breed}" loading="lazy"></a><div class="card-copy"><span class="tag ${cat}">${lab}</span><h3>${breed}</h3><p class="muted">${note}</p></div></article>`}).join('');
   document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.card').forEach(c=>c.hidden=b.dataset.f!=='all'&&c.dataset.cat!==b.dataset.f)});
   prev.onclick=()=>{if(i){i--;update()}};
   next.onclick=()=>{if(i<5){i++;update()}};
+  finePrev.onclick=()=>{if(fineView){fineView--;updateFine()}};
+  fineNext.onclick=()=>{if(fineView<3){fineView++;updateFine()}};
   update();
   updateFine();
 });
