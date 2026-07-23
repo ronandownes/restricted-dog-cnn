@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="An interactive visual journey from ImageNet and convolutional neural networks to transfer learning, Grad-CAM and Vision Transformers, grounded in a six-model restricted-dog classification benchmark.">
   <title>From ImageNet to Vision Transformers · Restricted Dog CNN</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-4">
+  <link rel="stylesheet" href="styles.css?v=20260723-5">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-4" defer></script>
+  <script src="app.js?v=20260723-5" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -214,16 +214,7 @@
 </section>
 
 <section id="fine" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>Better overall performance can still change the error trade-off.</h2></div><p class="section-intro">Accuracy alone hides the important question: which mistakes disappeared, and which mistakes increased?</p></div>
-    <div class="fine-process">
-      <article><span>1</span><div><small>START FROM THE WINNER</small><h3>Load the best frozen checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Its trained classification head and ImageNet feature extractor were retained.</p></div></article>
-      <article><span>2</span><div><small>OPEN THE DEEPEST PART</small><h3>Unfreeze the final 20 base layers</h3><p>Earlier layers stayed fixed. Only the deepest 20 layers of the pretrained base—plus the classification head—were allowed to change.</p></div></article>
-      <article><span>3</span><div><small>PROPAGATE THE ERROR BACKWARDS</small><h3>Backpropagation calculates useful changes</h3><p>Each prediction produced a loss. Gradients carried that error backwards from the sigmoid output, through the head and into the 20 unfrozen layers.</p></div></article>
-      <article><span>4</span><div><small>MAKE SMALL UPDATES</small><h3>Adam updates trainable weights at 1e-5</h3><p>The low learning rate made cautious adjustments, helping deeper features specialise without rapidly overwriting useful ImageNet knowledge.</p></div></article>
-      <article><span>5</span><div><small>CONTROL GENERALISATION</small><h3>Validate, stop and retain the best checkpoint</h3><p>Training allowed up to 15 epochs with class weighting and patience 4. Early stopping limited overfitting, and the best validation checkpoint—not simply the last epoch—was evaluated.</p></div></article>
-    </div>
-    <div class="fine-boundary"><strong>Important correction:</strong><span>fine-tuning does not “work backwards deeper into the model” by permanently opening one layer after another. The chosen final 20 layers were trainable together. Backpropagation then carried gradients backwards through that trainable region on every batch.</span></div>
-    <a class="inline-help" href="learning-curves.html#project-curves">How should I read the frozen and fine-tuned learning curves? →</a>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>What changed when the selected model was fine-tuned?</h2></div><p class="section-intro">InceptionResNetV2 was selected from the six-model benchmark. Start with its results before and after fine-tuning; the technical explanation follows underneath.</p></div>
     <div class="stepper fine-stepper">
       <button id="finePrev" class="btn">← Previous</button>
       <div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div>
@@ -231,6 +222,15 @@
     </div>
     <div class="chart-box tall"><canvas id="fineChart"></canvas></div><div id="fineDeltas" class="deltas"></div>
     <div class="trade"><div class="good"><b>−15</b><span>false positives</span><small>27 → 12</small></div><div class="bad"><b>+3</b><span>false negatives</span><small>3 → 6</small></div><div><b>+0.0327</b><span>MCC</span><small>0.9101 → 0.9428</small></div></div>
+    <div class="fine-process">
+      <article><span>1</span><div><small>START FROM THE SELECTED MODEL</small><h3>Load its best checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Before fine-tuning, its ImageNet CNN base was frozen and only its classification head had learned this task.</p></div></article>
+      <article><span>2</span><div><small>OPEN THE DEEPEST PART</small><h3>Unfreeze the final 20 base layers</h3><p>Earlier layers stayed fixed. Only the deepest 20 layers of the pretrained base—plus the classification head—were allowed to change.</p></div></article>
+      <article><span>3</span><div><small>PROPAGATE THE ERROR BACKWARDS</small><h3>Backpropagation calculates useful changes</h3><p>Each prediction produced a loss. Gradients carried that error backwards from the sigmoid output, through the head and into the 20 unfrozen layers.</p></div></article>
+      <article><span>4</span><div><small>MAKE SMALL UPDATES</small><h3>Adam updates trainable weights at 1e-5</h3><p>The low learning rate made cautious adjustments, helping deeper features specialise without rapidly overwriting useful ImageNet knowledge.</p></div></article>
+      <article><span>5</span><div><small>CONTROL GENERALISATION</small><h3>Validate, stop and retain the best checkpoint</h3><p>Training allowed up to 15 epochs with class weighting and patience 4. Early stopping limited overfitting, and the best validation checkpoint—not simply the last epoch—was evaluated.</p></div></article>
+    </div>
+    <div class="fine-boundary"><strong>What “before fine-tuning” means:</strong><span>the selected model’s pretrained CNN base was still frozen, while its new classification head had been trained for restricted-versus-unrestricted prediction. During fine-tuning, the final 20 base layers were made trainable together and backpropagation updated that trainable region.</span></div>
+    <a class="inline-help" href="learning-curves.html#project-curves">How should I read the before-and-after learning curves? →</a>
   </div>
 </section>
 
