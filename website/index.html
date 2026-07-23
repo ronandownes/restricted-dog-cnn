@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-7">
+  <link rel="stylesheet" href="styles.css?v=20260723-8">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-7" defer></script>
+  <script src="app.js?v=20260723-8" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -203,9 +203,17 @@
 
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
-    <div class="section-head benchmark-heading"><div><p class="chapter">06 · Benchmarking</p><h2>Benchmarking six ImageNet-pretrained CNNs.</h2></div></div>
+    <div class="section-head benchmark-heading"><div><p class="chapter">06 · Benchmarking</p><h2>Benchmark six CNNs.</h2></div></div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
-    <div class="grid-two"><div class="chart-box"><canvas id="benchmarkChart"></canvas></div><aside class="panel result-panel"><p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p><div id="tiles" class="tiles"></div></aside></div>
+    <div class="benchmark-results">
+      <div class="chart-box"><canvas id="benchmarkChart"></canvas></div>
+      <aside class="panel result-panel">
+        <p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p>
+        <div id="benchmarkMatrix" class="compact-matrix" aria-live="polite"></div>
+        <a class="matrix-help" href="metrics.html#confusion-matrix">How to read this matrix →</a>
+      </aside>
+    </div>
+    <div id="tiles" class="benchmark-tiles tiles"></div>
     <article id="architecture" class="architecture-panel" aria-live="polite"></article>
     <div id="deltas" class="deltas"></div>
     <div class="key-line"><strong>Read this carefully</strong><span>Architecture chronology does not guarantee better performance on a particular downstream task. The benchmark decides.</span></div>
@@ -217,14 +225,14 @@
 </section>
 
 <section id="fine" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>What changed when the selected model was fine-tuned?</h2></div><p class="section-intro">InceptionResNetV2 was selected from the six-model benchmark. Start with its results before and after fine-tuning; the technical explanation follows underneath.</p></div>
-    <div class="stepper fine-stepper">
-      <button id="finePrev" class="btn">← Previous</button>
-      <div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div>
-      <button id="fineNext" class="btn primary">Next view →</button>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>Fine-tune the winning CNN: InceptionResNetV2.</h2></div><p class="section-intro">Muted bars show the selected frozen-base model. Richer bars show the same model after its final 20 base layers were fine-tuned.</p></div>
+    <div class="chart-box tall"><canvas id="fineChart"></canvas></div>
+    <div id="fineDeltas" class="deltas"></div>
+    <div class="fine-matrices">
+      <article class="cm-card"><div class="cm-title"><div><small>Before fine-tuning</small><h3>Frozen CNN base</h3></div><span>96.79%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>810</b></div><div class="warn"><small>False positive</small><b>28</b></div><div class="badcell"><small>False negative</small><b>5</b></div><div class="ok"><small>True positive</small><b>185</b></div></div></article>
+      <article class="cm-card selected"><div class="cm-title"><div><small>After fine-tuning</small><h3>Final 20 base layers trainable</h3></div><span>97.96%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>824</b><em>+14</em></div><div class="warn"><small>False positive</small><b>14</b><em>−14</em></div><div class="badcell"><small>False negative</small><b>7</b><em>+2</em></div><div class="ok"><small>True positive</small><b>183</b><em>−2</em></div></div></article>
     </div>
-    <div class="chart-box tall"><canvas id="fineChart"></canvas></div><div id="fineDeltas" class="deltas"></div>
-    <div class="trade"><div class="good"><b>−15</b><span>false positives</span><small>27 → 12</small></div><div class="bad"><b>+3</b><span>false negatives</span><small>3 → 6</small></div><div><b>+0.0327</b><span>MCC</span><small>0.9101 → 0.9428</small></div></div>
+    <div class="trade"><div class="good"><b>−14</b><span>false positives</span><small>28 → 14</small></div><div class="bad"><b>+2</b><span>false negatives</span><small>5 → 7</small></div><div><b>+1.17</b><span>accuracy points</span><small>96.79% → 97.96%</small></div></div>
     <div class="fine-process">
       <article><span>1</span><div><small>START FROM THE SELECTED MODEL</small><h3>Load its best checkpoint</h3><p>InceptionResNetV2 was selected from the six-model benchmark. Before fine-tuning, its ImageNet CNN base was frozen and only its classification head had learned this task.</p></div></article>
       <article><span>2</span><div><small>OPEN THE DEEPEST PART</small><h3>Unfreeze the final 20 base layers</h3><p>Earlier layers stayed fixed. Only the deepest 20 layers of the pretrained base—plus the classification head—were allowed to change.</p></div></article>
@@ -234,13 +242,6 @@
     </div>
     <div class="fine-boundary"><strong>What “before fine-tuning” means:</strong><span>the selected model’s pretrained CNN base was still frozen, while its new classification head had been trained for restricted-versus-unrestricted prediction. During fine-tuning, the final 20 base layers were made trainable together and backpropagation updated that trainable region.</span></div>
     <a class="inline-help" href="learning-curves.html#project-curves">How should I read the before-and-after learning curves? →</a>
-  </div>
-</section>
-
-<section id="cm" class="section alt">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">08 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false positives, but it also created three additional false negatives in the restricted class.</p></div>
-    <a class="inline-help" href="metrics.html#confusion-matrix">What do true positive, false positive and false negative mean? →</a>
-    <div class="cm-wrap"><article class="cm-card"><div class="cm-title"><div><small>Frozen</small><h3>InceptionResNetV2</h3></div><span>97.08%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>811</b></div><div class="warn"><small>False positive</small><b>27</b></div><div class="badcell"><small>False negative</small><b>3</b></div><div class="ok"><small>True positive</small><b>187</b></div></div></article><div class="arrow">→</div><article class="cm-card selected"><div class="cm-title"><div><small>Fine-tuned</small><h3>InceptionResNetV2</h3></div><span>98.25%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>826</b><em>+15</em></div><div class="warn"><small>False positive</small><b>12</b><em>−15</em></div><div class="badcell"><small>False negative</small><b>6</b><em>+3</em></div><div class="ok"><small>True positive</small><b>184</b><em>−3</em></div></div></article></div>
   </div>
 </section>
 
