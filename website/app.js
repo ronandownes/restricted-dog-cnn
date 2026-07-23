@@ -69,7 +69,7 @@ function updateFine(){
   const frozenUrl=`${RAW}/benchmark/figures/InceptionResNetV2_learning_curves.png`,tunedUrl=`${RAW}/fine_tuning/figures/FineTuned_InceptionResNetV2_learning_curves.png`;
   if(fineView===0){fineCurveTitle.textContent='InceptionResNetV2 · before fine-tuning accuracy and loss';fineCurveStrip.innerHTML=`<img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning">`}
   else if(fineView===1){fineCurveTitle.textContent='InceptionResNetV2 · after fine-tuning accuracy and loss';fineCurveStrip.innerHTML=`<img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning">`}
-  else{fineCurveTitle.textContent='InceptionResNetV2 · before and after learning curves';fineCurveStrip.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning"><figcaption>InceptionResNetV2 · before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning"><figcaption>InceptionResNetV2 · after fine-tuning</figcaption></figure></div>`}
+  else{fineCurveTitle.textContent=fineView===2?'InceptionResNetV2 · learning curves side by side':'InceptionResNetV2 · learning curves behind the measured differences';fineCurveStrip.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="InceptionResNetV2 learning curves before fine-tuning"><figcaption>InceptionResNetV2 · before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="InceptionResNetV2 learning curves after fine-tuning"><figcaption>InceptionResNetV2 · after fine-tuning</figcaption></figure></div>`}
   fChart.options.plugins.title.text=`InceptionResNetV2 · ${view.title}`;
   fChart.update();
 }
@@ -81,6 +81,7 @@ function setupExpandableVisuals(){
   document.body.appendChild(overlay);
   const content=overlay.querySelector('.visual-overlay-content'),title=overlay.querySelector('strong'),closeButton=overlay.querySelector('.visual-close'),previousButton=overlay.querySelector('.visual-prev'),nextButton=overlay.querySelector('.visual-next');
   const benchmarkVisuals=new Set(['benchmarkMetricsVisual','benchmarkMatrixVisual','benchmarkCurveVisual']);
+  const fineVisuals=new Set(['fineMetricsVisual','finePanel','fineCurveVisual']);
   let activeSource=null;
   const visualName=source=>{
     if(source.id==='benchmarkMetricsVisual')return `${models[i].name} · Test metrics`;
@@ -107,11 +108,15 @@ function setupExpandableVisuals(){
       clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
       content.appendChild(clone);
     }
-    const canNavigate=benchmarkVisuals.has(source.id);
+    const isBenchmark=benchmarkVisuals.has(source.id);
+    const isFine=fineVisuals.has(source.id);
+    const canNavigate=isBenchmark||isFine;
     previousButton.hidden=!canNavigate;
     nextButton.hidden=!canNavigate;
-    previousButton.disabled=i===0;
-    nextButton.disabled=i===models.length-1;
+    previousButton.textContent=isFine?'← Previous view':'← Previous model';
+    nextButton.textContent=isFine?'Next view →':'Next model →';
+    previousButton.disabled=isFine?fineView===0:i===0;
+    nextButton.disabled=isFine?fineView===fineViews.length-1:i===models.length-1;
   };
   const close=async()=>{if(document.fullscreenElement)await document.exitFullscreen().catch(()=>{});overlay.hidden=true;activeSource=null;content.replaceChildren();document.body.classList.remove('visual-open')};
   const open=async source=>{
@@ -121,20 +126,27 @@ function setupExpandableVisuals(){
     await overlay.requestFullscreen?.().catch(()=>{});
     closeButton.focus();
   };
-  const moveModel=direction=>{
-    if(!activeSource||!benchmarkVisuals.has(activeSource.id))return;
-    const nextIndex=Math.max(0,Math.min(models.length-1,i+direction));
-    if(nextIndex===i)return;
-    i=nextIndex;
-    update();
+  const moveVisual=direction=>{
+    if(!activeSource)return;
+    if(benchmarkVisuals.has(activeSource.id)){
+      const nextIndex=Math.max(0,Math.min(models.length-1,i+direction));
+      if(nextIndex===i)return;
+      i=nextIndex;
+      update();
+    }else if(fineVisuals.has(activeSource.id)){
+      const nextView=Math.max(0,Math.min(fineViews.length-1,fineView+direction));
+      if(nextView===fineView)return;
+      fineView=nextView;
+      updateFine();
+    }else return;
     requestAnimationFrame(()=>render(activeSource));
   };
   document.querySelectorAll('.expandable-visual').forEach(source=>{
     source.addEventListener('click',event=>{if(event.target.closest('a,button'))return;open(source)});
     source.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&!event.target.closest('a,button')){event.preventDefault();open(source)}});
   });
-  previousButton.addEventListener('click',()=>moveModel(-1));
-  nextButton.addEventListener('click',()=>moveModel(1));
+  previousButton.addEventListener('click',()=>moveVisual(-1));
+  nextButton.addEventListener('click',()=>moveVisual(1));
   closeButton.addEventListener('click',close);
   overlay.addEventListener('click',event=>{if(event.target===overlay)close()});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!overlay.hidden)close()});
