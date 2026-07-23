@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-29">
+  <link rel="stylesheet" href="styles.css?v=20260723-31">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
   <script src="app.js?v=20260723-20" defer></script>
-  <script src="navigation.js?v=20260723-6" defer></script>
+  <script src="navigation.js?v=20260723-7" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -19,7 +19,16 @@
       <span class="menu-label">Menu</span>
     </button>
     <nav id="primary-navigation" aria-label="Primary navigation">
-      <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
+      <a href="#context">Context</a><a href="#data">Data</a><a href="#compute">Compute</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
+      <details class="nav-dropdown">
+        <summary>Submissions</summary>
+        <div class="nav-dropdown-menu">
+          <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
+          <a href="documents.html?document=poster"><strong>Poster</strong></a>
+          <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
+          <a href="documents.html?document=report"><strong>Report</strong></a>
+        </div>
+      </details>
       <details class="nav-dropdown">
         <summary>Learning Hub</summary>
         <div class="nav-dropdown-menu">
@@ -36,10 +45,6 @@
         <summary>Links</summary>
         <div class="nav-dropdown-menu">
           <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>Repository</strong><small>Code and results</small></a>
-          <a href="documents.html?document=report"><strong>Report</strong><small>Dissertation PDF</small></a>
-          <a href="documents.html?document=poster"><strong>Poster</strong><small>Research poster</small></a>
-          <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>For students and self-study</small></a>
-          <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>For presenters · staged reveals</small></a>
           <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs" target="_blank" rel="noopener"><strong>All documents</strong><small>GitHub folder</small></a>
           <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
           <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
@@ -71,7 +76,7 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Theory &amp; Methods</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Compute</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Submissions</span><i>→</i><span>Learning</span></div></section>
 
 <section id="context" class="section context-section">
   <div class="wrap">
@@ -130,6 +135,43 @@
       <div><strong>Why imbalance matters</strong><span>With many more unrestricted images, accuracy alone cannot describe model quality.</span></div>
       <a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/01_Data_Preparation.ipynb" target="_blank" rel="noopener">Open Data Preparation notebook ↗</a>
     </div>
+  </div>
+</section>
+
+<section id="compute" class="section alt compute-section">
+  <div class="wrap">
+    <div class="section-head benchmark-heading">
+      <div><h2>Compute</h2><p class="section-subtitle">Use accelerated hardware where it changes the runtime; use ordinary CPU compute where it does not.</p></div>
+      <p class="section-intro">The project used Google Colab because the local Surface laptop had no suitable training GPU. Free Colab GPU access was useful but dynamic, limited and not guaranteed.</p>
+    </div>
+    <div class="compute-route" aria-label="Project compute allocation">
+      <article class="cpu"><small>CPU</small><h3>Data Preparation</h3><p>File handling, class mapping, seeded sampling and dataset splitting did not need a GPU.</p></article>
+      <article class="gpu"><small>GPU</small><h3>CNN Benchmark</h3><p>Six ImageNet-pretrained CNNs were trained and evaluated using a Colab GPU when available.</p></article>
+      <article class="gpu"><small>GPU</small><h3>Fine-tuning</h3><p>Updating the selected model’s trainable layers was the other compute-intensive stage.</p></article>
+      <article class="cpu"><small>CPU</small><h3>Grad-CAM</h3><p>The fixed explanation cases could be generated without occupying scarce training-GPU time.</p></article>
+    </div>
+    <div class="compute-notes">
+      <article><h3>Why the GPU mattered</h3><p>CNN training performs large numbers of matrix and tensor operations in parallel. A GPU can execute this workload far faster than the laptop CPU.</p></article>
+      <article><h3>Why try at quieter times?</h3><p>In practice, GPU access was sometimes easier outside busy periods. This was a working strategy, not a guaranteed Colab rule: availability and usage limits fluctuate.</p></article>
+      <article><h3>Do not spend acceleration on idle work</h3><p>A GPU runtime is like a constrained compute budget—not literally an LLM token allowance. Disconnect it or switch to a standard runtime when the code is not using the GPU.</p></article>
+    </div>
+    <details class="compute-history">
+      <summary><span>Open lesson</span><h3>Why gaming hardware became AI hardware</h3><p>CPU versus GPU, parallel computing, AlexNet and the later cryptocurrency demand for GPUs.</p></summary>
+      <div class="compute-history-body">
+        <div class="cpu-gpu-compare">
+          <article><small>CPU</small><h3>Fewer, versatile cores</h3><p>A CPU is excellent at operating systems, branching logic and varied sequential tasks. It moves quickly through a comparatively small number of complex instruction streams.</p><div class="core-demo cpu-cores"><i></i><i></i><i></i><i></i></div></article>
+          <article><small>GPU</small><h3>Many parallel workers</h3><p>A GPU applies similar operations to many values at once. Neural-network training repeatedly multiplies large arrays of weights and activations, making that parallel design extremely valuable.</p><div class="core-demo gpu-cores"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+        </div>
+        <div class="compute-history-line">
+          <article><time>1990s–2000s</time><h3>Gaming built the market</h3><p>Demand for increasingly realistic real-time graphics financed powerful, mass-produced parallel processors. Programmable GPU tools then allowed researchers to use that hardware for work beyond graphics.</p></article>
+          <article class="alexnet-moment"><time>2012</time><h3>The AlexNet moment</h3><p>AlexNet trained a large CNN across two consumer NVIDIA GTX 580 GPUs. Its decisive ImageNet result demonstrated that deep networks, large labelled datasets and GPU compute could work together at scale.</p><a href="https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf" target="_blank" rel="noopener">Read the original AlexNet paper ↗</a></article>
+          <article><time>Later</time><h3>Cryptocurrency demand</h3><p>Cryptocurrency mining created another wave of demand for parallel hardware. The detail matters: competitive Bitcoin mining moved towards specialised ASICs, while GPU mining remained especially associated with currencies such as Ethereum during its former proof-of-work era.</p><a href="https://ethereum.org/developers/docs/consensus-mechanisms/pow/mining/mining-algorithms/ethash/" target="_blank" rel="noopener">Ethereum’s official historical note ↗</a></article>
+          <article><time>Now</time><h3>Purpose-built AI acceleration</h3><p>The industry moved from repurposing gaming GPUs towards hardware and software designed explicitly for tensor operations, large-model training and AI inference—while gaming remains a major GPU market.</p></article>
+        </div>
+        <div class="key-line"><strong>The central connection</strong><span>Gaming created a large commercial base for parallel processors. AlexNet revealed their importance for deep learning. AI demand then helped drive a new generation of specialised accelerators.</span></div>
+      </div>
+    </details>
+    <div class="key-line"><strong>Compute discipline</strong><span>The workflow reserved GPU access for benchmarking and fine-tuning, while data preparation and the saved Grad-CAM study used CPU-suitable execution. <a href="https://research.google.com/colaboratory/faq.html#resource-limits" target="_blank" rel="noopener">Read Google Colab’s resource guidance ↗</a></span></div>
   </div>
 </section>
 
@@ -263,17 +305,17 @@
 </section>
 
 <section id="transformers" class="section transformer-section">
-  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">10 · Before and beyond CNNs</p><h2>What came before CNNs—and what followed them?</h2></div><p class="section-intro">Before deep CNNs, computer-vision systems relied heavily on hand-designed features and separate classifiers. CNNs learned useful features directly from images. Transformers later relaxed CNN assumptions and learned relationships between image patches through attention.</p></div>
+  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">After CNN dominance</p><h2>The rise of Transformers: from language to vision.</h2></div><p class="section-intro">The Transformer was introduced for sequence modelling. Its self-attention mechanism later became the foundation of modern large language models, while Vision Transformers applied the same broad idea to image patches.</p></div>
     <div class="versus"><article><span class="label">CNN</span><h3>Locality is built in.</h3><div class="cnn-route"><b>Pixels</b><i>→</i><b>Local filters</b><i>→</i><b>Feature hierarchy</b><i>→</i><b>Prediction</b></div><p>Excellent inductive bias for images; efficient learning of local spatial structure.</p></article><div class="vs">VS</div><article class="transformer-card"><span class="label">ViT</span><h3>Relationships are learned.</h3><div class="patches"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div><p>Split the image into patches, embed them as tokens, add position information, then let self-attention model patch-to-patch relationships.</p></article></div>
     <div class="attention-flow"><div><small>STEP 1</small><b>Image</b></div><i>→</i><div><small>STEP 2</small><b>Patches</b></div><i>→</i><div><small>STEP 3</small><b>Embeddings + position</b></div><i>→</i><div class="attention"><small>STEP 4</small><b>Self-attention</b></div><i>→</i><div><small>STEP 5</small><b>Classification</b></div></div>
-    <div class="transformer-note"><b>The important historical point:</b> ViT did not prove that convolution was “wrong”. It showed that, given enough data and compute, a less image-specific architecture could become extremely competitive in vision.</div>
+    <div class="transformer-note"><p><b>In an LLM:</b> text is divided into tokens. Self-attention lets each token build a context-sensitive representation by weighting information from other tokens. Many stacked Transformer blocks learn increasingly rich language representations used to predict subsequent tokens.</p><p><b>In a Vision Transformer:</b> image patches take the place of text tokens. ViT did not prove convolution was “wrong”; it showed that, with sufficient data and compute, attention-based architectures could also become highly competitive in vision.</p></div>
   </div>
 </section>
 
 <section id="notebooks" class="section resources">
   <div class="wrap"><div class="section-head"><div><p class="chapter">11 · Go deeper</p><h2>Move from explanation to reproducible evidence.</h2></div><p class="section-intro">Every major project stage is available as an executed notebook, with the report, poster, presentation and slides alongside it.</p></div>
     <div class="notebooks"><a href="notebooks.html?notebook=data"><b>01</b><span>Data Preparation</span><small>read the executed notebook</small></a><a href="notebooks.html?notebook=benchmark"><b>02</b><span>Frozen Benchmark</span><small>read metrics, curves and matrices</small></a><a href="notebooks.html?notebook=fine"><b>03</b><span>Fine-Tuning</span><small>read the selected-model analysis</small></a><a href="notebooks.html?notebook=gradcam"><b>04</b><span>Grad-CAM</span><small>read the explainability analysis</small></a></div>
-    <div class="artefacts"><a href="documents.html?document=report">Report</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=presentation">Presentation</a><a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs">Browse documents ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
+    <div class="artefacts"><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="documents.html?document=report">Report</a><a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs">Browse documents ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
   </div>
 </section>
 </main>
