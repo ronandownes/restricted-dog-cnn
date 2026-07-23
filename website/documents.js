@@ -10,13 +10,13 @@ const documents = {
     file: "dog_cnn_poster.pdf"
   },
   presentation: {
-    title: "Presentation",
-    description: "The full viva presentation with the project narrative and evidence.",
+    title: "Presentation · Presenter version",
+    description: "The viva presentation with staged reveals, designed for delivery by a presenter rather than uninterrupted self-study.",
     file: "dog_cnn_presentation.pdf"
   },
   slides: {
-    title: "Slides",
-    description: "The concise slide deck for viewing or presenting full screen.",
+    title: "Slides · Self-study version",
+    description: "The complete slide content without staged reveals—the clearer version for reading independently.",
     file: "dog_cnn_slides.pdf"
   }
 };
