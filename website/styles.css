@@ -524,6 +524,26 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .theory-card>span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--lightblue);color:var(--blue);font-weight:900}
 .theory-card p{color:var(--muted)}
 .theory-card>small{color:var(--blue);font-weight:800}
+.learning-grid{align-items:start}
+.learning-card{padding:0;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease}
+.learning-card:hover{border-color:#9bb9d7;box-shadow:0 14px 34px rgba(23,63,115,.11)}
+.learning-card[open]{grid-column:1/-1;border-color:var(--blue);box-shadow:0 18px 44px rgba(23,63,115,.13)}
+.learning-card>summary{display:block;position:relative;padding:25px;cursor:pointer;list-style:none}
+.learning-card>summary::-webkit-details-marker{display:none}
+.learning-card>summary::marker{display:none;content:""}
+.learning-card>summary>span{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--lightblue);color:var(--blue);font-weight:900}
+.learning-card>summary h3{margin:.75rem 0 .45rem;padding-right:36px}
+.learning-card>summary p{color:var(--muted)}
+.learning-card>summary>small{display:block;margin-top:12px;color:var(--blue);font-weight:850}
+.learning-card>summary::after{content:"+";position:absolute;right:22px;top:22px;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#e9f2fb;color:var(--blue);font-size:1.55rem;font-weight:800}
+.learning-card[open]>summary::after{content:"−";background:var(--navy);color:#fff}
+.learn-more{display:inline-flex;align-items:center;gap:7px;margin-top:18px;color:var(--blue);font-size:.88rem}
+.learn-more::after{content:"↓"}
+.learning-card[open] .learn-more::after{content:"↑"}
+.deep-dive{padding:24px 25px 28px;border-top:1px solid var(--line);background:#f7fafc}
+.deep-dive h4{margin:1.15rem 0 0;color:var(--navy);font-size:1.04rem}
+.deep-dive h4:first-child{margin-top:0}
+.deep-dive p{max-width:900px;margin:.4rem 0 0;color:var(--muted);line-height:1.7}
 .formula-chip{display:inline-block;background:#edf2f7;border-radius:8px;padding:8px 11px;font-family:ui-monospace,monospace;font-weight:800}
 .receptive-mini{display:flex;align-items:center;gap:8px;margin-top:18px}
 .receptive-mini i{display:block;border:3px solid var(--blue);width:28px;height:28px}
