@@ -14,7 +14,7 @@
   <div class="wrap nav">
     <a class="brand" href="#top"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
     <nav aria-label="Primary navigation">
-      <a href="#context">Irish context</a><a href="#imagenet">ImageNet</a><a href="#cnn">CNNs</a><a href="#benchmark">My benchmark</a><a href="metrics.html">Metrics help</a><a href="learning-curves.html">Learning curves</a>
+      <a href="#context">Context</a><a href="#imagenet">ImageNet</a><a href="#cnn">CNNs</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tuning</a><a href="metrics.html">Metrics help</a><a href="learning-curves.html">Learning curves</a>
       <details class="nav-dropdown">
         <summary>Repository</summary>
         <div class="nav-dropdown-menu">
@@ -37,7 +37,7 @@
       <p class="eyebrow">MSc Data Analytics · Computer Vision Learning Site</p>
       <h1>From <span>ImageNet</span> to CNNs to <span>Vision Transformers</span></h1>
       <p class="lede">Learn the ideas by following the problems that forced computer vision to change. Then see those ideas tested in a real six-model transfer-learning benchmark.</p>
-      <div class="buttons"><a class="btn primary" href="#context">Start with the Irish context</a><a class="btn" href="#benchmark">Jump to my experiment</a></div>
+      <div class="buttons"><a class="btn primary" href="#context">Start with the Irish context</a><a class="btn" href="#benchmark">Jump to the benchmark</a></div>
       <p class="byline">Ronan Downes · MSc Data Analytics · CCT College Dublin · 2026</p>
     </div>
     <aside class="hero-map" aria-label="Learning journey">
@@ -135,12 +135,12 @@
 </section>
 
 <section class="section transfer-band">
-  <div class="wrap transfer-grid"><div><p class="chapter light">04 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. My experiment reuses those representations rather than learning vision from scratch.</p></div><div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div></div>
+  <div class="wrap transfer-grid"><div><p class="chapter light">04 · Transfer learning</p><h2>Why ImageNet still matters to a small specialist dataset.</h2><p>A pretrained CNN already contains useful generic visual representations. This experiment reuses those representations rather than learning vision from scratch.</p></div><div class="transfer-stack"><div><span>ImageNet pretraining</span><b>general visual features</b></div><i>↓ freeze</i><div><span>New classification head</span><b>restricted vs unrestricted</b></div><i>↓ selectively unfreeze</i><div class="highlight"><span>Fine-tuning</span><b>adapt deeper features carefully</b></div></div></div>
 </section>
 
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">05 · My controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
+    <div class="section-head"><div><p class="chapter">05 · Controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
     <a class="metrics-callout" href="metrics.html"><span>New to model evaluation?</span><strong>Learn accuracy, precision, recall, F1, PR-AUC and MCC using this project’s results →</strong></a>
     <a class="metrics-callout curve-callout" href="learning-curves.html"><span>How did training behave?</span><strong>Learn to interpret training accuracy, validation accuracy, training loss and validation loss →</strong></a>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
