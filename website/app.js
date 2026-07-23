@@ -77,12 +77,22 @@ function setupExpandableVisuals(){
   const overlay=document.createElement('div');
   overlay.className='visual-overlay';
   overlay.hidden=true;
-  overlay.innerHTML='<div class="visual-overlay-toolbar"><strong id="visualOverlayTitle">Expanded visual</strong><span>Press Esc to close</span><button type="button" aria-label="Close expanded visual">×</button></div><div class="visual-overlay-content"></div>';
+  overlay.innerHTML='<div class="visual-overlay-toolbar"><button class="visual-model-nav visual-prev" type="button">← Previous model</button><strong id="visualOverlayTitle">Expanded visual</strong><button class="visual-model-nav visual-next" type="button">Next model →</button><span>Press Esc to close</span><button class="visual-close" type="button" aria-label="Close expanded visual">×</button></div><div class="visual-overlay-content"></div>';
   document.body.appendChild(overlay);
-  const content=overlay.querySelector('.visual-overlay-content'),title=overlay.querySelector('strong'),closeButton=overlay.querySelector('button');
-  const close=async()=>{if(document.fullscreenElement)await document.exitFullscreen().catch(()=>{});overlay.hidden=true;content.replaceChildren();document.body.classList.remove('visual-open')};
-  const open=async source=>{
-    title.textContent=source.getAttribute('aria-label')||'Expanded visual';
+  const content=overlay.querySelector('.visual-overlay-content'),title=overlay.querySelector('strong'),closeButton=overlay.querySelector('.visual-close'),previousButton=overlay.querySelector('.visual-prev'),nextButton=overlay.querySelector('.visual-next');
+  const benchmarkVisuals=new Set(['benchmarkMetricsVisual','benchmarkMatrixVisual','benchmarkCurveVisual']);
+  let activeSource=null;
+  const visualName=source=>{
+    if(source.id==='benchmarkMetricsVisual')return `${models[i].name} · Test metrics`;
+    if(source.id==='benchmarkMatrixVisual')return `${models[i].name} · Confusion matrix`;
+    if(source.id==='benchmarkCurveVisual')return `${models[i].name} · Training and validation accuracy and loss`;
+    if(source.id==='fineMetricsVisual')return `InceptionResNetV2 · ${fineViews[fineView].title} metrics`;
+    if(source.id==='finePanel')return `InceptionResNetV2 · ${fineViews[fineView].title}`;
+    if(source.id==='fineCurveVisual')return `InceptionResNetV2 · ${fineViews[fineView].title} learning curves`;
+    return source.getAttribute('aria-label')||'Expanded visual'
+  };
+  const render=source=>{
+    title.textContent=visualName(source);
     content.replaceChildren();
     const canvas=source.querySelector('canvas');
     if(canvas){
@@ -97,14 +107,34 @@ function setupExpandableVisuals(){
       clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
       content.appendChild(clone);
     }
+    const canNavigate=benchmarkVisuals.has(source.id);
+    previousButton.hidden=!canNavigate;
+    nextButton.hidden=!canNavigate;
+    previousButton.disabled=i===0;
+    nextButton.disabled=i===models.length-1;
+  };
+  const close=async()=>{if(document.fullscreenElement)await document.exitFullscreen().catch(()=>{});overlay.hidden=true;activeSource=null;content.replaceChildren();document.body.classList.remove('visual-open')};
+  const open=async source=>{
+    activeSource=source;
+    render(source);
     overlay.hidden=false;document.body.classList.add('visual-open');
     await overlay.requestFullscreen?.().catch(()=>{});
     closeButton.focus();
+  };
+  const moveModel=direction=>{
+    if(!activeSource||!benchmarkVisuals.has(activeSource.id))return;
+    const nextIndex=Math.max(0,Math.min(models.length-1,i+direction));
+    if(nextIndex===i)return;
+    i=nextIndex;
+    update();
+    requestAnimationFrame(()=>render(activeSource));
   };
   document.querySelectorAll('.expandable-visual').forEach(source=>{
     source.addEventListener('click',event=>{if(event.target.closest('a,button'))return;open(source)});
     source.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&!event.target.closest('a,button')){event.preventDefault();open(source)}});
   });
+  previousButton.addEventListener('click',()=>moveModel(-1));
+  nextButton.addEventListener('click',()=>moveModel(1));
   closeButton.addEventListener('click',close);
   overlay.addEventListener('click',event=>{if(event.target===overlay)close()});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!overlay.hidden)close()});
