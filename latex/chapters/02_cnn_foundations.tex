@@ -1,0 +1,105 @@
+\chapter{Convolutional Neural Network Foundations}
+\label{chap:cnn}
+
+\section{From pixels to learned representations}
+A digital colour image can be represented as a three-dimensional tensor. The first two dimensions describe spatial position and the third describes colour channels, commonly red, green and blue. An input of $299\times299\times3$ therefore contains 268,203 numerical values before batching. A conventional fully connected network would connect every input value to every neuron in the next layer. Even a modest dense layer would create an excessive number of parameters and would ignore the fact that neighbouring pixels are spatially related. CNNs address these problems through local connectivity and weight sharing \citep{lecun1998gradient,lecun2015deep}.
+
+A learned image representation is hierarchical. Early layers often respond to local contrasts, oriented edges and colour transitions. Intermediate layers combine those responses into textures, corners and parts. Later layers can represent higher-level configurations that support the classification objective. These descriptions are helpful intuitions rather than fixed rules: the actual representation depends on architecture, optimisation, data and loss. Nonetheless, the hierarchy explains why features learned from a large generic dataset can be useful for a smaller specialised task.
+
+\section{Convolution}
+A convolutional layer applies a bank of learned kernels to local regions of its input. For an input feature map $X$ and kernel $K$, a simplified two-dimensional cross-correlation operation can be written as
+\begin{equation}
+Y(i,j)=b+\sum_{u=0}^{h-1}\sum_{v=0}^{w-1}K(u,v)X(i+u,j+v),
+\end{equation}
+where $h$ and $w$ are the kernel dimensions and $b$ is a learned bias. Deep-learning libraries commonly implement cross-correlation while retaining the conventional term ``convolution''. For colour images and intermediate tensors, the sum also extends across input channels.
+
+The kernel slides across the image using the same weights at each location. This weight sharing is fundamental. A vertical-edge detector learned in the upper-left region can respond to the same pattern elsewhere. The layer produces a feature map indicating where the learned pattern is strongly expressed. Multiple filters produce multiple maps, allowing a layer to detect different visual properties.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{convolution_diagram.pdf}
+\caption{Conceptual convolution operation. A learned kernel is applied locally and produces one activation at each position.}
+\label{fig:convolutionconcept}
+\end{figure}
+
+Kernel size determines the immediate receptive field of a unit. A $3\times3$ kernel observes a neighbourhood of nine spatial positions, while deeper stacks of such layers acquire progressively larger effective receptive fields. This is one reason modern architectures can model global shape while using predominantly small kernels. The values of the kernels are not hand-selected edge templates in the final model. They are trainable parameters adjusted by gradient-based optimisation to reduce the classification loss.
+
+\section{Stride, padding and receptive field}
+Stride describes how far the kernel moves between applications. A stride of one evaluates adjacent locations; a stride of two reduces spatial resolution because every second location is sampled. Padding controls treatment of image borders. ``Valid'' convolution applies a kernel only where it fully overlaps the input, reducing width and height. ``Same'' padding adds border values, usually zeros, so that stride-one convolution preserves spatial dimensions.
+
+The receptive field of a deeper unit is the portion of the original input that can influence it. Receptive field grows with depth, kernel size, stride and pooling. In breed classification, a small receptive field may encode coat texture or an ear boundary, whereas a large receptive field can combine head, torso and stance. The distinction matters because breed cues occur at multiple scales. Inception architectures explicitly process several scales in parallel, while residual networks construct very deep hierarchies that enlarge contextual coverage.
+
+\section{Non-linearity and ReLU}
+A sequence of purely linear operations collapses to a single linear transformation, regardless of depth. Neural networks therefore apply nonlinear activation functions. The rectified linear unit is
+\begin{equation}
+f(x)=\max(0,x).
+\end{equation}
+ReLU retains positive activations and sets negative activations to zero. Its simplicity and favourable gradient behaviour contributed to the successful training of deep image networks \citep{nair2010rectified,krizhevsky2012imagenet}. It also creates sparse activation patterns in which a feature is active only for particular inputs.
+
+ReLU should not be interpreted as proving that a visual feature is present. It is one element in a distributed representation. Later layers combine many activations, and the same unit may participate in different decisions. This distributed character is one reason that post-hoc explanation methods such as Grad-CAM provide coarse localisation rather than a complete causal account.
+
+\section{Pooling and spatial reduction}
+Pooling summarises a local neighbourhood of a feature map. In $2\times2$ max pooling, the largest value in each local window is retained. For example,
+\begin{equation}
+\begin{bmatrix}1&3\\2&7\end{bmatrix}\longrightarrow 7.
+\end{equation}
+The operation reduces spatial dimensions and preserves the strongest local response. It can provide limited tolerance to small translations: if a strong activation moves slightly within the window, the pooled value may remain unchanged. Average pooling instead retains the mean response.
+
+Pooling is not synonymous with learning. A max-pooling layer has no trainable kernel values; it applies a fixed reduction. Modern architectures sometimes replace explicit pooling with strided convolution or specialised reduction blocks. InceptionV3 and InceptionResNetV2 use mixed reduction modules, while Xception uses strided separable convolutions in parts of its flow. The architectural purpose is similar: reduce resolution while increasing semantic abstraction and channel depth.
+
+At the end of many contemporary CNNs, global average pooling computes one mean value per feature channel. If a final tensor has shape $8\times8\times1536$, global average pooling produces a vector of length 1536. This avoids the extremely large parameter count created by flattening every spatial position into a dense layer. Global average pooling was proposed as a structural alternative to conventional dense classification heads and can improve correspondence between feature channels and categories \citep{lin2013network}.
+
+\section{Fully connected layers and binary output}
+A dense or fully connected layer forms weighted combinations of all values in its input vector. In a binary classifier, the final layer commonly contains one unit with sigmoid activation:
+\begin{equation}
+\sigma(z)=\frac{1}{1+e^{-z}}.
+\end{equation}
+The output lies between zero and one and is interpreted as a model score for the positive class. It is not automatically a calibrated probability. A decision threshold, commonly 0.5, converts the continuous score into a class prediction. Moving the threshold changes the balance of false positives and false negatives.
+
+The binary cross-entropy loss for target $y\in\{0,1\}$ and score $p$ is
+\begin{equation}
+\mathcal{L}(y,p)=-\left[y\log(p)+(1-y)\log(1-p)\right].
+\end{equation}
+Confident incorrect predictions incur a large penalty. During training, gradients of the loss are propagated backward through the classification head and any trainable backbone layers. The optimiser updates weights in a direction expected to reduce future loss.
+
+\section{Backpropagation and optimisation}
+Backpropagation applies the chain rule to compute the contribution of each trainable parameter to the loss. It is not a separate learning algorithm from gradient descent; it is an efficient method for obtaining gradients in a composed computational graph. The optimiser then decides how to use these gradients. Adam maintains adaptive estimates of first and second moments of the gradient and is widely used because it provides effective optimisation across parameters with different gradient scales \citep{kingma2014adam}.
+
+Learning rate controls update magnitude. A rate that is too large can destabilise training or destroy useful pretrained features. A rate that is too small can make progress extremely slow. Fine-tuning therefore normally uses a much lower learning rate than training a newly initialised classification head. In this project, the frozen stage learned only the new head, whereas fine-tuning updated a limited number of upper backbone layers at $10^{-5}$.
+
+\section{Batch normalisation}
+Batch normalisation standardises intermediate activations using mini-batch statistics and then applies learned scale and shift parameters. It was introduced to improve optimisation stability and permit more aggressive learning rates \citep{ioffe2015batch}. During inference, moving estimates accumulated during training are used rather than the current batch's statistics.
+
+Pretrained architectures contain many batch-normalisation layers. Their handling during fine-tuning requires care. Updating batch statistics with small or unrepresentative batches can disturb a pretrained representation. For this reason, transfer-learning implementations often keep the base model in inference mode while selectively enabling trainable weights in upper layers. The exact behaviour depends on the framework and model construction, and it is more precise to describe the implemented code than to make a general claim that every unfrozen batch-normalisation layer behaves identically.
+
+\section{Dropout and regularisation}
+Dropout randomly sets a proportion of activations to zero during training and rescales the remaining activations so that expected magnitude is maintained. The method discourages units from depending excessively on particular co-adapted features \citep{srivastava2014dropout}. During inference, dropout is disabled. A dropout rate is therefore not the proportion of model parameters permanently removed; it is a stochastic training mechanism.
+
+Regularisation also arises from data augmentation, early stopping, pretrained initialisation, limited fine-tuning and model selection based on validation data. These mechanisms address different aspects of overfitting. Dropout regularises the classification head, augmentation alters the observed input distribution, and early stopping limits the number of updates after validation performance ceases to improve.
+
+\section{Data augmentation}
+The project used light image augmentation in the training graph, including horizontal flipping, small rotations and zoom transformations. Augmentation exposes the classifier to plausible variations without changing the semantic label. A dog remains the same breed when it is mirrored horizontally or framed slightly differently. The objective is not to create new biological evidence, but to reduce reliance on accidental image coordinates and exact framing.
+
+Augmentation must be domain appropriate. Large rotations, severe crops or colour transformations could remove breed-relevant features or create unrealistic examples. Validation and test images must not receive random augmentation because evaluation should be repeatable. The use of modest transformations is consistent with the broader literature on image-data augmentation, which emphasises task validity rather than transformation quantity \citep{shorten2019survey}.
+
+\section{Transfer learning and frozen feature extraction}
+Transfer learning reuses knowledge acquired in one task to support another \citep{pan2009survey,yosinski2014transferable}. ImageNet-pretrained CNNs have learned filters from a large and varied image corpus. Although the original output categories differ from restricted-dog classification, low- and mid-level features such as edges, textures, contours and parts remain useful. ``Off-the-shelf'' CNN features have repeatedly provided strong baselines for downstream recognition \citep{sharif2014cnn}.
+
+In frozen feature extraction, all backbone weights are held constant. A new classification head is trained on top. This has several advantages for a small dataset: fewer parameters are updated, training is faster, and the risk of destroying useful general features is reduced. It also supports a fair architecture comparison because each backbone is tested under a common head and training policy. The limitation is that frozen features cannot adapt specifically to the visual boundary between restricted and unrestricted breeds.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{training_pipeline_diagram.pdf}
+\caption{Transfer-learning pipeline used conceptually in the project.}
+\label{fig:transferpipeline}
+\end{figure}
+
+\section{Fine-tuning}
+Fine-tuning begins from a trained transfer-learning checkpoint and allows a subset of pretrained layers to update. Upper layers are most closely associated with task-specific combinations, so unfreezing them can adapt the representation while preserving lower-level filters. Fine-tuning is not equivalent to starting again. It is a constrained continuation of training from a strong initial state.
+
+The main risk is catastrophic over-adaptation to the small target dataset. A low learning rate, checkpointing and early stopping are used to reduce this risk. The effectiveness of fine-tuning must be evaluated on held-out data. In the present study, fine-tuning improved precision and F1 while slightly reducing recall. This illustrates why fine-tuning should be treated as an empirical intervention rather than an assumed improvement.
+
+\section{From model score to decision}
+The network produces a score, while the evaluation protocol defines a decision. At threshold 0.5, scores greater than or equal to the threshold are classified as restricted. Lowering the threshold generally increases recall but also increases false positives; raising it generally increases precision but can increase false negatives. The selected threshold therefore embodies an operating preference.
+
+Because the dissertation compares frozen and fine-tuned models at a common conventional threshold, the confusion matrices remain directly interpretable. A separate calibration analysis could optimise a threshold for a stated cost function, but it would need to be selected on validation data and evaluated once on untouched test data. Repeatedly selecting a threshold from test performance would leak information and overstate generalisation.
