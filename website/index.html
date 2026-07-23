@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-31">
+  <link rel="stylesheet" href="styles.css?v=20260723-32">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
   <script src="app.js?v=20260723-20" defer></script>
-  <script src="navigation.js?v=20260723-7" defer></script>
+  <script src="navigation.js?v=20260723-8" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -19,14 +19,25 @@
       <span class="menu-label">Menu</span>
     </button>
     <nav id="primary-navigation" aria-label="Primary navigation">
-      <a href="#context">Context</a><a href="#data">Data</a><a href="#compute">Compute</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
+      <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
+      <details class="nav-dropdown">
+        <summary>Compute</summary>
+        <div class="nav-dropdown-menu">
+          <a href="#compute"><strong>Compute overview</strong></a>
+          <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
+          <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
+          <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning InceptionResNetV2</strong></a>
+          <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM</strong></a>
+        </div>
+      </details>
       <details class="nav-dropdown">
         <summary>Submissions</summary>
         <div class="nav-dropdown-menu">
+          <a href="documents.html?document=report"><strong>Report</strong></a>
           <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>Self-study version</small></a>
           <a href="documents.html?document=poster"><strong>Poster</strong></a>
           <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>Presenter-led version</small></a>
-          <a href="documents.html?document=report"><strong>Report</strong></a>
+          <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>GitHub repository</strong></a>
         </div>
       </details>
       <details class="nav-dropdown">
@@ -76,7 +87,7 @@
   </div>
 </section>
 
-<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Compute</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Submissions</span><i>→</i><span>Learning</span></div></section>
+<section class="chapter-strip"><div class="wrap"><span>Context</span><i>→</i><span>Data</span><i>→</i><span>Benchmark</span><i>→</i><span>Fine-tune</span><i>→</i><span>Grad-CAM</span><i>→</i><span>Compute</span><i>→</i><span>Submissions</span><i>→</i><span>Learning</span></div></section>
 
 <section id="context" class="section context-section">
   <div class="wrap">
@@ -153,7 +164,6 @@
     <div class="compute-notes">
       <article><h3>Why the GPU mattered</h3><p>CNN training performs large numbers of matrix and tensor operations in parallel. A GPU can execute this workload far faster than the laptop CPU.</p></article>
       <article><h3>Why try at quieter times?</h3><p>In practice, GPU access was sometimes easier outside busy periods. This was a working strategy, not a guaranteed Colab rule: availability and usage limits fluctuate.</p></article>
-      <article><h3>Do not spend acceleration on idle work</h3><p>A GPU runtime is like a constrained compute budget—not literally an LLM token allowance. Disconnect it or switch to a standard runtime when the code is not using the GPU.</p></article>
     </div>
     <details class="compute-history">
       <summary><span>Open lesson</span><h3>Why gaming hardware became AI hardware</h3><p>CPU versus GPU, parallel computing, AlexNet and the later cryptocurrency demand for GPUs.</p></summary>
@@ -171,6 +181,10 @@
         <div class="key-line"><strong>The central connection</strong><span>Gaming created a large commercial base for parallel processors. AlexNet revealed their importance for deep learning. AI demand then helped drive a new generation of specialised accelerators.</span></div>
       </div>
     </details>
+    <div class="compute-notebooks">
+      <div class="section-head benchmark-heading"><div><h3>Executed notebooks</h3><p class="section-subtitle">The saved notebooks are the software record of how each project stage ran. Opening them here displays committed code, charts and outputs without rerunning the analysis.</p></div></div>
+      <div class="notebooks"><a href="notebooks.html?notebook=data"><b>01</b><span>Data Preparation</span><small>CPU-suitable preparation</small></a><a href="notebooks.html?notebook=benchmark"><b>02</b><span>Benchmarking CNNs</span><small>GPU training evidence</small></a><a href="notebooks.html?notebook=fine"><b>03</b><span>Fine-tuning</span><small>GPU adaptation evidence</small></a><a href="notebooks.html?notebook=gradcam"><b>04</b><span>Grad-CAM</span><small>saved explainability analysis</small></a></div>
+    </div>
     <div class="key-line"><strong>Compute discipline</strong><span>The workflow reserved GPU access for benchmarking and fine-tuning, while data preparation and the saved Grad-CAM study used CPU-suitable execution. <a href="https://research.google.com/colaboratory/faq.html#resource-limits" target="_blank" rel="noopener">Read Google Colab’s resource guidance ↗</a></span></div>
   </div>
 </section>
@@ -312,10 +326,9 @@
   </div>
 </section>
 
-<section id="notebooks" class="section resources">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">11 · Go deeper</p><h2>Move from explanation to reproducible evidence.</h2></div><p class="section-intro">Every major project stage is available as an executed notebook, with the report, poster, presentation and slides alongside it.</p></div>
-    <div class="notebooks"><a href="notebooks.html?notebook=data"><b>01</b><span>Data Preparation</span><small>read the executed notebook</small></a><a href="notebooks.html?notebook=benchmark"><b>02</b><span>Frozen Benchmark</span><small>read metrics, curves and matrices</small></a><a href="notebooks.html?notebook=fine"><b>03</b><span>Fine-Tuning</span><small>read the selected-model analysis</small></a><a href="notebooks.html?notebook=gradcam"><b>04</b><span>Grad-CAM</span><small>read the explainability analysis</small></a></div>
-    <div class="artefacts"><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="documents.html?document=report">Report</a><a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs">Browse documents ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
+<section id="submissions" class="section resources">
+  <div class="wrap"><div class="section-head"><div><p class="chapter">Project record</p><h2>Submissions</h2></div><p class="section-intro">Open the assessed report and its visual communication formats, or inspect the complete code repository.</p></div>
+    <div class="artefacts"><a href="documents.html?document=report">Report</a><a href="documents.html?document=slides">Slides</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
   </div>
 </section>
 </main>
