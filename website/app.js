@@ -104,7 +104,7 @@ function setupExpandableVisuals(){
     }else{
       const clone=source.cloneNode(true);
       clone.classList.remove('expandable-visual');
-      clone.removeAttribute('role');clone.removeAttribute('tabindex');
+      clone.removeAttribute('id');clone.removeAttribute('role');clone.removeAttribute('tabindex');
       clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
       content.appendChild(clone);
     }
