@@ -1,0 +1,147 @@
+\chapter{Methodology}
+\label{chap:methodology}
+
+\section{Research design}
+The project used a staged experimental methodology. The independent experimental factor was the pretrained CNN architecture and, later, training stage. The dependent outcomes were test-set classification metrics and confusion-matrix counts. Dataset composition, split, class order, evaluation code and general head design were held constant as far as architecture-specific input requirements allowed.
+
+The workflow comprised four notebooks: dataset preparation; frozen model-zoo benchmarking; fine-tuning of the selected model; and Grad-CAM explanation. Each notebook saved outputs to persistent storage. This separation reduced the risk that an interrupted Colab runtime would erase results and created a traceable sequence of artefacts.
+
+\section{Experiment at a glance}
+The dissertation used a controlled two-stage transfer-learning experiment. First, six ImageNet-pretrained CNN backbones were frozen and evaluated under the same dataset, preprocessing, classification head, training controls and held-out test set. Second, the strongest frozen architecture was selected using metric-aware criteria and its final 20 layers were unfrozen for limited fine-tuning. This design separates architecture comparison from subsequent task-specific adaptation.
+
+\begin{table}[H]
+\centering
+\caption{Summary of the experimental pipeline.}
+\label{tab:experimentglance}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{0.96\textwidth}{p{0.25\textwidth}X}
+\toprule
+\textbf{Stage} & \textbf{Implementation} \\
+\midrule
+Data construction & Stanford Dogs images; six represented restricted breeds and 24 unrestricted breeds selected reproducibly. \\
+Split design & Fixed training, validation and held-out test partitions reused across all models. \\
+Frozen benchmark & VGG16, ResNet50, InceptionV3, Xception, InceptionResNetV2 and NASNetMobile trained as frozen feature extractors. \\
+Model selection & Multiple imbalance-aware metrics and confusion counts considered rather than accuracy alone. \\
+Fine-tuning & Final 20 layers of the selected InceptionResNetV2 backbone unfrozen at a low learning rate. \\
+Explanation & Fixed true-positive, true-negative, false-positive and false-negative cases analysed using Grad-CAM. \\
+Reproducibility & Notebooks, saved figures, tables, predictions, checkpoints and LaTeX source retained in the project archive. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.96\textwidth]{training_pipeline_diagram.pdf}
+\caption{End-to-end experimental pipeline from reproducible dataset construction to frozen benchmarking, selected-model fine-tuning, evaluation and explanation.}
+\label{fig:trainingpipeline}
+\end{figure}
+
+\section{Dataset source and class construction}
+Stanford Dogs contains 120 breed directories and more than twenty thousand images \citep{khosla2011novel}. The preparation notebook verified the extracted directory structure before constructing the binary dataset. Six breeds represented both in the dataset and the restricted list were assigned to the positive class: Bull Mastiff, Doberman Pinscher, German Shepherd, Rhodesian Ridgeback, Rottweiler and Staffordshire Bull Terrier.
+
+Twenty-four unrestricted breeds were selected using a fixed random seed. Fixing this selection is important. If unrestricted breeds were re-sampled for every run, model comparisons could reflect a change in negative-class difficulty rather than architectural performance. The prepared split contained 3,023 training images, 1,002 validation images and 1,028 test images. Table~\ref{tab:datasetcounts} shows the class distribution.
+
+\begin{table}[H]
+\centering
+\caption{Prepared dataset counts.}
+\label{tab:datasetcounts}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{lrrr}
+\toprule
+Split & Unrestricted & Restricted & Total \\
+\midrule
+Training & 2,462 & 561 & 3,023 \\
+Validation & 816 & 186 & 1,002 \\
+Test & 838 & 190 & 1,028 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The positive prevalence in the test set was approximately 18.48\%. This imbalance is moderate but sufficient to make accuracy alone misleading. A classifier predicting every image as unrestricted would achieve about 81.52\% accuracy while having zero restricted-class recall.
+
+\section{Split integrity and leakage control}
+The data were divided into training, validation and test sets using a 60/20/20 strategy at the image level. The training set was used for parameter updates, the validation set for checkpoint and stopping decisions, and the test set for final comparison. The test set was not intended as an iterative tuning resource.
+
+A limitation is that the source dataset can contain visually related or near-duplicate web images. The project did not implement perceptual-hash duplicate detection across splits. Consequently, the reported performance should be interpreted as performance on the prepared Stanford-derived split, not as a guarantee of independence at the level of original photographic events. Future work should audit exact and near duplicates before splitting.
+
+\section{Preprocessing and augmentation}
+Each architecture was paired with its expected input resolution and preprocessing function. InceptionV3, Xception and InceptionResNetV2 used $299\times299$ inputs, while VGG16, ResNet50 and NASNetMobile used $224\times224$ inputs in their standard Keras configurations. Images were decoded as RGB and batched through the TensorFlow data pipeline.
+
+The training graph included light horizontal flipping, rotation and zoom. Validation and test data were preprocessed deterministically without random augmentation. This separation ensures that repeated evaluation of the same checkpoint produces the same predictions. Augmentation was deliberately modest because strong geometric transformation could obscure breed morphology.
+
+\section{Model-zoo configuration}
+Each model used ImageNet-pretrained weights with the original classification top removed. The backbone was frozen. Its output was passed through global average pooling, dropout and a one-unit sigmoid classifier. This standardised head allowed the comparison to focus on the transferred representation rather than a separately engineered classifier for each model.
+
+The architectures were VGG16, ResNet50, InceptionV3, Xception, InceptionResNetV2 and NASNetMobile. These models span conventional deep convolution, residual learning, multi-branch factorisation, depthwise separable convolution, hybrid Inception-residual design and neural architecture search. The benchmark therefore tests qualitatively different feature extractors rather than six minor variants of one family.
+
+Class weighting was used to reduce majority-class dominance during optimisation. The weights alter the loss contribution of examples, not the reported test counts. They do not fabricate balance in the test set; they encourage the optimiser to treat errors on the less frequent class as more consequential during training.
+
+\section{Training controls}
+The head was optimised with binary cross-entropy and Adam. Checkpointing preserved the model with the best monitored validation result, and early stopping limited continued training after improvement ceased. Training histories and model files were saved under architecture-specific names.
+
+A fair benchmark does not require every architecture to experience identical internal computation, because their input sizes and normalisation differ. It does require the same dataset split, target labels, evaluation procedure and broad training policy. The model-zoo notebook encoded these controls in one loop to reduce manual inconsistency.
+
+\section{Metric definitions}
+Let $TP$, $TN$, $FP$ and $FN$ denote true positives, true negatives, false positives and false negatives. The primary metrics are
+\begin{align}
+\mathrm{Accuracy}&=\frac{TP+TN}{TP+TN+FP+FN},\\
+\mathrm{Precision}&=\frac{TP}{TP+FP},\\
+\mathrm{Recall}&=\frac{TP}{TP+FN},\\
+F_1&=2\frac{\mathrm{Precision}\times\mathrm{Recall}}{\mathrm{Precision}+\mathrm{Recall}}.
+\end{align}
+
+Specificity was also available from $TN/(TN+FP)$. ROC-AUC evaluates the ranking of positive and negative scores across thresholds. PR-AUC summarises the precision--recall curve and directly reflects performance on the positive class. MCC is
+\begin{equation}
+\mathrm{MCC}=\frac{TP\times TN-FP\times FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}.
+\end{equation}
+MCC approaches one for perfect classification, zero for no better than chance association, and minus one for complete disagreement.
+
+\section{Model selection}
+The strongest frozen model was selected through metric-aware ranking rather than accuracy alone. High restricted-class recall was important, but precision, F1, PR-AUC and MCC were also considered. InceptionResNetV2 ranked strongest overall and was therefore advanced to fine-tuning.
+
+This selection occurred before examination of the fine-tuned test result. The process avoids the less defensible practice of fine-tuning every model and then reporting only the most favourable outcome without a clear selection rule. It also limits computational cost.
+
+\section{Fine-tuning strategy}
+The best frozen InceptionResNetV2 checkpoint was loaded. The final twenty layers of the pretrained base were made trainable, while the remainder stayed frozen. The model was recompiled with a learning rate of $1\times10^{-5}$. Recompilation is essential after changing trainable status because the optimiser must construct its parameter update set from the new configuration.
+
+Fine-tuning was controlled by validation monitoring and checkpointing. The final reported checkpoint was evaluated on the same held-out test set as the frozen model. This permits a direct comparison but also means the two evaluations are statistically paired: they classify the same images. The report focuses on observed differences rather than claiming formal significance from one test split.
+
+\section{Explanation sample}
+The explanation notebook generated predictions for the complete test set and assigned each case to TP, TN, FP or FN. Three cases from each category were selected according to a fixed procedure, creating twelve examples. Grad-CAM heatmaps were computed from the final convolutional feature layer of the fine-tuned InceptionResNetV2 model and overlaid on the original image.
+
+The explanation sample is qualitative. It was designed to expose varied outcomes, not to estimate the prevalence of particular attention patterns. Selecting equal numbers from each confusion category intentionally over-represents errors relative to their frequency in the full test set. This is appropriate for diagnostic analysis but must not be mistaken for a random sample of model behaviour.
+
+\section{Reproducibility and project management}
+Random seeds were set where supported. Dataset folders, class order and split counts were verified before training. Results were exported as CSV files, histories were saved, and confusion matrices and learning curves were written as standalone images. The report archive contains the four principal notebooks and the figures used in the dissertation.
+
+The staged workflow also reflects iterative project management. The original proposal considered a broader architecture timeline and hyperparameter search. Resource constraints and the need for a clear, reproducible final experiment led to a focused six-model benchmark followed by one controlled fine-tuning stage. This was a methodological narrowing, not an unreported failure: the completed design addresses the research questions with less uncontrolled multiplicity.
+
+\section{Ethical methodology}
+The source data contain dog photographs and breed labels rather than human personal data, but ethical risk remains. The central risk is downstream misuse: a model score could be treated as objective proof in a context where visual breed identification is contested. The methodology therefore treats legal status as a dataset label and avoids claims about aggression or individual dangerousness.
+
+No attempt was made to infer temperament. The model cannot assess behaviour, training, ownership conditions or context. The report explicitly separates classification performance from policy validity. This distinction is necessary because a technically successful classifier could still support an unjust or scientifically disputed decision framework.
+
+\section{Software environment}
+The experiments were implemented in Python using TensorFlow and Keras within Google Colab. Google Drive provided persistent storage for data splits, checkpoints, prediction files and plots. GPU acceleration was used for model-zoo training and fine-tuning. The notebooks verify whether the expected directories and hardware resources are available before beginning expensive stages.
+
+The use of a managed notebook environment improves accessibility but introduces reproducibility risks. Library versions can change, runtimes are ephemeral and mounted-drive paths can become inconsistent across revisions. The final notebooks therefore record TensorFlow versions in their outputs and use explicit project paths. A stronger archival package would additionally include a locked requirements file or container image. The report treats the notebooks and saved artefacts as the reproducibility record for the completed run rather than promising bit-for-bit equivalence on future software versions.
+
+\section{Data pipeline performance considerations}
+Image training can become input-bound if data are repeatedly decoded from slow remote storage. The preparation notebook extracted and organised files with attention to local versus mounted-drive performance. The TensorFlow pipeline used batching and prefetching so that CPU-side image preparation could overlap with GPU computation where possible. These engineering choices do not change the statistical model, but they affect whether the experiment is feasible within a hosted runtime.
+
+The persistent split directories also reduce accidental changes between notebooks. Model benchmarking, fine-tuning and explanation all point to the same train, validation and test folders. Rebuilding the split is unnecessary unless the data-preparation stage intentionally changes. The printed verification counts provide a simple integrity check before training.
+
+\section{Decision not to perform exhaustive hyperparameter search}
+The proposal considered systematic search over dropout, learning rate and other settings. The final study used a restrained configuration instead. Exhaustive search would consume substantial GPU time and, without a nested validation design, could overfit the validation set. It would also make the architecture comparison less interpretable if each network received a different and unequally extensive search.
+
+A common pipeline provides a cleaner answer to the comparative question. It may not reveal the maximum possible performance of every model, but it estimates how their pretrained features behave under a consistent practical setup. The selected model then receives one clearly described fine-tuning intervention. This design prioritises methodological clarity over leaderboard optimisation.
+
+\section{Threats to methodological validity}
+Internal validity could be weakened by hidden duplicates, inconsistent preprocessing or accidental test use. The notebook structure and common evaluation functions reduce but do not eliminate these risks. Construct validity is limited because the binary label operationalises legal membership using dataset categories rather than direct statutory adjudication. External validity is limited by the curated source images. Conclusion validity is limited by one split and one main run per architecture.
+
+Stating these threats is not an admission that the experiment is invalid. It defines the level of inference supported. The strongest claim is comparative: under this prepared split and pipeline, InceptionResNetV2 produced the strongest frozen metric profile and fine-tuning altered the error balance in the observed way.
+
+\section{Research integrity and reporting choices}
+The report preserves unfavourable aspects of the results. It reports the reduction in recall after fine-tuning, discusses background attention, and avoids presenting Grad-CAM only for successful cases. It also distinguishes the established 0.5-threshold confusion matrix from exploratory calibration output. These choices reduce selective reporting.
+
+The experimental figures are used directly from saved outputs rather than redrawn with altered values. Numerical tables are rounded for readability, while precise values remain in the text and source CSV files. Rounding to two decimal places in summary tables avoids an impression of precision beyond the finite test set.
