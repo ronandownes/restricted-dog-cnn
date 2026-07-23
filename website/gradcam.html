@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Grad-CAM case study for the Restricted Dog CNN project, with true-positive, true-negative, false-positive and false-negative examples.">
+  <title>Grad-CAM Study · Restricted Dog CNN</title>
+  <link rel="stylesheet" href="styles.css?v=20260723-11">
+  <script src="navigation.js?v=20260723-2" defer></script>
+  <script src="gradcam.js?v=20260723-1" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation menu"><span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-label">Menu</span></button>
+    <nav id="primary-navigation" aria-label="Primary navigation">
+      <a href="index.html#context">Context</a><a href="index.html#data">Data</a><a href="index.html#benchmark">Benchmark</a><a href="index.html#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
+      <details class="nav-dropdown"><summary>Theory &amp; Methods</summary><div class="nav-dropdown-menu"><a href="theory.html"><strong>Theory &amp; Methods hub</strong><small>All concepts and architecture diagrams</small></a><a href="theory.html#cnn"><strong>CNN foundations</strong><small>Convolution, pooling and feature hierarchies</small></a><a href="theory.html#training"><strong>Training methods</strong><small>Dropout, batch normalization and fine-tuning</small></a><a href="theory.html#architectures"><strong>Architectures</strong><small>AlexNet through InceptionResNetV2</small></a><a href="metrics.html"><strong>Metrics guide</strong><small>Accuracy, precision, recall, F1 and MCC</small></a></div></details>
+      <details class="nav-dropdown"><summary>Links &amp; Resources</summary><div class="nav-dropdown-menu"><a href="documents.html?document=report"><strong>Report</strong><small>Read or download the dissertation</small></a><a href="documents.html?document=poster"><strong>Poster</strong><small>Research poster</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>GitHub repository</strong><small>Code, results and notebooks</small></a></div></details>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="study-hero"><div class="wrap"><p class="eyebrow">Explainability case study</p><h1>Grad-CAM</h1><p class="lede">Where was InceptionResNetV2 looking when it classified restricted and unrestricted dog images?</p><div class="buttons"><a class="btn primary" href="#cases">Explore all 12 cases</a><a class="btn" href="index.html#gradcam">Return to the project</a></div></div></section>
+  <section class="section alt"><div class="wrap"><div class="section-head"><div><h2>From feature maps to a heatmap</h2></div><p class="section-intro">Grad-CAM weights deep convolutional feature maps using gradients for the selected class, combines them, applies a rectifier and enlarges the result over the original image.</p></div><div class="grad-explain"><div class="layer-stack"><span></span><span></span><span></span><b>deep feature maps</b></div><i>+</i><div class="gradient-box">class gradients</div><i>→</i><div class="heat-box">weighted map</div><i>→</i><div class="overlay-box">image overlay</div></div><div class="key-line"><strong>What it can tell us</strong><span>Which image regions were associated with the prediction.</span></div><div class="key-line caution"><strong>What it cannot tell us</strong><span>It does not prove causality, establish legal identity or validate deployment in real-world conditions.</span></div><a class="inline-help" href="theory.html#gradcam">Learn the Grad-CAM mechanism in more detail →</a></div></section>
+  <section id="cases" class="section"><div class="wrap"><div class="section-head benchmark-heading"><div><h2>Twelve explanation cases</h2><p class="section-subtitle">Filter the fixed sample by prediction outcome. Each case remains full width so the wide heatmap output is readable.</p></div></div><div class="filters"><button class="filter active" data-f="all">All 12</button><button class="filter" data-f="TP">True positives</button><button class="filter" data-f="TN">True negatives</button><button class="filter" data-f="FP">False positives</button><button class="filter" data-f="FN">False negatives</button></div><div id="gallery" class="gallery"></div></div></section>
+  <section class="section alt"><div class="wrap"><div class="section-head benchmark-heading"><div><h2>Read patterns, not just pictures</h2><p class="section-subtitle">Compare correct and incorrect cases from the same breed. Ask whether attention follows the dog, a body region, the background, image composition or a feature shared across breeds.</p></div></div><div class="buttons"><a class="btn primary" href="index.html#fine">Return to fine-tuning</a><a class="btn" href="metrics.html#confusion-matrix">Learn TP, TN, FP and FN</a><a class="btn" href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/04_Model_Explainability.ipynb" target="_blank" rel="noopener">Open the notebook ↗</a></div></div></section>
+</main>
+<footer><div class="wrap footer-grid"><div><b>Restricted Dog CNN</b><span>Dedicated Grad-CAM explanation study</span></div><div><a href="index.html">Return to project →</a></div></div></footer>
+</body>
+</html>
