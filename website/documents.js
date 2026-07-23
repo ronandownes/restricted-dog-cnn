@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     title.textContent = selected.title;
     description.textContent = selected.description;
-    viewer.data = `${pdfUrl}#view=FitH`;
-    viewer.setAttribute("aria-label", `${selected.title} PDF viewer`);
+    viewer.src = `${pdfUrl}#view=FitH`;
+    viewer.title = `${selected.title} PDF viewer`;
     openButton.href = pdfUrl;
     downloadButton.href = pdfUrl;
     downloadButton.setAttribute("download", selected.file);
