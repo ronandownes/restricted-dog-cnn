@@ -283,3 +283,69 @@ h1{font-size:clamp(3rem,15vw,5rem)}
   .xl-note{padding:23px}
   .metrics-hero{padding:65px 0}
 }
+
+/* Learning curves teaching page */
+.curve-callout{background:#244f3d}
+.curve-callout span{color:#c7e5d7}
+.curve-hero{padding:90px 0;background:radial-gradient(circle at 82% 20%,#dcefe6 0,transparent 30%),linear-gradient(135deg,#fff,#edf7f2)}
+.curve-hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}
+.curve-hero h1{font-size:clamp(3rem,6vw,5.8rem)}
+.epoch-card{background:#16382b;color:#fff;border-radius:24px;padding:32px;box-shadow:var(--shadow)}
+.epoch-card small{color:#a9d5c1;font-size:.9rem;font-weight:900;letter-spacing:.09em}
+.epoch-card h2{font-size:2.25rem;letter-spacing:-.03em}
+.epoch-card p{color:#d0e5dc;font-size:1.08rem}
+.four-curves-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.curve-definition{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px}
+.curve-definition h3{font-size:1.6rem}
+.curve-definition strong{display:block;font-size:1.08rem}
+.curve-definition p{color:var(--muted);font-size:1.05rem}
+.curve-swatch{display:block;width:72px;height:7px;border-radius:999px;margin-bottom:18px}
+.blue-line{background:#1f77b4}
+.orange-line{background:#ff7f0e}
+.green-line{background:#2ca02c}
+.red-line{background:#d62728}
+.reading-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;list-style:none;padding:0;margin:0}
+.reading-steps li{display:grid;grid-template-columns:54px 1fr;gap:18px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
+.reading-steps li>span{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--navy);color:#fff;font-size:1.45rem;font-weight:950}
+.reading-steps h3{font-size:1.5rem}
+.reading-steps p{color:var(--muted);font-size:1.04rem}
+.validation-higher{background:var(--lightblue);border-left:6px solid var(--blue);border-radius:15px;padding:25px 28px;margin-top:20px}
+.validation-higher h3{font-size:1.55rem}
+.validation-higher p{font-size:1.08rem;margin-bottom:0}
+.pattern-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.pattern{background:#fff;border:1px solid var(--line);border-top:6px solid var(--green);border-radius:18px;padding:27px}
+.pattern.overfit{border-top-color:var(--red)}
+.pattern.underfit{border-top-color:var(--orange)}
+.pattern.unstable{border-top-color:#7655a6}
+.pattern>span{font-size:.9rem;text-transform:uppercase;letter-spacing:.07em;font-weight:900;color:var(--muted)}
+.pattern h3{font-size:1.55rem}
+.pattern p{font-size:1.05rem;color:var(--muted)}
+.curve-picker{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.curve-choice{border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:12px 17px;font-size:1rem;font-weight:850;cursor:pointer}
+.curve-choice:hover,.curve-choice.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.curve-choice.fine-choice{border-color:var(--green)}
+.curve-choice.fine-choice.active{background:var(--green);border-color:var(--green)}
+.project-curve-viewer{display:grid;grid-template-columns:1.55fr .65fr;background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.curve-image-wrap{background:#f4f6f8;padding:14px;display:flex;align-items:center}
+.curve-image-wrap img{display:block;width:100%;height:auto}
+.curve-commentary{padding:30px}
+.curve-commentary h2{font-size:2.35rem}
+.curve-commentary>p:not(.eyebrow){font-size:1.08rem;color:var(--muted)}
+.curve-verdict{background:#dcefe6;border-radius:12px;padding:17px;margin-top:22px}
+.curve-verdict span,.curve-verdict strong{display:block}
+.curve-verdict span{color:#357056;font-weight:800}
+.curve-verdict strong{font-size:1.15rem;color:#174d36}
+.reading-prompt{font-size:1rem;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.next-learning{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.curve-page footer a{color:var(--navy);font-weight:850;text-decoration:none}
+
+@media(max-width:1000px){
+  .curve-hero-grid,.project-curve-viewer,.next-learning{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .four-curves-grid,.reading-steps,.pattern-grid{grid-template-columns:1fr}
+  .reading-steps li{grid-template-columns:46px 1fr}
+  .reading-steps li>span{width:46px;height:46px}
+  .curve-choice{width:100%}
+  .curve-hero{padding:65px 0}
+}
