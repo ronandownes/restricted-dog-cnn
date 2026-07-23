@@ -11,6 +11,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (label === "Links & Resources" || label === "Resources") summary.textContent = "Links";
   });
 
+  const linksSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
+    .find((summary) => summary.textContent.trim() === "Links");
+  const linksMenu = linksSummary?.parentElement.querySelector(".nav-dropdown-menu");
+  if (linksMenu) {
+    linksMenu.innerHTML = `
+      <a href="https://github.com/ronandownes/restricted-dog-cnn" target="_blank" rel="noopener"><strong>Repository</strong></a>
+      <a href="documents.html?document=report"><strong>Report</strong></a>
+      <a href="documents.html?document=poster"><strong>Poster</strong></a>
+      <a class="explained-link" href="documents.html?document=slides"><strong>Slides</strong><small>For students and self-study</small></a>
+      <a class="explained-link" href="documents.html?document=presentation"><strong>Presentation</strong><small>For presenters · staged reveals</small></a>
+      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs" target="_blank" rel="noopener"><strong>All documents</strong></a>
+      <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation</strong></a>
+      <a href="notebooks.html?notebook=benchmark"><strong>02 · Benchmarking CNNs</strong></a>
+      <a href="notebooks.html?notebook=fine"><strong>03 · Fine-tuning InceptionResNetV2</strong></a>
+      <a href="notebooks.html?notebook=gradcam"><strong>04 · Grad-CAM</strong></a>
+      <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/notebooks" target="_blank" rel="noopener"><strong>All notebooks</strong></a>
+    `;
+  }
+
   const closeMenu = () => {
     navigation.classList.remove("is-open");
     button.setAttribute("aria-expanded", "false");
