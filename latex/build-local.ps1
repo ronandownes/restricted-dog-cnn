@@ -10,8 +10,12 @@ $RepositoryRoot = Split-Path -Parent $LatexDirectory
 $FiguresDirectory = Join-Path $LatexDirectory "figures"
 $DocsDirectory = Join-Path $RepositoryRoot "docs"
 
-if (-not (Get-Command latexmk -ErrorAction SilentlyContinue)) {
-    throw "latexmk was not found. Install MiKTeX or TeX Live, then restart PowerShell."
+if (-not (Get-Command pdflatex -ErrorAction SilentlyContinue)) {
+    throw "pdflatex was not found. Install MiKTeX or TeX Live, then restart PowerShell."
+}
+
+if (-not (Get-Command bibtex -ErrorAction SilentlyContinue)) {
+    throw "bibtex was not found. Open MiKTeX Console, install updates, then restart PowerShell."
 }
 
 New-Item -ItemType Directory -Force -Path $FiguresDirectory | Out-Null
@@ -42,8 +46,7 @@ Copy-Item `
 Write-Host "Compiling editable diagrams..." -ForegroundColor Cyan
 
 Get-ChildItem (Join-Path $LatexDirectory "diagram_sources\*.tex") | ForEach-Object {
-    & latexmk `
-        -pdf `
+    & pdflatex `
         -file-line-error `
         -halt-on-error `
         -interaction=nonstopmode `
@@ -73,8 +76,8 @@ try {
     foreach ($Document in $Documents) {
         Write-Host "Compiling $Document.tex..." -ForegroundColor Cyan
 
-        & latexmk `
-            -pdf `
+        # First pass creates the auxiliary files and discovers references.
+        & pdflatex `
             -file-line-error `
             -halt-on-error `
             -interaction=nonstopmode `
@@ -82,6 +85,33 @@ try {
 
         if ($LASTEXITCODE -ne 0) {
             throw "Compilation failed: $Document.tex"
+        }
+
+        # Run BibTeX only when the document's auxiliary file requests it.
+        $AuxiliaryFile = Join-Path $LatexDirectory "$Document.aux"
+        if (
+            (Test-Path $AuxiliaryFile) -and
+            (Select-String -Path $AuxiliaryFile -Pattern "\\bibdata" -Quiet)
+        ) {
+            Write-Host "Building bibliography for $Document..." -ForegroundColor Cyan
+            & bibtex $Document
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Bibliography compilation failed: $Document"
+            }
+        }
+
+        # Two final passes resolve citations, contents and cross-references.
+        1..2 | ForEach-Object {
+            & pdflatex `
+                -file-line-error `
+                -halt-on-error `
+                -interaction=nonstopmode `
+                "$Document.tex"
+
+            if ($LASTEXITCODE -ne 0) {
+                throw "Compilation failed on final pass: $Document.tex"
+            }
         }
 
         Copy-Item `
