@@ -1,0 +1,20 @@
+\chapter{Detailed Architecture Summary}
+\label{app:architecture}
+\begin{longtable}{p{2.6cm}p{3.2cm}p{4.0cm}p{3.2cm}}
+\caption{Block-level summary of the evaluated architectures.}\label{tab:blocksummary}\\
+\toprule
+Model & Stem and reduction & Principal blocks and kernel patterns & Final representation \\
+\midrule
+\endfirsthead
+\toprule
+Model & Stem and reduction & Principal blocks and kernel patterns & Final representation \\
+\midrule
+\endhead
+VGG16 & Repeated convolution followed by $2\times2$ max pooling & Two or three $3\times3$ convolutions per block; channel depth increases from 64 to 512 & $7\times7\times512$ before the original dense top; global average pooling used in this project \\
+ResNet50 & $7\times7$ convolution and max pooling; strided residual stages & Bottleneck blocks use $1\times1$, $3\times3$, $1\times1$ convolutions with identity or projection shortcuts & 2048-channel terminal feature tensor followed by global average pooling \\
+InceptionV3 & Factorised convolutional stem and reduction modules & Parallel branches using $1\times1$, $3\times3$, and asymmetric $1\times7$/$7\times1$ factorisations & 2048-channel representation before pooling \\
+Xception & Two-convolution entry stem and strided entry flow & Depthwise $3\times3$ spatial convolution plus pointwise $1\times1$ channel mixing, arranged in residual blocks & 2048-channel exit-flow representation \\
+InceptionResNetV2 & Multi-convolution stem, Reduction-A and Reduction-B & Repeated Inception-ResNet A, B and C blocks with parallel kernels, projection and scaled residual addition & 1536-channel terminal representation before pooling \\
+NASNetMobile & Convolutional stem and learned reduction cells & Repeated normal cells preserve resolution; reduction cells downsample; separable convolutions selected by architecture search & Approximately 1056 channels before global pooling \\
+\bottomrule
+\end{longtable}
