@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Learn to interpret training accuracy, validation accuracy, training loss and validation loss using the Restricted Dog CNN project’s real learning curves.">
+  <title>Learning Curves · Restricted Dog CNN</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="learning-curves.js" defer></script>
+</head>
+<body class="curve-page">
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
+    <nav aria-label="Learning curve navigation">
+      <a href="#four-curves">Four curves</a><a href="#reading">How to read</a><a href="#patterns">Warning patterns</a><a href="#project-curves">Project plots</a><a href="metrics.html">Metrics help</a><a href="index.html">Back to project</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="curve-hero">
+    <div class="wrap curve-hero-grid">
+      <div>
+        <p class="eyebrow">Plain-language training guide</p>
+        <h1>What is a <span>learning curve</span> telling me?</h1>
+        <p class="lede">A learning curve is the model’s training story. It shows whether performance is improving, whether learning transfers to unseen validation images, and when further training may stop helping.</p>
+        <div class="buttons"><a class="btn primary" href="#four-curves">Meet the four curves</a><a class="btn" href="#project-curves">Explore my actual plots</a></div>
+      </div>
+      <aside class="epoch-card">
+        <small>START WITH THE X-AXIS</small>
+        <h2>One epoch = one complete pass through the training data.</h2>
+        <p>At the end of each epoch, the graph records training and validation performance. Reading from left to right shows how learning changes over time.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="four-curves" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">01 · The four signals</p><h2>Accuracy asks “how often correct?” Loss asks “how wrong?”</h2></div>
+        <p class="section-intro">Training values come from images used to update the model. Validation values come from a separate set used to check generalisation during training; validation images do not update the weights.</p>
+      </div>
+      <div class="four-curves-grid">
+        <article class="curve-definition train-acc"><span class="curve-swatch blue-line"></span><h3>Training accuracy</h3><strong>How often is the model correct on training batches?</strong><p>It should generally rise. Augmentation, dropout and other training-only effects can make this lower or noisier than validation accuracy.</p></article>
+        <article class="curve-definition val-acc"><span class="curve-swatch orange-line"></span><h3>Validation accuracy</h3><strong>How often is the model correct on unseen validation images?</strong><p>It should rise with training accuracy and then level off. It is a better guide to generalisation than training accuracy alone.</p></article>
+        <article class="curve-definition train-loss"><span class="curve-swatch green-line"></span><h3>Training loss</h3><strong>How large is the model’s optimisation penalty on training batches?</strong><p>It should generally fall. Loss uses confidence as well as correctness, so two models with the same accuracy can have different loss.</p></article>
+        <article class="curve-definition val-loss"><span class="curve-swatch red-line"></span><h3>Validation loss</h3><strong>How large is that penalty on unseen validation images?</strong><p>It should fall and stabilise. If it turns upward while training loss keeps falling, overfitting may be starting.</p></article>
+      </div>
+      <div class="key-line"><strong>Do not confuse them</strong><span>Accuracy is a proportion of correct labels. Loss is the function the optimiser tries to minimise. Lower loss is better, but loss is not simply “one minus accuracy”.</span></div>
+    </div>
+  </section>
+
+  <section id="reading" class="section alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">02 · A reading routine</p><h2>Read every learning curve in four passes.</h2></div>
+        <p class="section-intro">Do not begin by judging whether one line is “high”. First examine direction, separation, turning points and stability.</p>
+      </div>
+      <ol class="reading-steps">
+        <li><span>1</span><div><h3>Direction</h3><p>Are both accuracy curves generally rising? Are both loss curves generally falling? If yes, useful learning is taking place.</p></div></li>
+        <li><span>2</span><div><h3>Training–validation gap</h3><p>Are the paired curves close? A widening gap can mean the model is learning the training data better than it generalises.</p></div></li>
+        <li><span>3</span><div><h3>Turning point</h3><p>Where does validation performance stop improving? The best checkpoint is often near the lowest validation loss, not automatically the final epoch.</p></div></li>
+        <li><span>4</span><div><h3>Stability</h3><p>Small fluctuations are normal. Large repeated jumps can indicate a noisy validation set, an aggressive learning rate or unstable optimisation.</p></div></li>
+      </ol>
+      <div class="validation-higher">
+        <h3>Can validation accuracy be higher than training accuracy?</h3>
+        <p>Yes. Training may be deliberately harder because it uses augmented images and training-time regularisation such as dropout. Validation uses clean images with dropout disabled. A modest validation advantage is therefore not, by itself, evidence of data leakage.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="patterns" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">03 · Recognising patterns</p><h2>What should make me look more closely?</h2></div>
+        <p class="section-intro">These are diagnostic clues, not automatic verdicts. Always check the data pipeline, class balance and final held-out test results as well.</p>
+      </div>
+      <div class="pattern-grid">
+        <article class="pattern healthy"><span>Healthy convergence</span><h3>Both datasets improve together</h3><p>Accuracy rises, loss falls, and training and validation remain reasonably close before settling.</p></article>
+        <article class="pattern overfit"><span>Possible overfitting</span><h3>Training improves while validation deteriorates</h3><p>Training loss keeps falling, but validation loss rises or validation accuracy falls. The generalisation gap widens.</p></article>
+        <article class="pattern underfit"><span>Possible underfitting</span><h3>Both performances plateau too low</h3><p>Training and validation may be close, but neither becomes strong. The model, features or training setup may not capture enough of the task.</p></article>
+        <article class="pattern unstable"><span>Possible instability</span><h3>Validation jumps sharply between epochs</h3><p>Investigate learning rate, validation-set size, class composition and whether evaluation is deterministic.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="project-curves" class="section alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">04 · My project</p><h2>Read the real curves model by model.</h2></div>
+        <p class="section-intro">Choose a model. The full-resolution plot and a guided interpretation appear below. Use the four-pass routine before reading the commentary.</p>
+      </div>
+      <div class="curve-picker" role="group" aria-label="Choose a learning curve">
+        <button class="curve-choice" data-model="VGG16">VGG16</button>
+        <button class="curve-choice" data-model="ResNet50">ResNet50</button>
+        <button class="curve-choice" data-model="InceptionV3">InceptionV3</button>
+        <button class="curve-choice" data-model="Xception">Xception</button>
+        <button class="curve-choice active" data-model="InceptionResNetV2">InceptionResNetV2</button>
+        <button class="curve-choice" data-model="NASNetMobile">NASNetMobile</button>
+        <button class="curve-choice fine-choice" data-model="FineTuned">Fine-tuned model</button>
+      </div>
+      <article class="project-curve-viewer">
+        <div class="curve-image-wrap">
+          <img id="curveImage" src="https://raw.githubusercontent.com/ronandownes/restricted-dog-cnn/main/benchmark/figures/InceptionResNetV2_learning_curves.png" alt="InceptionResNetV2 learning curves">
+        </div>
+        <div class="curve-commentary">
+          <p class="eyebrow">Guided interpretation</p>
+          <h2 id="curveTitle">InceptionResNetV2</h2>
+          <p id="curveSummary">Accuracy rises quickly and the training and validation curves remain close. Both loss curves fall together and remain stable, with no late validation-loss reversal.</p>
+          <div class="curve-verdict"><span id="curveLabel">Overall pattern</span><strong id="curveVerdict">Strong, stable convergence</strong></div>
+          <div class="reading-prompt"><b>Your turn:</b> identify the direction, gap, turning point and stability before moving to another model.</div>
+        </div>
+      </article>
+      <div class="key-line"><strong>Important boundary</strong><span>A healthy learning curve shows that optimisation behaved sensibly on the training and validation splits. It does not prove performance on genuinely new real-world populations.</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap next-learning">
+      <div><p class="chapter">Continue learning</p><h2>Now connect training behaviour to final evaluation.</h2></div>
+      <div class="buttons"><a class="btn primary" href="metrics.html">Learn the evaluation metrics</a><a class="btn" href="index.html#benchmark">Return to the six-model benchmark</a><a class="btn" href="index.html#fine">See fine-tuning results</a></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap footer-grid"><div><b>Restricted Dog CNN</b><span>Learning curves · training and validation interpretation</span></div><div><a href="index.html">Return to the learning journey →</a></div></div></footer>
+</body>
+</html>
