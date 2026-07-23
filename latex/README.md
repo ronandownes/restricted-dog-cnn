@@ -21,6 +21,8 @@ Replace `report` with `poster`, `presentation`, `slides` or `all`. The script pr
 
 After the first preparation run, LaTeX Workshop can also compile the root `.tex` file directly while you edit. Overleaf is not required.
 
+The local script uses MiKTeX's `pdflatex` and `bibtex` commands directly. It does not use `latexmk`, so Perl is not required.
+
 ## Manual GitHub build
 
 Pushing LaTeX source does not regenerate the public PDFs. When a public rebuild is wanted:
