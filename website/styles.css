@@ -24,9 +24,9 @@ body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(-
 .nav-dropdown[open] summary::after{transform:rotate(180deg)}
 .nav-dropdown summary:hover,.nav-dropdown[open] summary{color:var(--blue)}
 .nav-dropdown summary:focus-visible{outline:3px solid rgba(44,111,176,.3);outline-offset:5px;border-radius:5px}
-.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 16px);z-index:50;display:grid;gap:4px;width:300px;padding:10px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:14px;box-shadow:var(--shadow)}
+.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 16px);z-index:50;display:grid;gap:5px;width:300px;padding:12px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:14px;box-shadow:var(--shadow)}
 .nav-dropdown:first-of-type .nav-dropdown-menu{right:auto;left:0}
-.nav-dropdown-menu a{display:block;overflow:hidden;padding:11px 13px;border-radius:9px;font-size:.95rem!important;line-height:1.25;white-space:nowrap}
+.nav-dropdown-menu a{display:block;overflow:hidden;padding:14px 14px;border-radius:9px;font-size:.97rem!important;line-height:1.25;white-space:nowrap}
 .nav-dropdown-menu a:hover{background:var(--lightblue)}
 .nav-dropdown-menu strong{display:block;overflow:hidden;color:var(--ink);font-size:1rem;text-overflow:ellipsis}
 .nav-dropdown-menu small{display:none}
@@ -315,8 +315,8 @@ footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted)}
 .nav nav.is-open{display:flex}
 .nav nav>a,.nav-dropdown>summary{width:100%;padding:13px 14px;border-radius:9px;font-size:1.05rem}
 .nav nav>a:hover,.nav-dropdown>summary:hover{background:var(--lightblue)}
-.nav-dropdown-menu{position:static;width:100%;min-width:0;max-width:none;margin:0 0 8px;padding:7px 8px;background:#f5f8fb;border:0;border-left:4px solid var(--blue);border-radius:10px;box-shadow:none}
-.nav-dropdown-menu a{padding:10px 11px}
+.nav-dropdown-menu{position:static;width:100%;min-width:0;max-width:none;margin:0 0 10px;padding:9px 10px;background:#f5f8fb;border:0;border-left:4px solid var(--blue);border-radius:10px;box-shadow:none}
+.nav-dropdown-menu a{padding:13px 12px}
 body.menu-open{overflow:hidden}
 .hero-grid,.section-head,.transfer-grid,.grid-two,.benchmark-results{grid-template-columns:1fr}
 .head-route{grid-template-columns:1fr}
