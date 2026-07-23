@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-10">
+  <link rel="stylesheet" href="styles.css?v=20260723-11">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-10" defer></script>
+  <script src="app.js?v=20260723-11" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -19,16 +19,17 @@
       <span class="menu-label">Menu</span>
     </button>
     <nav id="primary-navigation" aria-label="Primary navigation">
-      <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="#gradcam">Grad-CAM</a>
+      <a href="#context">Context</a><a href="#data">Data</a><a href="#benchmark">Benchmark</a><a href="#fine">Fine-tune</a><a href="gradcam.html">Grad-CAM</a>
       <details class="nav-dropdown">
         <summary>Theory &amp; Methods</summary>
         <div class="nav-dropdown-menu">
-          <a href="#imagenet"><strong>ImageNet</strong><small>Why scale transformed image recognition</small></a>
-          <a href="#cnn"><strong>CNN foundations</strong><small>Convolution, filters and feature hierarchies</small></a>
-          <a href="#evolution"><strong>Architecture evolution</strong><small>AlexNet, VGG, ResNet, Inception and more</small></a>
+          <a href="theory.html"><strong>Theory &amp; Methods hub</strong><small>All concepts and architecture diagrams</small></a>
+          <a href="theory.html#imagenet"><strong>ImageNet</strong><small>Why scale transformed image recognition</small></a>
+          <a href="theory.html#cnn"><strong>CNN foundations</strong><small>Convolution, filters and feature hierarchies</small></a>
+          <a href="theory.html#architectures"><strong>Architecture evolution</strong><small>AlexNet, VGG, ResNet, Inception and more</small></a>
           <a href="metrics.html"><strong>Metrics guide</strong><small>Accuracy, precision, recall, F1 and MCC</small></a>
           <a href="learning-curves.html"><strong>Learning curves</strong><small>Training and validation accuracy and loss</small></a>
-          <a href="#transformers"><strong>Before and beyond CNNs</strong><small>What preceded CNNs and how Transformers followed</small></a>
+          <a href="theory.html#transformers"><strong>Before and beyond CNNs</strong><small>What preceded CNNs and how Transformers followed</small></a>
         </div>
       </details>
       <details class="nav-dropdown">
@@ -240,15 +241,18 @@
       <article><span>5</span><div><small>CONTROL GENERALISATION</small><h3>Validate, stop and retain the best checkpoint</h3><p>Training allowed up to 15 epochs with class weighting and patience 4. Early stopping limited overfitting, and the best validation checkpoint—not simply the last epoch—was evaluated.</p></div></article>
     </div>
     <div class="fine-boundary"><strong>What “before fine-tuning” means:</strong><span>the selected model’s pretrained CNN base was still frozen, while its new classification head had been trained for restricted-versus-unrestricted prediction. During fine-tuning, the final 20 base layers were made trainable together and backpropagation updated that trainable region.</span></div>
-    <a class="inline-help" href="learning-curves.html#project-curves">How should I read the before-and-after learning curves? →</a>
+    <div class="contextual-links"><a class="inline-help" href="theory.html#fine-tuning-method">How does unfreezing layers work? →</a><a class="inline-help" href="theory.html#dropout">What does dropout do? →</a><a class="inline-help" href="theory.html#batch-normalization">What is batch normalization? →</a><a class="inline-help" href="learning-curves.html#project-curves">How should I read the learning curves? →</a></div>
   </div>
 </section>
 
 <section id="gradcam" class="section">
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Grad-CAM</h2><p class="section-subtitle">Where was the CNN looking? Class-relevant activation can reveal useful focus or suspicious background reliance—but it is not a causal explanation.</p></div></div>
     <div class="grad-explain"><div class="layer-stack"><span></span><span></span><span></span><b>deep feature maps</b></div><i>+</i><div class="gradient-box">class gradients</div><i>→</i><div class="heat-box">heatmap</div><i>→</i><div class="overlay-box">image overlay</div></div>
-    <div class="filters"><button class="filter active" data-f="all">All 12</button><button class="filter" data-f="TP">True positives</button><button class="filter" data-f="TN">True negatives</button><button class="filter" data-f="FP">False positives</button><button class="filter" data-f="FN">False negatives</button></div><div id="gallery" class="gallery"></div>
-    <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction. It does not prove why the model decided, and it certainly does not establish behaviour, danger or legal identity.</span></div>
+    <div class="gradcam-preview">
+      <div><span class="tag TP">True positive</span><h3>Explore all twelve cases</h3><p>The dedicated page contains full-width TP, TN, FP and FN examples, filters, case interpretation and the limits of heatmap evidence.</p></div>
+      <a class="btn primary" href="gradcam.html">Open the Grad-CAM study →</a>
+    </div>
+    <div class="key-line"><strong>Interpretive boundary</strong><span>Grad-CAM indicates regions associated with a prediction. It does not prove why the model decided, and it certainly does not establish behaviour, danger or legal identity. <a href="theory.html#gradcam">Learn how Grad-CAM works →</a></span></div>
   </div>
 </section>
 
