@@ -207,6 +207,10 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .cm-tp{background:#b9d1e8}
 .cm-fp{background:#edf4fb}
 .cm-fn{background:#f5f8fc;border:1px solid #d6e2ef}
+.matrix-differences .delta-good{background:#dff3e9;color:#155f42;border:1px solid #a9d8c2}
+.matrix-differences .delta-bad{background:#fde8e8;color:#9b2f2f;border:1px solid #edbcbc}
+.matrix-differences small{color:inherit}
+.matrix-balance{margin:16px 0 0;color:var(--muted);font-size:.92rem}
 .matrix-help{display:inline-block;margin-top:14px;color:var(--navy);font-weight:850}
 .change-list{display:grid;gap:10px;margin-top:22px}
 .change-list>div{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;background:#edf5fb;border-left:5px solid var(--blue);border-radius:10px}
