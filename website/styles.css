@@ -580,6 +580,13 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .curve-pair figure{margin:0;text-align:center}
 .curve-pair img{display:block;width:100%;height:auto;max-height:365px;object-fit:contain}
 .curve-pair figcaption{font-weight:850;color:var(--muted);font-size:.85rem}
+.curve-strip{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.curve-strip-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:14px}
+.curve-strip-heading small{color:var(--blue);font-weight:900;letter-spacing:.08em}
+.curve-strip-heading h3{margin:.15rem 0 0}
+.curve-strip-heading a{color:var(--navy);font-weight:850}
+.curve-strip>img,.curve-strip>div:last-child>img{display:block;width:100%;max-height:560px;object-fit:contain;background:#f7f9fb;border-radius:12px}
+.curve-strip .curve-pair img{max-height:500px}
 
 @media(max-width:700px){
   .gradcam-preview{align-items:stretch;flex-direction:column}
@@ -591,4 +598,5 @@ h1{font-size:clamp(3rem,15vw,5rem)}
   .visual-switch button{flex:1}
   .curve-pair{grid-template-columns:1fr}
   .learning-curve-stage{overflow:auto;justify-content:flex-start}
+  .curve-strip-heading{align-items:flex-start;flex-direction:column}
 }
