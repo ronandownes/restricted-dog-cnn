@@ -30,6 +30,25 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
+  const learningSummary = [...navigation.querySelectorAll(".nav-dropdown > summary")]
+    .find((summary) => summary.textContent.trim() === "Learning Hub");
+  const learningMenu = learningSummary?.parentElement.querySelector(".nav-dropdown-menu");
+  if (learningMenu) {
+    learningMenu.innerHTML = `
+      <a href="theory.html"><strong>Learning Hub</strong></a>
+      <a href="theory.html#binary-classifier"><strong>Binary classifier</strong></a>
+      <a href="theory.html#bitter-lesson"><strong>Feature engineering</strong></a>
+      <a href="theory.html#imagenet"><strong>ImageNet</strong></a>
+      <a href="theory.html#cnn"><strong>CNN foundations</strong></a>
+      <a href="theory.html#training"><strong>Training methods</strong></a>
+      <a href="theory.html#architectures"><strong>CNN architectures</strong></a>
+      <a href="metrics.html"><strong>Metrics guide</strong></a>
+      <a href="learning-curves.html"><strong>Learning curves</strong></a>
+      <a href="theory.html#gradcam"><strong>Grad-CAM theory</strong></a>
+      <a href="theory.html#transformers"><strong>Beyond CNNs</strong></a>
+    `;
+  }
+
   const closeMenu = () => {
     navigation.classList.remove("is-open");
     button.setAttribute("aria-expanded", "false");
