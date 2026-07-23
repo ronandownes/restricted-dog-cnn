@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Plain-language guide to accuracy, precision, recall, F1, PR-AUC, MCC and confusion matrices, using the Restricted Dog CNN project as a worked example.">
+  <title>Metrics Help · Restricted Dog CNN</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="metrics-page">
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="brand-mark">RD</span><span>Restricted Dog CNN</span></a>
+    <nav aria-label="Metrics navigation">
+      <a href="#start">Start here</a><a href="#confusion-matrix">Four outcomes</a><a href="#metrics">Metrics</a><a href="#choice">Which matters?</a><a href="index.html">Back to project</a>
+    </nav>
+  </div>
+</header>
+
+<main id="start">
+  <section class="metrics-hero">
+    <div class="wrap metrics-hero-grid">
+      <div>
+        <p class="eyebrow">Plain-language evaluation guide</p>
+        <h1>What do <span>precision</span> and <span>recall</span> actually mean?</h1>
+        <p class="lede">Begin with the model’s four possible outcomes. Every headline metric is simply a different way of combining those four counts.</p>
+        <div class="buttons"><a class="btn primary" href="#confusion-matrix">Show me the four outcomes</a><a class="btn" href="index.html#benchmark">Return to the benchmark</a></div>
+      </div>
+      <aside class="positive-note">
+        <small>FIRST IMPORTANT POINT</small>
+        <h2>“Positive” does not mean “good”.</h2>
+        <p>In this project, <strong>positive means the model predicted “restricted”</strong>. Negative means it predicted “unrestricted”. True and false tell us whether that prediction matched the dataset label.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="confusion-matrix" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">01 · The foundation</p><h2>One image. Four possible outcomes.</h2></div>
+        <p class="section-intro">The examples below use the fine-tuned InceptionResNetV2 test results. The restricted class is treated as positive.</p>
+      </div>
+      <div class="outcome-grid">
+        <article class="outcome-card outcome-good"><span>TP</span><small>True positive</small><b>184</b><h3>Restricted—and predicted restricted</h3><p>A restricted-class image was correctly detected.</p></article>
+        <article class="outcome-card outcome-warn"><span>FP</span><small>False positive</small><b>12</b><h3>Unrestricted—but predicted restricted</h3><p>A false accusation: the model raised the restricted label incorrectly.</p></article>
+        <article class="outcome-card outcome-bad"><span>FN</span><small>False negative</small><b>6</b><h3>Restricted—but predicted unrestricted</h3><p>A miss: the model failed to detect a restricted-class image.</p></article>
+        <article class="outcome-card outcome-good"><span>TN</span><small>True negative</small><b>826</b><h3>Unrestricted—and predicted unrestricted</h3><p>An unrestricted-class image was correctly cleared.</p></article>
+      </div>
+      <div class="memory-line"><strong>A quick memory aid</strong><span><b>True or false</b> = was the model correct? &nbsp; <b>Positive or negative</b> = which class did it predict?</span></div>
+    </div>
+  </section>
+
+  <section id="metrics" class="section alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">02 · The headline metrics</p><h2>Each metric asks a different question.</h2></div>
+        <p class="section-intro">There is no single universally “best” metric. The right one depends on which error matters and whether the classes are balanced.</p>
+      </div>
+      <div class="metric-guide">
+        <article class="metric-explainer accuracy">
+          <div class="metric-name"><span>Accuracy</span><b>98.25%</b></div>
+          <h3>How often was the model correct overall?</h3>
+          <p>Count every correct prediction—restricted and unrestricted—and divide by all images.</p>
+          <code>(TP + TN) ÷ all images</code>
+          <div class="worked">(184 + 826) ÷ 1,028 = 98.25%</div>
+          <small>Useful as a broad summary, but it can look impressive when one class is much larger than the other.</small>
+        </article>
+        <article class="metric-explainer precision">
+          <div class="metric-name"><span>Precision</span><b>93.88%</b></div>
+          <h3>When the model said “restricted”, how often was it right?</h3>
+          <p>Precision focuses on the reliability of positive predictions. False positives lower precision.</p>
+          <code>TP ÷ (TP + FP)</code>
+          <div class="worked">184 ÷ (184 + 12) = 93.88%</div>
+          <small>High precision means relatively few unrestricted images were incorrectly labelled restricted.</small>
+        </article>
+        <article class="metric-explainer recall">
+          <div class="metric-name"><span>Recall</span><b>96.84%</b></div>
+          <h3>Of all restricted images, how many did the model find?</h3>
+          <p>Recall focuses on coverage of the positive class. False negatives lower recall.</p>
+          <code>TP ÷ (TP + FN)</code>
+          <div class="worked">184 ÷ (184 + 6) = 96.84%</div>
+          <small>High recall means relatively few restricted-class images were missed.</small>
+        </article>
+        <article class="metric-explainer f1">
+          <div class="metric-name"><span>F1 score</span><b>95.34%</b></div>
+          <h3>How strong is the balance between precision and recall?</h3>
+          <p>F1 is the harmonic mean of precision and recall. It falls if either one is weak.</p>
+          <code>2 × (precision × recall) ÷ (precision + recall)</code>
+          <div class="worked">Balance of 93.88% precision and 96.84% recall = 95.34%</div>
+          <small>Useful when both false positives and false negatives matter.</small>
+        </article>
+        <article class="metric-explainer prauc">
+          <div class="metric-name"><span>PR-AUC</span><b>Across thresholds</b></div>
+          <h3>How well does the model trade precision against recall?</h3>
+          <p>A classifier produces scores, not just one final label. Changing the decision threshold changes precision and recall. PR-AUC summarises that relationship across many thresholds.</p>
+          <code>Area under the precision–recall curve</code>
+          <small>Especially informative when the positive class is less common. It is not calculated from just one confusion matrix.</small>
+        </article>
+        <article class="metric-explainer mcc">
+          <div class="metric-name"><span>MCC</span><b>0.9428</b></div>
+          <h3>How well do predictions agree with labels across all four outcomes?</h3>
+          <p>Matthews correlation coefficient uses TP, TN, FP and FN together. It ranges from −1 to +1.</p>
+          <div class="mcc-scale"><span>−1<br><small>opposite</small></span><span>0<br><small>no better than chance</small></span><span class="selected">+1<br><small>perfect</small></span></div>
+          <small>The project’s 0.9428 indicates very strong agreement on this held-out test set—not legal or real-world validity.</small>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="choice" class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="chapter">03 · Reading the trade-off</p><h2>Fine-tuning improved the balance, but not every metric.</h2></div>
+        <p class="section-intro">The fine-tuned model became more precise while becoming slightly less sensitive to the restricted class.</p>
+      </div>
+      <div class="trade-story">
+        <article><span class="trade-arrow good-arrow">↓ 15</span><h3>Fewer false positives</h3><p>False positives fell from 27 to 12. Precision therefore rose substantially.</p></article>
+        <article><span class="trade-arrow bad-arrow">↑ 3</span><h3>More false negatives</h3><p>False negatives rose from 3 to 6. Recall therefore fell slightly.</p></article>
+        <article><span class="trade-arrow neutral-arrow">↑</span><h3>Better overall balance</h3><p>Accuracy, precision, F1 and MCC improved, despite the small recall reduction.</p></article>
+      </div>
+      <div class="question-grid">
+        <div><small>If false accusations matter most</small><strong>Watch precision and false positives.</strong></div>
+        <div><small>If missed restricted cases matter most</small><strong>Watch recall and false negatives.</strong></div>
+        <div><small>If both errors matter</small><strong>Use F1, MCC and the confusion matrix together.</strong></div>
+      </div>
+      <div class="key-line"><strong>The key lesson</strong><span>Never report a single metric without asking which mistakes it hides.</span></div>
+      <div class="buttons centre-buttons"><a class="btn primary" href="index.html#benchmark">Apply this to the benchmark</a><a class="btn" href="index.html#cm">See the two confusion matrices</a></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap footer-grid"><div><b>Restricted Dog CNN</b><span>Metrics help · plain-language model evaluation</span></div><div><a href="index.html">Return to the learning journey →</a></div></div></footer>
+</body>
+</html>
