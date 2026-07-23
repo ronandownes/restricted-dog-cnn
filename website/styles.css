@@ -194,6 +194,13 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .cm-fp{background:#edf4fb}
 .cm-fn{background:#f5f8fc;border:1px solid #d6e2ef}
 .matrix-help{display:inline-block;margin-top:14px;color:var(--navy);font-weight:850}
+.change-list{display:grid;gap:10px;margin-top:22px}
+.change-list>div{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;background:#edf5fb;border-left:5px solid var(--blue);border-radius:10px}
+.change-list>div.down{background:#fff1f1;border-left-color:var(--red)}
+.change-list span,.change-list small{color:var(--muted)}
+.change-list b{font-size:1.15rem;white-space:nowrap}
+.change-list.errors>div{display:grid;grid-template-columns:1fr auto;gap:0 12px}
+.change-list.errors small{grid-column:1/-1}
 .arrow{font-size:2.5rem;color:var(--blue)}
 .grad-explain{display:flex;align-items:center;justify-content:center;gap:20px;background:#edf2f7;border-radius:18px;padding:25px;margin-bottom:25px}
 .grad-explain>i{font-style:normal;font-size:1.6rem;color:var(--blue)}
