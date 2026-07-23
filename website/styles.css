@@ -24,7 +24,7 @@ body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(-
 .nav-dropdown[open] summary::after{transform:rotate(180deg)}
 .nav-dropdown summary:hover,.nav-dropdown[open] summary{color:var(--blue)}
 .nav-dropdown summary:focus-visible{outline:3px solid rgba(44,111,176,.3);outline-offset:5px;border-radius:5px}
-.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 16px);z-index:50;display:grid;gap:5px;width:300px;padding:12px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:14px;box-shadow:var(--shadow)}
+.nav-dropdown-menu{position:absolute;right:0;top:calc(100% + 16px);z-index:50;display:grid;gap:5px;width:340px;padding:12px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:14px;box-shadow:var(--shadow)}
 .nav-dropdown:first-of-type .nav-dropdown-menu{right:auto;left:0}
 .nav-dropdown-menu a{display:block;overflow:hidden;padding:14px 14px;border-radius:9px;font-size:.97rem!important;line-height:1.25;white-space:nowrap}
 .nav-dropdown-menu a:hover{background:var(--lightblue)}
