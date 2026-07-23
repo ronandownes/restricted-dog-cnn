@@ -120,11 +120,13 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .stepper strong{font-size:1.45rem}
 .stepper small,.stepper span{color:var(--muted)}
 .grid-two{display:grid;grid-template-columns:1.4fr .75fr;gap:18px}
+.benchmark-results{display:grid;grid-template-columns:1.25fr .85fr;gap:18px;align-items:stretch}
 .chart-box,.panel,.cm-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 .chart-box{height:490px;padding:24px}
 .chart-box.tall{height:520px}
 .panel{padding:27px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.benchmark-tiles{grid-template-columns:repeat(4,1fr);margin-top:14px}
 .tile{background:#f8fafc;border-top:4px solid var(--c);border-radius:10px;padding:12px}
 .tile small{display:block;color:var(--muted)}
 .tile b{font-size:1.25rem}
@@ -173,6 +175,24 @@ h3{font-size:1.35rem;line-height:1.15;margin:.4rem 0 .7rem}
 .matrix .warn{background:#edf4fb;color:var(--ink)}
 .matrix .badcell{background:#f5f8fc;color:var(--ink);border:1px solid #d6e2ef}
 .matrix .ok:first-child small{color:#dbeafa}
+.fine-matrices{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.compact-matrix{position:relative;display:grid;grid-template-columns:72px 1fr;grid-template-rows:auto auto 1fr;gap:6px;margin-top:22px;padding:0 0 0 18px}
+.matrix-axis{color:var(--muted);font-size:.72rem;font-weight:850;letter-spacing:.03em}
+.matrix-axis.top{grid-column:2;text-align:center}
+.matrix-axis.side{position:absolute;left:-17px;top:55%;transform:rotate(-90deg);transform-origin:center}
+.matrix-labels{color:var(--muted);font-size:.68rem;font-weight:750}
+.matrix-labels.columns{grid-column:2;display:grid;grid-template-columns:1fr 1fr;text-align:center}
+.matrix-labels.rows{grid-column:1;display:grid;grid-template-rows:1fr 1fr;align-items:center;text-align:right;padding-right:5px}
+.matrix-cells{grid-column:2;display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.matrix-cells>div{min-height:108px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center}
+.matrix-cells small{font-size:.67rem;font-weight:750}
+.matrix-cells b{font-size:2rem;line-height:1.1}
+.cm-tn{background:#173f73;color:#fff}
+.cm-tn small{color:#dbeafa}
+.cm-tp{background:#b9d1e8}
+.cm-fp{background:#edf4fb}
+.cm-fn{background:#f5f8fc;border:1px solid #d6e2ef}
+.matrix-help{display:inline-block;margin-top:14px;color:var(--navy);font-weight:850}
 .arrow{font-size:2.5rem;color:var(--blue)}
 .grad-explain{display:flex;align-items:center;justify-content:center;gap:20px;background:#edf2f7;border-radius:18px;padding:25px;margin-bottom:25px}
 .grad-explain>i{font-style:normal;font-size:1.6rem;color:var(--blue)}
@@ -263,18 +283,18 @@ footer{padding:34px 0;border-top:1px solid var(--line);color:var(--muted)}
 .nav-dropdown-menu{position:static;width:100%;margin:0 0 8px;padding:6px 8px 8px;background:#f5f8fb;border:0;border-radius:10px;box-shadow:none}
 .nav-dropdown-menu a{padding:12px 13px}
 body.menu-open{overflow:hidden}
-.hero-grid,.section-head,.transfer-grid,.grid-two{grid-template-columns:1fr}
+.hero-grid,.section-head,.transfer-grid,.grid-two,.benchmark-results{grid-template-columns:1fr}
 .head-route{grid-template-columns:1fr}
 .head-route>i{transform:rotate(90deg);text-align:center}
 .fine-process{grid-template-columns:1fr 1fr}
-.concept-grid.four,.timeline{grid-template-columns:1fr 1fr}
+.concept-grid.four,.timeline,.fine-matrices{grid-template-columns:1fr 1fr}
 .hero-map{max-width:600px}
 .section-head{gap:15px}
 .notebooks{grid-template-columns:1fr 1fr}
 }
 @media(max-width:700px){.wrap{width:min(100% - 28px,1220px)}
 .section{padding:72px 0}
-.concept-grid.three,.concept-grid.four,.timeline,.gallery,.notebooks,.deltas,.trade{grid-template-columns:1fr}
+.concept-grid.three,.concept-grid.four,.timeline,.gallery,.notebooks,.deltas,.trade,.fine-matrices{grid-template-columns:1fr}
 .chapter-strip{display:none}
 .cnn-demo{grid-template-columns:1fr;justify-items:center}
 .receptive,.attention-flow{flex-direction:column}
@@ -291,6 +311,7 @@ body.menu-open{overflow:hidden}
 .fine-stepper+.chart-box{height:340px}
 .dense-definition,.fine-boundary{grid-template-columns:1fr}
 .fine-process{grid-template-columns:1fr}
+.benchmark-tiles{grid-template-columns:1fr 1fr}
 .btn{width:100%}
 h1{font-size:clamp(3rem,15vw,5rem)}
 .document-home{font-size:.88rem;text-align:right}
