@@ -110,7 +110,7 @@
 </section>
 
 <section id="cm" class="section alt">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false alarms, but it also created three additional misses in the restricted class.</p></div>
+  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Error structure</p><h2>A confusion matrix makes the consequences visible.</h2></div><p class="section-intro">Fine-tuning sharply reduced false positives, but it also created three additional false negatives in the restricted class.</p></div>
     <div class="cm-wrap"><article class="cm-card"><div class="cm-title"><div><small>Frozen</small><h3>InceptionResNetV2</h3></div><span>97.08%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>811</b></div><div class="warn"><small>False positive</small><b>27</b></div><div class="badcell"><small>False negative</small><b>3</b></div><div class="ok"><small>True positive</small><b>187</b></div></div></article><div class="arrow">→</div><article class="cm-card selected"><div class="cm-title"><div><small>Fine-tuned</small><h3>InceptionResNetV2</h3></div><span>98.25%</span></div><div class="matrix"><div class="ok"><small>True negative</small><b>826</b><em>+15</em></div><div class="warn"><small>False positive</small><b>12</b><em>−15</em></div><div class="badcell"><small>False negative</small><b>6</b><em>+3</em></div><div class="ok"><small>True positive</small><b>184</b><em>−3</em></div></div></article></div>
   </div>
 </section>
