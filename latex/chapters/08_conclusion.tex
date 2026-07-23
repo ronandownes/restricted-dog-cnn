@@ -1,0 +1,21 @@
+\chapter{Conclusion}
+\label{chap:conclusion}
+
+This dissertation benchmarked and critically evaluated a reproducible ImageNet transfer-learning pipeline for binary restricted versus unrestricted dog-image classification. Six ImageNet-pretrained CNN architectures were compared as frozen feature extractors using a common Stanford Dogs-derived dataset. InceptionResNetV2 achieved the strongest frozen performance and was selected for limited fine-tuning.
+
+The frozen model achieved 97.08\% accuracy and 98.42\% recall, with 27 false positives and 3 false negatives. Fine-tuning improved accuracy to 98.25\%, precision to 93.88\%, F1 to 95.34\% and MCC to 0.9428. It reduced false positives to 12 while increasing false negatives to 6. The central empirical conclusion is therefore nuanced: fine-tuning improved overall balance and positive predictive reliability, but the frozen model remained more sensitive to restricted examples.
+
+The architecture comparison supports the usefulness of modern multi-scale and residual representations for this controlled task. It does not establish that architecture alone caused the observed ranking, nor that the model will retain its performance outside the prepared split. The dataset is curated, incomplete with respect to the legal list, and poorly suited to crossbred or ambiguous real-world cases.
+
+Grad-CAM added a qualitative diagnostic layer. The selected maps often overlapped the animal, but correct predictions sometimes attended to context and incorrect predictions could still appear visually plausible. The explanations therefore support inspection without proving human-like reasoning or legal validity.
+
+The project meets its aim as a controlled academic benchmark and proof of concept. It demonstrates dataset engineering, transfer-learning comparison, fine-tuning, metric-aware evaluation, checkpointing, explanation and critical reflection. It does not demonstrate an autonomous legal classifier. Photograph-only output should never be treated as a substitute for expert evidence, due process or behavioural assessment.
+
+The most valuable next step is not simply to increase model capacity. It is to improve external validity through representative field data, crossbreed coverage, duplicate control, calibration, uncertainty estimation, subgroup analysis and independent testing. Any movement toward operational use would require human-in-the-loop design, transparent documentation, appeal and governance. The technical result is strong; the responsible conclusion remains deliberately bounded.
+
+\section{Final reflection}
+The project also demonstrates why evaluation quality matters as much as model construction. A less critical account could have reported only the 98.25\% accuracy and described the experiment as solved. The fuller analysis shows that the same model made twelve false-positive and six false-negative decisions, that precision depends on prevalence, that the positive class is legally rather than visually defined, and that the source dataset omits important breeds and mixed dogs. These qualifications do not diminish the technical achievement. They identify exactly what has and has not been demonstrated.
+
+The comparison of six backbones provided a defensible basis for model selection, while the frozen-versus-fine-tuned comparison showed that additional training changes the operating trade-off. The explanation analysis further showed that correct classification and satisfactory visual reasoning are not equivalent. Together, these findings support a broader lesson: responsible machine learning requires an evidence chain from data construction through model training, evaluation, explanation and governance.
+
+For the MSc capstone, the completed artefact is therefore both the trained classifier and the documented research process around it. The notebooks, saved predictions, figures and chapter source make the decision path inspectable. The report's final position is intentionally balanced. CNN transfer learning can classify the prepared images with high accuracy and can provide useful comparative insight into architecture and fine-tuning. It cannot, on the evidence presented here, determine the legal identity, ancestry or dangerousness of an arbitrary dog. Maintaining that boundary is central to the validity of the work.
