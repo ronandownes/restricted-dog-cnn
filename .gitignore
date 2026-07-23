@@ -95,3 +95,5 @@ drive/
 *.nav
 *.snm
 *.vrb
+latex/figures/
+latex/*.pdf
