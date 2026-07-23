@@ -1,0 +1,80 @@
+name: Build LaTeX documents
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "latex/**"
+      - "benchmark/figures/**"
+      - "fine_tuning/figures/**"
+      - "gradcam/figures/**"
+      - ".github/workflows/build-latex.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latex-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Compile report, poster, presentation and slides
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            latex/report.tex
+            latex/poster.tex
+            latex/presentation.tex
+            latex/slides.tex
+          work_in_root_file_dir: true
+          texlive_version: 2026
+          os: debian
+          pre_compile: |
+            mkdir -p latex/figures
+            cp benchmark/figures/model_zoo_four_metric_comparison_presentation.pdf latex/figures/
+            cp benchmark/figures/InceptionResNetV2_confusion_matrix.png latex/figures/
+            cp fine_tuning/figures/FineTuned_InceptionResNetV2_learning_curves.png latex/figures/
+            cp fine_tuning/figures/Model_confusion_matrix.png latex/figures/FineTuned_InceptionResNetV2_confusion_matrix.png
+            cp gradcam/figures/*.png latex/figures/
+            for source in latex/diagram_sources/*.tex; do
+              latexmk -pdf -file-line-error -halt-on-error -interaction=nonstopmode \
+                -output-directory=latex/figures "$source"
+            done
+
+      - name: Copy compiled PDFs into docs
+        run: |
+          cp latex/report.pdf docs/dog_cnn_report.pdf
+          cp latex/poster.pdf docs/dog_cnn_poster.pdf
+          cp latex/presentation.pdf docs/dog_cnn_presentation.pdf
+          cp latex/slides.pdf docs/dog_cnn_slides.pdf
+
+      - name: Upload compiled PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: restricted-dog-cnn-pdfs
+          path: |
+            docs/dog_cnn_report.pdf
+            docs/dog_cnn_poster.pdf
+            docs/dog_cnn_presentation.pdf
+            docs/dog_cnn_slides.pdf
+          if-no-files-found: error
+
+      - name: Commit refreshed PDFs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/dog_cnn_report.pdf docs/dog_cnn_poster.pdf \
+            docs/dog_cnn_presentation.pdf docs/dog_cnn_slides.pdf
+          if git diff --cached --quiet; then
+            echo "Compiled PDFs are already current."
+          else
+            git commit -m "Refresh compiled LaTeX documents"
+            git push
+          fi
