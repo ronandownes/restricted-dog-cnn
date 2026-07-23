@@ -1,0 +1,173 @@
+\chapter{Model Explanation with Grad-CAM}
+\label{chap:explanation}
+
+\section{Purpose and scope}
+
+The quantitative evaluation established that the selected InceptionResNetV2 classifier performed strongly on the controlled test set. However, metrics such as accuracy, precision, recall, F1 score, PR-AUC, MCC, and the confusion matrix describe the correctness of the predictions rather than the visual evidence used to produce them. Gradient-weighted Class Activation Mapping (Grad-CAM) was therefore applied as a post-hoc explanation technique \citep{selvaraju2017gradcam}.
+
+Grad-CAM uses the gradients of a target class flowing into a late convolutional representation to produce a coarse class-discriminative localisation map. The resulting heatmap is resized and overlaid on the original image. Warmer colours represent regions with comparatively stronger influence on the selected class score. The method is useful for inspecting whether a model attends to the dog, to plausible breed-related morphology, or to incidental contextual features. It is not a pixel-level segmentation method, and a visually plausible heatmap does not prove that the classifier has learned a robust or causal concept \citep{adebayo2018sanity,rudin2019stop}.
+
+\section{Selection and interpretation of cases}
+
+A reproducible sample of twelve test images was selected: three true positives, three true negatives, three false positives, and three false negatives. Each saved figure contains the original image, the Grad-CAM heatmap, and the merged overlay. The original image was considered alongside the heatmap because activation colours are meaningful only in relation to the visual content of the scene.
+
+The examples were examined using human visual judgement. Particular attention was paid to the apparent size of the dog in the frame, pose, occlusion, facial expression, contrast, background texture, and whether the strongest activation overlapped the dog or an unrelated object. This is a qualitative analysis intended to complement, rather than replace, the principal metric-based evaluation.
+
+\section{False negatives: restricted dogs predicted as unrestricted}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FN_staffordshire_bullterrier_n02093256_2987_gradcam.png}
+        \caption{Close portrait with an unusual facial expression and mouth position. Activation is broad rather than tightly focused on the muzzle, skull, or body proportions.}
+        \label{fig:fn-portrait}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FN_staffordshire_bullterrier_n02093256_5325_gradcam.png}
+        \caption{A strong high-contrast structure competes with the dog for attention, producing a response distributed across both subject and background.}
+        \label{fig:fn-pattern}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FN_staffordshire_bullterrier_n02093256_5988_gradcam.png}
+        \caption{The standing dog occupies a relatively small part of a visually active frame, and the activation remains diffuse.}
+        \label{fig:fn-standing}
+    \end{subfigure}
+    \caption{Representative false-negative Grad-CAM explanations. All three restricted Staffordshire Bull Terriers were classified as unrestricted.}
+    \label{fig:gradcam-fn}
+\end{figure}
+
+The false negatives are visually understandable. They contain difficult composition, competing contrast, unusual expression, or a dog that is not presented as a clean reference image. In each case, the heatmap is less convincingly concentrated on the most recognisable parts of the animal. The examples suggest that restricted-class sensitivity can fall when the animal is relatively small, visually unusual, or embedded in a strong background.
+
+From a human perspective, this is consistent with the nature of fine-grained classification. A person also depends on a sufficiently clear view of the head, muzzle, body proportions, coat, and stance. If those features are distorted, partly hidden, or visually overwhelmed by the scene, the distinction becomes more difficult.
+
+\section{False positives: unrestricted dogs predicted as restricted}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FP_black-and-tan_coonhound_n02089078_1454_gradcam.png}
+        \caption{The Black and Tan Coonhound was predicted as restricted. Strong activation around the head and upper body suggests genuine morphological similarity rather than background alone.}
+        \label{fig:fp-coonhound}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FP_kelpie_n02105412_7370_gradcam.png}
+        \caption{The Kelpie was predicted as restricted with high confidence. The heatmap overlaps the dog but also extends into the street environment.}
+        \label{fig:fp-kelpie}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{FP_weimaraner_n02092339_3028_gradcam.png}
+        \caption{The Weimaraner was classified as restricted. Activation covers both the dog and the highly textured flower background.}
+        \label{fig:fp-weimaraner}
+    \end{subfigure}
+    \caption{Representative false-positive Grad-CAM explanations. Unrestricted dogs were incorrectly classified as restricted.}
+    \label{fig:gradcam-fp}
+\end{figure}
+
+The false positives show why the classifier should not be interpreted as a legal breed-identification system. Some unrestricted breeds share visible characteristics with breeds in the restricted class, including head shape, body build, coat colour, stance, or silhouette. The heatmaps frequently overlap the dog, so the errors cannot be dismissed simply as background failure. Instead, the learned decision boundary appears to treat some legitimate visual similarities as restricted-class evidence.
+
+This is also important ethically. A false positive does not necessarily mean that the model saw nothing meaningful; it may mean that visually similar morphology was given too much weight. Human review would therefore remain essential in any sensitive application.
+
+\section{True negatives: unrestricted dogs correctly classified}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TN_curly-coated_retriever_n02099429_1465_gradcam.png}
+        \caption{The Curly-Coated Retriever was correctly classified while swimming, despite partial occlusion and an unusual body outline.}
+        \label{fig:tn-swimming}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TN_greater_swiss_mountain_dog_n02107574_2662_gradcam.png}
+        \caption{The Greater Swiss Mountain Dog puppy was correctly classified despite juvenile proportions and an expressive facial pose.}
+        \label{fig:tn-puppy}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TN_kelpie_n02105412_7810_gradcam.png}
+        \caption{The Kelpie was correctly classified, although strong activation falls on the high-contrast pipe and surrounding structure.}
+        \label{fig:tn-pipe}
+    \end{subfigure}
+    \caption{Representative true-negative Grad-CAM explanations.}
+    \label{fig:gradcam-tn}
+\end{figure}
+
+These examples demonstrate some robustness to unusual conditions. The swimming dog is partly occluded by water, the puppy differs from an adult breed standard, and the Kelpie appears beneath a visually dominant object. Nevertheless, all three were classified correctly.
+
+The pipe example is especially informative. It shows that a correct prediction does not automatically imply a satisfactory explanation. The label is correct, but the model appears to rely partly on an incidental feature of the scene. This distinction between prediction quality and explanation quality is central to the interpretation of post-hoc explanation methods.
+
+\section{True positives: restricted dogs correctly classified}
+
+\begin{figure}[p]
+    \centering
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TP_german_shepherd_n02106662_13368_gradcam.png}
+        \caption{The German Shepherd was correctly classified as restricted. Activation covers the head and body while extending into the grass.}
+        \label{fig:tp-shepherd}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TP_rottweiler_n02106550_4962_gradcam.png}
+        \caption{The Rottweiler was correctly classified with very high confidence, with substantial overlap across the head, torso, and outline.}
+        \label{fig:tp-rottweiler}
+    \end{subfigure}
+
+    \vspace{0.8em}
+    \begin{subfigure}[t]{0.84\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{TP_staffordshire_bullterrier_n02093256_8205_gradcam.png}
+        \caption{The Staffordshire Bull Terrier was correctly classified, although the textured sand also contributes to the activation pattern.}
+        \label{fig:tp-staffordshire}
+    \end{subfigure}
+    \caption{Representative true-positive Grad-CAM explanations.}
+    \label{fig:gradcam-tp}
+\end{figure}
+
+The true positives provide the clearest evidence that the classifier learned useful restricted-class cues. In each example, the heatmap substantially overlaps the dog. The Rottweiler example is particularly persuasive because activation follows the main body region and head. However, none of the maps is perfectly confined to the animal. Grass and sand also receive activation, showing that the final decision may combine morphology with recurring contextual patterns.
+
+\section{Overall interpretation}
+
+Viewed with human eyes, the twelve examples support a nuanced conclusion. It would be inaccurate to claim either that the model fully understands dog breeds or that it merely uses background information. The maps suggest that it often attends to the dog and to plausible breed-related regions, but contextual features also influence some decisions.
+
+The false negatives are associated with difficult presentation: unusual pose or expression, smaller subject scale, diffuse attention, and competing contrast. The false positives often involve unrestricted breeds with visually similar morphology, sometimes combined with environmental texture. The true positives generally show substantial overlap between activation and the dog, while the true negatives demonstrate that the classifier can remain correct under occlusion, juvenile appearance, or unusual setting.
+
+These observations are consistent with the limitations of saliency-based explanation. Heatmaps can be useful for debugging and qualitative inspection, but they should be subjected to cautious interpretation and sanity checking \citep{adebayo2018sanity}. They do not establish that a model reasons in the same way as a human, and they do not make a black-box decision legally or ethically authoritative \citep{rudin2019stop}.
+
+\section{Implications for the project}
+
+The explanation analysis strengthens the project in four ways. First, it confirms that the model frequently attends to the dog rather than only to arbitrary image regions. Second, it reveals contextual dependence that would not be visible from metrics alone. Third, it makes several false-positive and false-negative cases understandable in terms of morphology, pose, scale, expression, occlusion, and contrast. Fourth, it supports the cautious framing of the system as experimental decision support rather than automated legal determination.
+
+A future extension could compare Grad-CAM with alternative explanation methods, quantify localisation against dog bounding boxes, analyse errors by breed, and test whether explanations remain stable under image perturbation. Such work would move the analysis from qualitative inspection towards systematic explanation evaluation.
+
+\section{Chapter conclusion}
+
+Grad-CAM provided a useful qualitative layer of evaluation beyond the confusion matrix. The model often used visually relevant regions on the dog, but it also displayed sensitivity to background texture and high-contrast objects. Correct predictions were not always accompanied by convincing localisation, while some incorrect predictions were understandable because of genuine visual similarity between breeds. The results therefore reinforce the need for human interpretation, transparent limitations, and caution in any sensitive use of the classifier.
+
+\section{Synthesis of the explanation evidence}
+Across the twelve cases, the maps provide evidence of partial object localisation rather than a simple background-only shortcut. Several true positives show strong activation over the torso, head and muzzle. Nevertheless, the true-negative Kelpie under the pipe demonstrates that a correct prediction can coexist with substantial attention to contextual structure. Likewise, false negatives involving small scale, unusual expression or patterned backgrounds suggest that the model's representation is sensitive to image composition.
+
+The explanations do not establish a unique set of breed features. Grad-CAM highlights regions, not semantic concepts, and the heatmap resolution is inherited from a late feature tensor. A red area over a dog's head does not reveal whether the network relied on muzzle length, ear position, colour, texture or a correlated combination. More targeted methods could include occlusion tests, counterfactual editing, concept activation vectors and part annotations. Those methods would require additional experimental design and validation.
+
+The explanation study therefore supports three bounded conclusions. First, the model often attends to the animal. Second, attention to the animal does not guarantee a correct decision. Third, context can influence both correct and incorrect predictions. These findings justify human review and robustness testing rather than autonomous use.
