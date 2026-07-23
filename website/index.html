@@ -203,14 +203,16 @@
 
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
-    <div class="section-head"><div><p class="chapter">06 · Controlled experiment</p><h2>Six ImageNet-pretrained CNNs. One task. Same evaluation logic.</h2></div><p class="section-intro">The site now turns the MSc project into a worked case study: first compare frozen feature extractors, then fine-tune the selected model and inspect how its errors change.</p></div>
-    <a class="metrics-callout" href="metrics.html"><span>New to model evaluation?</span><strong>Learn accuracy, precision, recall, F1, PR-AUC and MCC using this project’s results →</strong></a>
-    <a class="metrics-callout curve-callout" href="learning-curves.html"><span>How did training behave?</span><strong>Learn to interpret training accuracy, validation accuracy, training loss and validation loss →</strong></a>
+    <div class="section-head benchmark-heading"><div><p class="chapter">06 · Benchmarking</p><h2>Benchmarking six ImageNet-pretrained CNNs.</h2></div></div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="grid-two"><div class="chart-box"><canvas id="benchmarkChart"></canvas></div><aside class="panel result-panel"><p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p><div id="tiles" class="tiles"></div></aside></div>
     <article id="architecture" class="architecture-panel" aria-live="polite"></article>
     <div id="deltas" class="deltas"></div>
     <div class="key-line"><strong>Read this carefully</strong><span>Architecture chronology does not guarantee better performance on a particular downstream task. The benchmark decides.</span></div>
+    <div class="benchmark-learning-links">
+      <a class="metrics-callout" href="metrics.html"><span>New to model evaluation?</span><strong>Learn accuracy, precision, recall, F1, PR-AUC and MCC using this project’s results →</strong></a>
+      <a class="metrics-callout curve-callout" href="learning-curves.html"><span>How did training behave?</span><strong>Learn to interpret training accuracy, validation accuracy, training loss and validation loss →</strong></a>
+    </div>
   </div>
 </section>
 
