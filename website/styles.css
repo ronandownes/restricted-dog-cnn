@@ -587,6 +587,25 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .curve-strip-heading a{color:var(--navy);font-weight:850}
 .curve-strip>img,.curve-strip>div:last-child>img{display:block;width:100%;max-height:560px;object-fit:contain;background:#f7f9fb;border-radius:12px}
 .curve-strip .curve-pair img{max-height:500px}
+.expandable-visual{position:relative;cursor:zoom-in;transition:transform .18s ease,box-shadow .18s ease}
+.expandable-visual:hover{transform:translateY(-2px);box-shadow:0 22px 52px rgba(23,63,115,.16)}
+.expandable-visual:focus-visible{outline:4px solid rgba(44,111,176,.32);outline-offset:4px}
+.expandable-visual::after{content:"⛶ Enlarge";position:absolute;right:12px;bottom:12px;z-index:5;padding:6px 10px;border-radius:999px;background:rgba(11,27,49,.88);color:#fff;font-size:.72rem;font-weight:900;letter-spacing:.03em;pointer-events:none}
+.visual-overlay{position:fixed;inset:0;z-index:1000;background:#edf2f7;padding:72px 24px 24px;overflow:auto}
+.visual-overlay[hidden]{display:none!important}
+.visual-overlay:fullscreen{padding:72px 24px 24px;background:#edf2f7}
+.visual-overlay-toolbar{position:fixed;left:0;right:0;top:0;z-index:1001;min-height:58px;display:flex;align-items:center;gap:20px;padding:9px 18px;background:var(--dark);color:#fff}
+.visual-overlay-toolbar strong{font-size:1.05rem}
+.visual-overlay-toolbar span{margin-left:auto;color:#b8cadd;font-size:.82rem}
+.visual-overlay-toolbar button{width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:var(--dark);font-size:1.8rem;line-height:1;cursor:pointer}
+.visual-overlay-content{width:min(1500px,100%);min-height:calc(100vh - 110px);margin:auto;display:flex;align-items:center;justify-content:center}
+.visual-overlay-content>img{display:block;max-width:100%;max-height:calc(100vh - 115px);object-fit:contain;border-radius:14px;background:#fff}
+.visual-overlay-content>.panel,.visual-overlay-content>.curve-strip{width:min(1200px,100%);max-height:none;margin:0}
+.visual-overlay-content .compact-matrix{max-width:780px;margin:25px auto}
+.visual-overlay-content .matrix-cells>div{min-height:210px}
+.visual-overlay-content .matrix-cells b{font-size:4rem}
+.visual-overlay-content .curve-strip>img,.visual-overlay-content .curve-strip>div:last-child>img{max-height:calc(100vh - 210px)}
+body.visual-open{overflow:hidden}
 
 @media(max-width:700px){
   .gradcam-preview{align-items:stretch;flex-direction:column}
@@ -599,4 +618,8 @@ h1{font-size:clamp(3rem,15vw,5rem)}
   .curve-pair{grid-template-columns:1fr}
   .learning-curve-stage{overflow:auto;justify-content:flex-start}
   .curve-strip-heading{align-items:flex-start;flex-direction:column}
+  .visual-overlay{padding:68px 10px 10px}
+  .visual-overlay-toolbar span{display:none}
+  .visual-overlay-content .matrix-cells>div{min-height:125px}
+  .visual-overlay-content .matrix-cells b{font-size:2.4rem}
 }
