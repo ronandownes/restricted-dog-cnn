@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-8">
+  <link rel="stylesheet" href="styles.css?v=20260723-9">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
   <script src="app.js?v=20260723-8" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
@@ -203,7 +203,9 @@
 
 <section id="benchmark" class="section alt benchmark-section">
   <div class="wrap">
-    <div class="section-head benchmark-heading"><div><p class="chapter">06 · Benchmarking</p><h2>Benchmark six CNNs.</h2></div></div>
+    <div class="section-head benchmark-heading">
+      <div><h2>Benchmarks</h2><p class="section-subtitle">Six ImageNet-pretrained CNNs compared on the same restricted-versus-unrestricted classification task.</p></div>
+    </div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="benchmark-results">
       <div class="chart-box"><canvas id="benchmarkChart"></canvas></div>
@@ -225,7 +227,7 @@
 </section>
 
 <section id="fine" class="section">
-  <div class="wrap"><div class="section-head"><div><p class="chapter">07 · Fine-tuning</p><h2>Fine-tune the winning CNN: InceptionResNetV2.</h2></div><p class="section-intro">Muted bars show the selected frozen-base model. Richer bars show the same model after its final 20 base layers were fine-tuned.</p></div>
+  <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
     <div class="chart-box tall"><canvas id="fineChart"></canvas></div>
     <div id="fineDeltas" class="deltas"></div>
     <div class="fine-matrices">
