@@ -1,0 +1,16 @@
+\chapter{Reproducibility Artefacts}
+\label{app:reproducibility}
+
+The project archive contains the four principal notebooks, saved figures, result tables and LaTeX source. The notebooks are independent of a previous Google Colab runtime but retain the dependencies of the experimental pipeline: data preparation precedes frozen-model benchmarking; the selected model checkpoint is required for fine-tuning; and the model explainability notebook requires the trained model and test dataset.
+
+\begin{itemize}
+    \item \texttt{01\_Data\_Preparation.ipynb}: dataset acquisition, class mapping, validation and split construction;
+    
+    \item \texttt{02\_Frozen\_Model\_Benchmarking.ipynb}: frozen transfer-learning benchmark across the six candidate CNN architectures;
+    
+    \item \texttt{03\_Selected\_Model\_Fine\_Tuning.ipynb}: fine-tuning and evaluation of the selected InceptionResNetV2 model;
+    
+    \item \texttt{04\_Model\_Explainability.ipynb}: prediction verification, error analysis and Grad-CAM visualisation.
+\end{itemize}
+
+The report is divided into separate chapter files and assembled through \texttt{report.tex}. GitHub Actions compiles the report, poster, presentation and slides whenever their source or supporting figures change. A complete build is performed so that the table of contents, cross-references, bibliography and chapter auxiliary files remain current without depending on Overleaf.
