@@ -1,0 +1,120 @@
+\chapter{Discussion, Ethics and Limitations}
+\label{chap:discussion}
+
+\section{Answering the research questions}
+The first research question asked how effectively frozen ImageNet-pretrained CNNs could classify the constructed binary task. Five of the six architectures exceeded 91\% accuracy, and four exceeded 94\%. Transfer learning was therefore highly effective under the prepared data distribution. The result is consistent with the view that generic visual features can transfer to fine-grained downstream tasks.
+
+The second question concerned architecture selection. InceptionResNetV2 achieved the strongest combination of recall, F1, PR-AUC and MCC. Its advantage was not merely a fraction of accuracy over an otherwise identical model; it produced a notably stronger precision--recall balance than VGG16 and ResNet50. The result is compatible with the architecture's high-capacity multi-scale residual representation, but one experiment cannot prove that architectural design alone caused the difference. Optimisation, input resolution, preprocessing and stochastic variation also contribute.
+
+The third question asked how fine-tuning changed performance. It reduced false positives from 27 to 12 and increased false negatives from 3 to 6. Precision, accuracy, F1 and MCC improved, while recall and the saved AUC values decreased slightly. Fine-tuning therefore shifted the boundary toward fewer positive predictions. This is a meaningful improvement for balanced classification, but not a universal improvement under every possible cost function.
+
+The fourth question concerned explanation. Grad-CAM frequently overlapped the dog and produced plausible regions, especially in clear true-positive cases. It also revealed background sensitivity and did not resolve the semantic basis of errors. The method added diagnostic value but did not convert the network into an intrinsically interpretable model.
+
+
+\section{Synthesis of the principal finding}
+The experiment does not support a simple claim that fine-tuning made every aspect of performance better. The frozen model maximised recall, whereas the fine-tuned model produced the stronger overall balance by sharply reducing false positives. This distinction is important because the preferred model depends on the relative consequences assigned to false negatives and false positives. The final selection therefore reflects a stated metric trade-off, not an assumption that a single headline accuracy fully represents performance.
+
+\section{Why InceptionResNetV2 may have performed strongly}
+The task requires evidence at multiple scales. Local colour and texture can distinguish some breeds, but whole-body proportions and head shape require larger receptive fields. Inception branches offer parallel processing paths, while residual shortcuts make very deep feature transformations trainable. ImageNet pretraining also means that the model began with a rich representation of animal parts and textures.
+
+However, architecture narratives can become post-hoc stories. Because InceptionResNetV2 won the benchmark, it is tempting to attribute success confidently to its hybrid design. A stronger causal comparison would control parameter count, input size and training budget or use repeated runs. The present dissertation therefore treats the architectural explanation as plausible, not proven.
+
+\section{Comparison with the proposal and project evolution}
+The research proposal envisaged a broader timeline of architectures, systematic hyperparameter search, threshold optimisation and a larger notebook sequence. The completed project narrowed this plan to six established pretrained models, one selected fine-tuning experiment and a fixed Grad-CAM sample. This change improved feasibility and clarity. A broad search with limited compute could have produced many partially controlled comparisons and increased the risk of choosing results after test inspection.
+
+The final design still addresses the proposal's central question: whether architectural progress and transfer learning matter for the restricted/unrestricted task. It also preserves the proposal's concern with interpretability and ethical risk. The divergence lies in scope, not purpose. This is an example of reflective project management: methods were revised in response to resource constraints and the need for a defensible final evaluation.
+
+\section{External validity}
+The largest limitation is domain shift. Stanford Dogs images are curated breed examples, often selected because the dog is visible and recognisable. Field photographs may contain multiple dogs, motion blur, poor lighting, occlusion, unusual camera angles and mixed ancestry. A model can perform extremely well within a benchmark and fail when deployed outside it.
+
+Breed labels themselves are not unproblematic ground truth. Visual breed identification by humans is known to be unreliable for mixed dogs, and genetic ancestry does not map perfectly onto appearance. A model trained on labelled purebred examples cannot settle disputes about crossbred animals. The binary label also aggregates distinct breeds into one class and may obscure large variation in per-breed performance.
+
+The unrestricted sample contains twenty-four of the 114 non-positive Stanford categories, not every possible unrestricted breed or cross. The decision boundary is therefore conditional on the selected negative set. Adding visually similar mastiff, bull-type or shepherd breeds could reduce performance. Repeating the experiment with several negative samples would test the stability of the result.
+
+\section{Legal context and category error}
+Irish regulations name breeds, strains and crosses, while the model maps a photograph to a dataset-derived binary label. These are not equivalent operations. Legal classification may involve documentary evidence, expert opinion and definitions not captured by a Stanford category. A model score cannot establish that an individual dog falls within a statutory description.
+
+There is also a risk of category error between breed and dangerousness. The project does not predict aggression, bite risk or behaviour. Treating a restricted-class score as a dangerousness score would be scientifically and ethically unjustified. Behaviour depends on many factors outside an image, including socialisation, training, health, environment and immediate context.
+
+\section{Error asymmetry and proportionality}
+False positives and false negatives impose different harms. A false negative could fail to identify a dog subject to additional legal controls. A false positive could expose an unrestricted dog and owner to unwarranted intervention. The appropriate balance is not a purely technical choice; it is a policy decision involving proportionality and due process.
+
+The fine-tuned model's twelve false positives and six false negatives may appear small, but deployment scale magnifies error. At ten thousand cases with similar prevalence and performance, errors would number in the hundreds. Moreover, performance could deteriorate under domain shift. High test accuracy should therefore not be used to bypass human judgement or appeal.
+
+A responsible decision-support design would show uncertainty, retain the original image, document the model version, permit expert override and prohibit automatic adverse action. It would also require evaluation across subgroups and image conditions. The present project does not implement such a system; these safeguards define what would be necessary before operational consideration.
+
+\section{Bias and fairness}
+Bias can enter through the legal category, dataset and model. The legal list reflects policy choices that are contested in veterinary and animal-welfare debate. The dataset reflects internet availability and breed photography conventions. Some breeds may be photographed in show poses, domestic settings or outdoor working contexts. The model can learn these contextual regularities.
+
+Fairness analysis would require per-breed sensitivity and specificity, confidence distributions, and performance across age, sex, coat variation, image quality and crossbreed status. These attributes are not comprehensively available in Stanford Dogs. The absence of metadata prevents a complete audit. This limitation should not be mistaken for evidence that no disparity exists.
+
+Datasheets and model cards could improve transparency by recording source, selection rules, known exclusions, metrics and intended use \citep{gebru2021datasheets,mitchell2019modelcards}. The reproducibility appendix performs part of this role, but a deployment-grade document would need substantially more governance detail.
+
+\section{Interpretability and contestability}
+Grad-CAM provides a visual aid that may help a reviewer identify obvious background dependence. It does not provide a complete explanation of the score and can create false confidence because heatmaps are visually persuasive. Explanation quality must be tested, not assumed \citep{adebayo2018sanity,samek2021explaining}.
+
+In a contested decision, an owner would need more than a coloured overlay. They would need to know the legal basis, model limitations, confidence, alternative evidence and route of appeal. Contestability is an institutional property, not a visualisation feature. This is why post-hoc explanation cannot by itself make a black-box classifier suitable for high-stakes enforcement \citep{rudin2019stop}.
+
+\section{Calibration and threshold selection}
+The 0.5 threshold is conventional but not inherently optimal. Calibration asks whether scores correspond to observed frequencies. A model that assigns 0.9 to many cases should be correct roughly 90\% of the time in a calibrated setting. Neural networks can be overconfident, and temperature scaling is one method for post-hoc calibration \citep{guo2017calibration}.
+
+Threshold selection should occur on validation data using a predeclared objective. Possible objectives include a minimum recall requirement, maximum allowable false-positive rate, or explicit cost matrix. The chosen threshold should then be locked before test evaluation. The explanation notebook explored a nearby calibrated threshold, but the main report retains 0.5 for consistency with the established confusion matrix. Future work should separate probability calibration from decision-cost optimisation.
+
+\section{Statistical uncertainty}
+The report presents point estimates from one held-out test set. A 98.25\% accuracy is not known without uncertainty. Bootstrap confidence intervals could quantify sampling variation, and McNemar's test could compare paired error patterns between frozen and fine-tuned models. Repeated training seeds would quantify optimisation variance.
+
+These additions were outside the completed pipeline but would materially strengthen the inference. The current result demonstrates that the saved model performed strongly on 1,028 test images. It does not establish a universal performance rate for all dog photographs.
+
+\section{Computational constraints}
+Google Colab enabled access to GPU acceleration but imposed runtime and storage constraints. These constraints influenced the choice to benchmark frozen backbones and fine-tune only the selected model. This is methodologically defensible because the project question concerns comparative transfer learning, not exhaustive hyperparameter optimisation.
+
+The large figure files also created Overleaf compilation pressure. The report project therefore uses modular chapter files and supports \texttt{\textbackslash includeonly} for chapter-level builds. The final PDF can be compiled locally from the complete source. This workflow preserves automatic numbering and references while reducing routine edit-compile time.
+
+\section{Strengths of the study}
+The study has several strengths. The model zoo uses a common dataset and evaluation pipeline. The test-set class counts are explicit. Model selection is based on several imbalance-aware metrics. The fine-tuning trade-off is reported rather than hidden. Predictions, figures and notebooks are retained. Grad-CAM cases include correct and incorrect outcomes instead of only persuasive successes.
+
+The dissertation also avoids claiming that the legal category is visually natural or behaviourally meaningful. This separation between what the model predicts and what society may infer from it is essential in responsible data analytics.
+
+\section{Future work}
+Future research should begin with data, not merely larger models. A stronger dataset would include all relevant breeds and types, crossbred dogs, field images, expert review and documented uncertainty. Exact and perceptual duplicate detection should precede splitting. An external test set from a different source should be reserved for final validation.
+
+Methodologically, future work should report confidence intervals, repeated seeds, calibration, threshold analysis and per-breed metrics. Hard-negative mining could focus training on visually similar unrestricted breeds. Multi-task learning could predict breed before legal mapping, allowing errors to be inspected at the breed level. Open-set recognition or abstention could allow the system to refuse cases unlike its training distribution.
+
+Explanation work should test model sensitivity through occlusion, perturbation and counterfactual examples. A human factors study could examine whether model support improves or harms expert decisions. Most importantly, any operational research would require legal, veterinary, animal-welfare and public consultation rather than treating deployment as a purely engineering question.
+
+\section{Relation to assessment criteria and Level 9 practice}
+A capstone artefact is not evaluated solely by whether it operates. The work must demonstrate selection and justification of methodology, integration of theory and practice, independent implementation, coherent reporting, ethical analysis and confident presentation. The project addresses these requirements through the staged notebook pipeline, architecture comparison, error analysis and explicit limitations.
+
+Critical reflection is particularly important. Several decisions changed during the project: the focus moved away from unavailable XL Bully data; the architecture set was narrowed; exhaustive hyperparameter search was not pursued; and the explanation method was stabilised through multiple notebook revisions. Reporting these changes demonstrates management of research constraints. Concealing them would create a falsely linear account of development.
+
+\section{Alternative modelling formulations}
+The direct binary classifier is not the only possible formulation. A multiclass model could first predict one of the thirty selected breeds and then map the predicted breed to legal status. This would provide breed-level transparency and reveal which restricted breeds drive performance. However, multiclass training would require distinguishing many more boundaries and could reduce binary accuracy.
+
+A hierarchical model could first distinguish broad morphological groups and then make a finer prediction. Metric learning could embed visually similar dogs near one another and support nearest-neighbour inspection. An ensemble could average the strongest architectures. Each approach introduces complexity and new validation requirements. The direct binary classifier was appropriate for a bounded comparative study, but it should not be mistaken for the only defensible design.
+
+\section{Why an ensemble was not selected}
+InceptionV3, Xception, InceptionResNetV2 and NASNetMobile all performed strongly, so an ensemble might reduce uncorrelated errors. Probability averaging could improve ranking and robustness. The likely gain must be weighed against additional inference cost, storage and interpretability complexity.
+
+Because the selected fine-tuned single model already made eighteen test errors, an ensemble could at most improve a relatively small absolute number of cases on this split. Without an independent validation design, ensemble weights could also overfit. The project therefore favoured a single well-documented model. Future work could test whether the models' errors are sufficiently diverse to justify ensembling.
+
+\section{Human-in-the-loop design}
+A responsible support tool would not present a binary verdict in isolation. It could display the score, uncertainty interval, nearest training examples, model limitations and an abstention warning when the image is out of distribution. A trained reviewer would combine this information with documentation, physical examination and other evidence.
+
+Human involvement does not automatically remove bias. Reviewers can over-trust algorithmic output, a phenomenon often described as automation bias. Interface design and training would need to emphasise that the score is advisory. Overrides and disagreements should be recorded so that systematic model failures can be audited.
+
+\section{Data protection and image governance}
+The Stanford dataset is publicly available for research, and the project does not process owner identities. Nevertheless, an operational system could receive photographs containing people, addresses, vehicle registrations or location metadata. Such a system would process personal data and would require a lawful basis, purpose limitation, minimisation, retention controls and security safeguards.
+
+The research artefact does not implement these operational functions. The ethical analysis includes them because deployment changes the data-protection profile. Moving a model from a benchmark notebook into a public-service workflow is not a neutral technical step; it creates new governance obligations.
+
+\section{Animal welfare perspective}
+Errors affect animals as well as owners. False identification can contribute to restrictive handling, prolonged kennelling or adverse legal outcomes. Even correct breed identification does not establish that a dog poses a behavioural threat. A welfare-aware system should therefore avoid language that equates restricted status with individual dangerousness.
+
+The model could also have beneficial uses in a carefully designed setting, such as prompting a second expert review rather than triggering action. Whether benefits exceed harms depends on the surrounding institution. The dissertation cannot answer that policy question from image metrics alone.
+
+\section{Reflexive account of the research process}
+The project involved repeated negotiation between ambition and reproducibility. It was tempting to add more models, searches and diagrams, but every addition consumes time and creates another opportunity for uncontrolled comparison. The final pipeline became stronger when it was simplified around explicit research questions.
+
+The work also improved through attention to presentation. Confusion matrices were standardised, tables were reformatted, explanation cases were arranged vertically for inspection, and chapter source was modularised to overcome compilation constraints. These are not merely cosmetic changes. Clear presentation supports scrutiny and reduces the chance that an important trade-off is hidden by layout.
+
+The most important learning outcome was that a high score is the beginning of interpretation rather than the end. The final model's 98.25\% accuracy initially appears decisive. Examining the eighteen errors, the threshold, the missing breeds and the Grad-CAM maps produces a much more qualified understanding. That movement from headline metric to bounded claim is central to advanced data-analytics practice.
