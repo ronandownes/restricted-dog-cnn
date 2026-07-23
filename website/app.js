@@ -1,5 +1,6 @@
 const RAW='https://raw.githubusercontent.com/ronandownes/restricted-dog-cnn/main';
 const colors={Accuracy:'#2c6fb0',Precision:'#d87922',Recall:'#22865a',F1:'#c84444'};
+const mutedColors={Accuracy:'#8fb4d8',Precision:'#e7b27d',Recall:'#8cc8ab',F1:'#de9797'};
 const models=[
 {name:'VGG16',year:'2014 · Uniform deep CNN',input:'224×224',idea:'A simple stack of repeated 3×3 convolutions. Pooling progressively reduces spatial size while the number of learned feature channels grows.',route:['3×3 conv blocks','Max pooling','Deep feature maps'],why:'VGG made depth systematic and easy to understand, but it is comparatively heavy and lacks skip connections.',Accuracy:87.4,Precision:60.3,Recall:92.1,F1:72.9},
 {name:'ResNet50',year:'2015 · Residual connections',input:'224×224',idea:'Residual blocks add a shortcut path around several transformations, allowing information and gradients to bypass them.',route:['Stem convolution','Residual blocks','Identity shortcuts'],why:'The network can learn a residual change rather than rebuilding the entire representation at every block, making deeper optimisation more reliable.',Accuracy:91.7,Precision:70.9,Recall:93.7,F1:80.7},
@@ -25,9 +26,9 @@ const frozen=[97.08,87.38,98.42,92.57];
 const fineTuned=[98.25,93.88,96.84,95.34];
 const differences=fineTuned.map((v,j)=>+(v-frozen[j]).toFixed(2));
 const fineViews=[
-  {title:'Selected model — before fine-tuning',summary:'InceptionResNetV2 with its pretrained CNN base still frozen.'},
-  {title:'Selected model — after fine-tuning',summary:'The result after its final 20 base layers were allowed to adapt.'},
-  {title:'Before versus after',summary:'The two sets of test values shown directly beside one another.'},
+  {title:'InceptionResNetV2 — frozen CNN base',summary:'Only the new classification head had learned the restricted-dog task.'},
+  {title:'InceptionResNetV2 — fine-tuned CNN base',summary:'The result after its final 20 base layers were allowed to adapt.'},
+  {title:'Frozen versus fine-tuned',summary:'Muted colours show the frozen-base result; richer colours show the fine-tuned result.'},
   {title:'Change after fine-tuning',summary:'Three metrics improved; recall decreased by 1.58 percentage points.'}
 ];
 function performanceDataset(label,data,backgroundColor){return{label,data,backgroundColor,borderRadius:8,maxBarThickness:88}}
@@ -40,25 +41,25 @@ function updateFine(){
   fineNext.disabled=fineView===3;
   fChart.options.plugins.legend.display=fineView===2;
   if(fineView===0){
-    fChart.data.datasets=[performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>colors[k]))];
+    fChart.data.datasets=[performanceDataset('Frozen CNN base',frozen,metricKeys.map(k=>mutedColors[k]))];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
     fChart.options.scales.y.title.text='Performance before fine-tuning (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else if(fineView===1){
-    fChart.data.datasets=[performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))];
+    fChart.data.datasets=[performanceDataset('Fine-tuned CNN base',fineTuned,metricKeys.map(k=>colors[k]))];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
     fChart.options.scales.y.title.text='Performance after fine-tuning (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else if(fineView===2){
     fChart.data.datasets=[
-      performanceDataset('Before fine-tuning',frozen,'#9aa8ba'),
-      performanceDataset('After fine-tuning',fineTuned,metricKeys.map(k=>colors[k]))
+      performanceDataset('Frozen CNN base',frozen,metricKeys.map(k=>mutedColors[k])),
+      performanceDataset('Fine-tuned CNN base',fineTuned,metricKeys.map(k=>colors[k]))
     ];
     fChart.options.scales.y.min=84;fChart.options.scales.y.max=100;
     fChart.options.scales.y.title.text='Test performance (%)';
     fChart.options.scales.y.ticks.callback=v=>v+'%';
   }else{
-    fChart.data.datasets=[{label:'Difference',data:differences,unit:'points',backgroundColor:differences.map(v=>v>=0?'#22865a':'#c84444'),borderRadius:8,maxBarThickness:88}];
+    fChart.data.datasets=[{label:'Difference',data:differences,unit:'points',backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:8,maxBarThickness:88}];
     fChart.options.scales.y.min=-7;fChart.options.scales.y.max=7;
     fChart.options.scales.y.title.text='Change (percentage points)';
     fChart.options.scales.y.ticks.callback=v=>(v>0?'+':'')+v;
@@ -69,7 +70,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',onClick:()=>{}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   const fr={Accuracy:97.08,Precision:87.38,Recall:98.42,F1:92.57},ft={Accuracy:98.25,Precision:93.88,Recall:96.84,F1:95.34};
-  fineDeltas.innerHTML=metricKeys.map(k=>{const d=+(ft[k]-fr[k]).toFixed(2),cl=d>0?'up':'down',ar=d>0?'↑':'↓';return `<div class="delta ${cl}"><span>${k}</span><b>${ar} ${d>0?'+':''}${d.toFixed(2)} pts</b></div>`}).join('');
+  fineDeltas.innerHTML=metricKeys.map(k=>{const d=+(ft[k]-fr[k]).toFixed(2),ar=d>0?'↑':'↓';return `<div class="delta metric-change" style="--c:${colors[k]}"><span>${k}</span><b>${ar} ${d>0?'+':''}${d.toFixed(2)} pts</b></div>`}).join('');
   gallery.innerHTML=cases.map(([cat,breed,file])=>{const url=`${RAW}/gradcam/figures/${file}`,lab={TP:'True positive',TN:'True negative',FP:'False positive',FN:'False negative'}[cat];let note='Representative case from the fixed twelve-image explanation sample.';if(file.includes('german_shepherd'))note='Attention concentrated around the head and ears in this correctly restricted prediction.';if(file.includes('weimaraner'))note='Body shape, pose, coat contrast and contextual structure may have contributed to this false positive.';return `<article class="card" data-cat="${cat}"><a href="${url}" target="_blank"><img src="${url}" alt="${lab}: ${breed}" loading="lazy"></a><div class="card-copy"><span class="tag ${cat}">${lab}</span><h3>${breed}</h3><p class="muted">${note}</p></div></article>`}).join('');
   document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.card').forEach(c=>c.hidden=b.dataset.f!=='all'&&c.dataset.cat!==b.dataset.f)});
   prev.onclick=()=>{if(i){i--;update()}};
