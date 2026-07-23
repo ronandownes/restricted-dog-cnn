@@ -1,0 +1,499 @@
+\documentclass[12pt,a4paper]{report}
+
+% ============================================================
+% PAGE LAYOUT
+% ============================================================
+
+\usepackage[
+  margin=1in
+]{geometry}
+
+% ============================================================
+% CORE GRAPHICS, TABLES AND MATHEMATICS
+% ============================================================
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{multirow}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{float}
+
+% ============================================================
+% FIGURE CAPTIONS AND SUBFIGURES
+% ============================================================
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+% ============================================================
+% DIAGRAMS
+% ============================================================
+
+% All diagrams used by the report are pre-rendered PDF or PNG files.
+% TikZ and PGFPlots are intentionally not loaded here because loading
+% those packages substantially increases Overleaf start-up time.
+
+% ============================================================
+% REFERENCES
+% ============================================================
+
+\usepackage[
+  round,
+  authoryear
+]{natbib}
+
+% ============================================================
+% TEXT FORMATTING AND COLOUR SUPPORT
+% ============================================================
+
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+
+\onehalfspacing
+
+% Provides additional flexibility when LaTeX is resolving
+% difficult line breaks.
+\emergencystretch=2em
+
+% ============================================================
+% PROJECT COLOURS
+% ============================================================
+
+% Main project colour, adapted from the viva presentation.
+\definecolor{projectblue}{RGB}{28,76,128}
+
+% Light alternating table row.
+\definecolor{tableStripe}{RGB}{239,245,250}
+
+% Highlight for selected or winning model.
+\definecolor{winnerRow}{RGB}{218,237,224}
+
+% Pipeline stage colours.
+\definecolor{stageone}{RGB}{224,237,249}
+\definecolor{stagetwo}{RGB}{224,241,228}
+\definecolor{stagethree}{RGB}{250,239,214}
+
+% Additional pale background colours.
+\definecolor{lightblue}{RGB}{232,240,248}
+\definecolor{verylightblue}{RGB}{246,249,252}
+
+
+% ============================================================
+% BODY TYPOGRAPHY
+% ============================================================
+
+% The Singapore-blue visual treatment is intentionally limited to the
+% title page. The dissertation body uses the standard report-class
+% chapter and section styling for a conventional academic appearance
+% and faster compilation.
+
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  justification=centering,
+  singlelinecheck=false
+}
+
+% ============================================================
+% CLICKABLE LINKS, CONTENTS AND PDF BOOKMARKS
+% ============================================================
+
+% Hyperref is loaded only after projectblue has been defined.
+% Every link is explicitly blue: no red text and no red boxes.
+\usepackage{xurl}
+\usepackage[
+  pdfencoding=auto,
+  psdextra
+]{hyperref}
+\usepackage{bookmark}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=projectblue,
+  citecolor=projectblue,
+  urlcolor=projectblue,
+  filecolor=projectblue,
+  menucolor=projectblue,
+  anchorcolor=projectblue,
+  linktoc=all,
+  pdfborder={0 0 0},
+  bookmarks=true,
+  bookmarksopen=true,
+  bookmarksnumbered=true,
+  bookmarksopenlevel=2,
+  pdfpagemode=UseOutlines,
+  pdftitle={
+    Restricted Dog Breed Classification Using Deep Learning
+    and Public Image Datasets
+  },
+  pdfauthor={Ronan Downes},
+  pdfsubject={
+    CNN transfer learning for restricted and unrestricted
+    dog-image classification
+  },
+  pdfkeywords={
+    convolutional neural networks,
+    transfer learning,
+    dog-breed classification,
+    InceptionResNetV2,
+    Grad-CAM,
+    deep learning
+  }
+}
+
+
+% ============================================================
+% CLICKABLE PAGE NUMBERS: RETURN TO CONTENTS
+% ============================================================
+
+% Clicking a footer page number returns to the actual Contents page (Roman page iv).
+% Headers and page-number typography remain plain and black.
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyfoot[C]{\hypersetup{linkcolor=black}\hyperlink{page.iv}{\thepage}\hypersetup{linkcolor=projectblue}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\hypersetup{linkcolor=black}\hyperlink{page.iv}{\thepage}\hypersetup{linkcolor=projectblue}}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+% ============================================================
+% TABLE SETTINGS
+% ============================================================
+
+% Increases vertical spacing in tables.
+\renewcommand{\arraystretch}{1.35}
+
+% Default horizontal space between table columns.
+\setlength{\tabcolsep}{6pt}
+
+% Reusable column types.
+%
+% L = left-aligned flexible-width column
+% C = centred flexible-width column
+% R = right-aligned flexible-width column
+%
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+% Fixed-width left, centre and right columns.
+\newcolumntype{P}[1]{
+  >{\raggedright\arraybackslash}p{#1}
+}
+
+\newcolumntype{Q}[1]{
+  >{\centering\arraybackslash}p{#1}
+}
+
+\newcolumntype{T}[1]{
+  >{\raggedleft\arraybackslash}p{#1}
+}
+
+% ============================================================
+% FIGURE AND TABLE CAPTION SETTINGS
+% ============================================================
+
+
+\captionsetup[table]{
+  position=above,
+  skip=8pt
+}
+
+\captionsetup[figure]{
+  position=below,
+  skip=6pt
+}
+
+% ============================================================
+% SECTION AND CONTENTS DEPTH
+% ============================================================
+
+% Number subsections down to the third level.
+\setcounter{secnumdepth}{3}
+
+% Include subsections down to the third level in the contents.
+\setcounter{tocdepth}{2}
+
+% ============================================================
+% GRAPHICS DIRECTORY
+% ============================================================
+
+\graphicspath{
+  {figures/}
+}
+
+% ============================================================
+% REUSABLE RESULT COMMANDS
+% ============================================================
+
+% Highlight the selected model name.
+\newcommand{\selectedmodel}[1]{
+  \textbf{#1}
+}
+
+% Typeset percentages consistently.
+\newcommand{\resultpercent}[1]{#1\%}
+
+% Typeset a reduction or increase in percentage points.
+\newcommand{\percentagepoints}[1]{
+  #1 percentage points
+}
+
+% ============================================================
+% CONDITIONAL BUILD SETTINGS
+% ============================================================
+
+% This file should define the draft-image switch, for example:
+%
+% \newif\ifdraftimages
+% \draftimagesfalse
+%
+\input{build-settings}
+
+% When draft-image mode is enabled, images are represented
+% by empty bounding boxes. This greatly reduces compilation time.
+\ifdraftimages
+  \setkeys{Gin}{draft}
+\fi
+
+% ============================================================
+% DOCUMENT INFORMATION
+% ============================================================
+
+\title{
+  Restricted Dog Breed Classification Using Deep Learning
+  and Public Image Datasets
+}
+
+\author{
+  Ronan Downes\\[1cm]
+  Supervisor: Sam Weiss\\
+  Course Director: David McQuaid\\[1cm]
+  MSc in Data Analytics\\
+  CCT College Dublin
+}
+
+\date{July 2026}
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+
+\begin{document}
+
+% ============================================================
+% TITLE PAGE
+% ============================================================
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+
+  \vspace*{1.2cm}
+  {\color{projectblue}\rule{\textwidth}{2.2pt}}\\[1.3cm]
+
+  {\sffamily\bfseries\color{projectblue}\fontsize{29}{34}\selectfont
+   Restricted Dog Breed Classification\\[0.25em]
+   Using Deep Learning and\\[0.25em]
+   Public Image Datasets\par}
+
+  \vspace{0.8cm}
+  {\color{lightblue}\rule{0.72\textwidth}{1.1pt}}\\[1.15cm]
+
+  {\Large\sffamily Ronan Downes\par}
+
+  \vfill
+
+\begin{minipage}{0.72\textwidth}
+  \centering
+  {\large\sffamily
+    Supervisor: Sam Weiss\\[0.35em]
+    Course Director: David McQuaid\\[1.1em]
+    MSc in Data Analytics\\
+    CCT College Dublin\\[1.1em]
+    \textbf{Word count: 14,030}
+  }
+\end{minipage}
+  \vfill
+
+  {\large\sffamily\color{projectblue}July 2026\par}
+  \vspace{0.8cm}
+  {\color{projectblue}\rule{\textwidth}{2.2pt}}
+\end{titlepage}
+\pdfbookmark[0]{Title Page}{titlepage}
+
+% ============================================================
+% FRONT MATTER
+% ============================================================
+
+\pagenumbering{roman}
+
+% ------------------------------------------------------------
+% DECLARATION
+% ------------------------------------------------------------
+
+\chapter*{Declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+
+I declare that this dissertation is my own work, except where the
+work of others is acknowledged through citation and reference.
+The experimental notebooks, saved outputs, figures and tables
+supplied with the project form the reproducibility record for
+the study.
+
+% ------------------------------------------------------------
+% ACKNOWLEDGEMENTS
+% ------------------------------------------------------------
+
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+I would like to thank my supervisor, Sam Weiss, for his guidance
+and support throughout the capstone project. I also thank David
+McQuaid, Course Director of the MSc in Data Analytics, for his
+direction of the programme and his guidance on the structure,
+evaluation and presentation of the thesis.
+
+I am grateful to the teaching staff of CCT College Dublin for
+the technical and academic foundation provided across the
+programme. Finally, I thank my wife Airida and my children
+Gabija and Erik for their patience, encouragement and
+understanding throughout the work.
+
+% ------------------------------------------------------------
+% ABSTRACT
+% ------------------------------------------------------------
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This dissertation investigates whether transfer learning with
+convolutional neural networks can support the visual
+classification of dog breeds subject to additional controls
+under Irish law.
+
+A binary restricted/unrestricted image-classification task was
+constructed from the Stanford Dogs dataset using six represented
+restricted breeds and a reproducibly selected sample of
+twenty-four unrestricted breeds. Six ImageNet-pretrained
+architectures were evaluated as frozen feature extractors under
+a common pipeline. The models compared were VGG16, ResNet50,
+InceptionV3, Xception, InceptionResNetV2 and NASNetMobile.
+
+InceptionResNetV2 provided the strongest frozen result, achieving
+97.08\% accuracy, 87.38\% precision, 98.42\% recall and an F1
+score of 92.57\%. Fine-tuning the final twenty layers improved
+accuracy to 98.25\%, precision to 93.88\% and F1 to 95.34\%,
+while recall reduced slightly to 96.84\%. The corresponding
+confusion matrix contained 826 true negatives, 12 false
+positives, 6 false negatives and 184 true positives.
+
+The findings therefore demonstrate that fine-tuning changed the
+operating trade-off rather than uniformly improving every
+metric: false positives were more than halved, but false
+negatives increased from three to six.
+
+A qualitative Grad-CAM study of twelve fixed cases was used to
+examine true-positive, true-negative, false-positive and
+false-negative decisions. The maps frequently overlapped the
+dog, but some predictions were influenced by pose, scale,
+contrast and background structure.
+
+The study concludes that transfer learning is effective for this
+controlled dataset, while emphasising that a photograph-only
+classifier cannot establish legal breed identity and should not
+be treated as an autonomous enforcement mechanism. The main
+contribution is a reproducible comparison of established CNN
+architectures, a metric-aware fine-tuning analysis, and a
+critical account of the technical, legal and ethical limits of
+image-based restricted-breed classification.
+
+
+% CONTENTS, FIGURES AND TABLES
+% ============================================================
+
+\phantomsection
+\hypertarget{contentspage}{}
+\tableofcontents
+\listoffigures
+\listoftables
+
+\clearpage
+
+% ============================================================
+% MAIN MATTER
+% ============================================================
+
+\pagenumbering{arabic}
+
+\input{chapters/01_introduction}
+
+\input{chapters/02_cnn_foundations}
+
+% This chapter can now contain:
+% - the ILSVRC development timeline;
+% - the revised architecture summary table;
+% - the discussion of pre-CNN and CNN milestones.
+\input{chapters/03_literature_architectures}
+
+% This chapter can now contain:
+% - the three-stage experimental pipeline;
+% - the dataset summary table;
+% - the notebook and reproducibility workflow.
+\input{chapters/04_methodology}
+
+% This chapter can now contain:
+% - the revised frozen benchmark table;
+% - the regenerated four-metric bar chart;
+% - the frozen/fine-tuned summary table;
+% - confusion matrices and learning curves.
+\input{chapters/05_results}
+
+\input{chapters/06_model_explanation}
+
+\input{chapters/07_discussion_ethics}
+
+\input{chapters/08_conclusion}
+
+% ============================================================
+% APPENDICES
+% ============================================================
+
+\appendix
+
+\input{appendices/appendix_a_reproducibility}
+
+\input{appendices/appendix_b_architecture_summary}
+
+% ============================================================
+% REFERENCES
+% ============================================================
+
+\clearpage
+
+\addcontentsline{toc}{chapter}{References}
+
+\bibliographystyle{apalike}
+
+\bibliography{references}
+
+% ============================================================
+% END DOCUMENT
+% ============================================================
+
+\end{document}
