@@ -1,0 +1,147 @@
+\chapter{Literature Review and Architecture Comparison}
+\label{chap:literature}
+
+\section{ImageNet and the development of deep visual recognition}
+Large labelled datasets and accelerated computation changed the dominant approach to image recognition. AlexNet demonstrated that a deep CNN trained with GPUs, ReLU activations, augmentation and dropout could substantially outperform earlier systems on ImageNet \citep{krizhevsky2012imagenet}. Subsequent research increased depth, introduced multi-branch processing, residual connections, separable convolution and automated architecture search. The six backbones evaluated in this dissertation represent several of these major design trajectories.
+
+The historical progression should not be read as a simple ranking in which every newer architecture is superior on every task. Architectural quality interacts with dataset size, input resolution, optimisation, parameter count and transferability. A compact architecture may generalise well and train quickly; a large architecture may offer richer features but impose higher computational cost. Benchmarking under a common pipeline is therefore preferable to selecting a network solely from its original ImageNet result.
+
+
+\subsection{From hand-crafted features to modern CNN families}
+Before the deep-learning breakthrough, large-scale image recognition commonly relied on hand-crafted descriptors and conventional classifiers. AlexNet's 2012 ILSVRC result established the practical advantage of GPU-trained deep CNNs, after which VGG and GoogLeNet/Inception demonstrated alternative routes to greater depth and representational efficiency. ResNet introduced residual connections that made substantially deeper optimisation practical, while later systems increasingly combined multi-scale processing, residual learning, separable convolution and architecture search.
+
+\begin{table}[H]
+\centering
+\caption{Selected milestones in large-scale visual recognition and their relevance to this study.}
+\label{tab:ilsvrctimeline}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.94\textwidth}{>{\raggedright\arraybackslash}p{0.12\textwidth}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Year} & \textbf{Method or architecture} & \textbf{Principal contribution} \\
+\midrule
+Pre-2012 & Hand-crafted features and shallow classifiers & Feature engineering preceded classification; representations were not learned end to end. \\
+2012 & AlexNet & Demonstrated the effectiveness of deep CNNs, GPUs, ReLU and augmentation at ImageNet scale. \\
+2014 & VGG / GoogLeNet & Showed the value of uniform small kernels and computationally efficient multi-scale modules. \\
+2015 & ResNet & Introduced residual connections for reliable optimisation of very deep networks. \\
+2016--2017 & Inception-ResNet / Xception / NASNet & Combined residual and multi-scale ideas, depthwise separable convolution, and architecture search. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The timeline is architectural context rather than a list of the six experimental models or a literal table of annual ILSVRC winners. The project benchmark was selected to compare distinct, established ImageNet-pretrained families available through a common software interface. Consequently, the benchmark contains architectures that were influential without each being the named winner of a particular competition year.
+
+\section{Fine-grained dog-breed recognition}
+Dog-breed classification is a well-established fine-grained recognition task. The Stanford Dogs dataset includes substantial intra-class variation: the same breed can appear at different ages, poses, coat lengths, backgrounds and scales. It also exhibits inter-class similarity, as related breeds can share visual characteristics \citep{khosla2011novel}. Fine-grained models must identify discriminative parts while remaining robust to irrelevant context.
+
+The binary reformulation used here differs from conventional 120-class recognition. It reduces output complexity but creates a heterogeneous positive class. The network is not asked to predict a breed name and then map that name to regulation. It learns the binary label directly. This can improve statistical efficiency, but it can also encourage shortcuts. If particular backgrounds, photographic styles or colour distributions correlate with the positive examples, the model may exploit those regularities rather than stable breed morphology. Explanation and error analysis are therefore important complements to aggregate metrics.
+
+\section{VGG16}
+VGG16 established the effectiveness of increasing network depth through repeated small $3\times3$ convolutions \citep{simonyan2014very}. The architecture contains thirteen convolutional layers and three fully connected layers in its original ImageNet classifier. Convolutional blocks are separated by max pooling, and channel depth increases as spatial resolution decreases. Its regular structure makes VGG16 easy to explain and inspect.
+
+The main disadvantage is computational inefficiency. The original dense top contributes a very large number of parameters, and even when the top is removed the convolutional backbone remains expensive relative to more modern designs. In transfer learning, VGG features can provide a strong baseline, but the architecture lacks residual connections, branch factorisation and depthwise separability. In this project it achieved the weakest model-zoo result, with 86.48\% accuracy and 58.70\% precision despite recall of 90.53\%. The pattern suggests that it identified many restricted images but generated a comparatively high number of false positives.
+
+\section{ResNet50}
+Very deep networks can be difficult to optimise because adding layers may degrade training performance even when overfitting is not the primary issue. ResNet addresses this with identity shortcuts. A residual block learns a residual function $F(x)$ and combines it with the original input:
+\begin{equation}
+y=F(x)+x.
+\end{equation}
+The shortcut provides a direct route for information and gradients, making it easier for a block to approximate an identity mapping when additional transformation is unnecessary \citep{he2016deep}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth]{residual_block_diagram.pdf}
+\caption{Simplified bottleneck residual block. Projection shortcuts may be used when dimensions change.}
+\label{fig:residualblock}
+\end{figure}
+
+ResNet50 uses bottleneck blocks built from $1\times1$, $3\times3$ and $1\times1$ convolutions. The $1\times1$ layers reduce and then restore channel dimensions, controlling computation. In the model zoo, ResNet50 improved substantially on VGG16 but remained below the Inception-family models, achieving 91.15\% accuracy and an F1 score of 79.55\%.
+
+\section{InceptionV3}
+Inception architectures process the same input through several branches and concatenate the resulting feature maps. The branches capture patterns at different effective scales. InceptionV3 improves efficiency through factorisation: a larger convolution can be replaced by sequences of smaller or asymmetric convolutions, such as $1\times7$ followed by $7\times1$ \citep{szegedy2016rethinking}. This reduces computation while preserving a broad receptive field.
+
+The multi-scale design is relevant to dog images because discriminative evidence can be local or global. Ear shape and coat texture are local, whereas body proportion and stance require wider context. InceptionV3 achieved 95.53\% accuracy and 97.37\% recall, indicating that its features transferred effectively to the binary task.
+
+\section{Xception}
+Xception interprets an Inception module as an intermediate point between ordinary convolution and depthwise separable convolution \citep{chollet2017xception}. A depthwise separable convolution splits spatial and channel mixing. First, a spatial kernel is applied independently to each channel. A $1\times1$ pointwise convolution then combines information across channels. This factorisation can reduce computation and encourages a distinct representation of spatial and cross-channel relationships.
+
+Xception also uses residual connections. It achieved 94.75\% accuracy and the same 97.37\% recall as InceptionV3, but lower precision. The result demonstrates that high recall alone did not determine selection; InceptionResNetV2 achieved a better overall metric profile.
+
+\section{InceptionResNetV2}
+InceptionResNetV2 combines multi-branch Inception processing with residual shortcuts \citep{szegedy2017inceptionresnet}. Its stem is followed by repeated Inception-ResNet-A blocks, a Reduction-A block, repeated Inception-ResNet-B blocks, Reduction-B, and Inception-ResNet-C blocks. Branch outputs are concatenated, projected to the required channel dimension, scaled and added to the shortcut. The original study found that residual connections accelerated the training of Inception networks and could improve performance at similar computational cost.
+
+This architecture offers two plausible advantages for the current task. First, parallel branches represent features at several scales. Second, residual learning supports a very deep network without requiring every block to relearn an entire transformation. Its cost is size and complexity: it has substantially more parameters than NASNetMobile and requires $299\times299$ inputs in the Keras configuration used here.
+
+InceptionResNetV2 produced the strongest frozen result: 97.08\% accuracy, 87.38\% precision, 98.42\% recall, 92.57\% F1, 0.9891 PR-AUC and 0.9101 MCC. The frozen confusion matrix contained 811 true negatives, 27 false positives, 3 false negatives and 187 true positives. This combination of high recall and strong ranking metrics justified its selection for fine-tuning.
+
+\section{NASNetMobile}
+NASNet emerged from neural architecture search, in which a controller searches for reusable normal and reduction cells that can be transferred across image scales \citep{zoph2018learning}. NASNetMobile is designed for resource-constrained use. Its relatively low parameter count makes it attractive where deployment size and latency matter.
+
+The architecture achieved 95.14\% accuracy, 80.70\% precision and 96.84\% recall. These results are strong given its compact design, but they did not exceed InceptionResNetV2. For a mobile deployment study, computational efficiency might receive greater weight. In this dissertation, predictive performance and controlled comparison were prioritised over on-device inference.
+
+\section{Architectural summary}
+Table~\ref{tab:architectureoverview} summarises the design ideas. ``Depth'' is not perfectly standardised across publications and software libraries: paper names such as ResNet50 refer to conventional weighted-layer counts, while Keras documentation can report implementation-level layer depth. The table therefore emphasises structural families and parameter scale rather than treating depth as a directly comparable physical measurement.
+
+\begin{table}[H]
+\centering
+\caption{Architectural overview of the six pretrained backbones. Parameter counts are approximate Keras application totals with the original classification top.}
+\label{tab:architectureoverview}
+\footnotesize
+\renewcommand{\arraystretch}{1.45}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabularx}{0.98\textwidth}{>{\raggedright\arraybackslash}p{2.45cm} >{\centering\arraybackslash}p{1.35cm} >{\centering\arraybackslash}p{1.45cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X}
+\toprule
+Architecture & Input & Parameters & Core design & Main implication \\
+\midrule
+VGG16 & $224^2$ & 138.4 M & Repeated $3\times3$ convolution and max-pooling blocks & Simple and interpretable, but parameter-heavy \\
+ResNet50 & $224^2$ & 25.6 M & Bottleneck residual blocks with identity shortcuts & Enables deeper optimisation and feature reuse \\
+InceptionV3 & $299^2$ & 23.9 M & Parallel multi-scale branches and factorised convolution & Efficient representation of features at several scales \\
+Xception & $299^2$ & 22.9 M & Depthwise separable convolution with residual flow & Separates spatial filtering from channel mixing \\
+InceptionResNetV2 & $299^2$ & 55.9 M & Inception branches combined with residual shortcuts & High-capacity multi-scale representation \\
+NASNetMobile & $224^2$ & 5.3 M & Searched normal and reduction cells & Compact architecture suited to limited-resource inference \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Transfer learning literature}
+Transfer learning is motivated by the observation that learned representations vary in their specificity. Lower layers tend to be more general, while later layers become increasingly specialised to the source task \citep{yosinski2014transferable}. Reusing a pretrained backbone can therefore reduce data requirements and training time. The success of frozen CNN features as general-purpose descriptors was demonstrated even before transfer learning became routine in high-level libraries \citep{sharif2014cnn}.
+
+Two strategies are common. Feature extraction freezes the backbone and learns a new head. Fine-tuning subsequently updates part of the backbone. The second strategy can improve domain alignment, but it also increases variance and overfitting risk. A rigorous study must therefore compare held-out results rather than assuming that more trainable parameters produce a better model.
+
+\section{Evaluation under imbalance}
+Accuracy is the proportion of correct predictions, but it can obscure minority-class behaviour. Precision measures the proportion of positive predictions that are correct, while recall measures the proportion of actual positives recovered. F1 is their harmonic mean. ROC-AUC evaluates ranking across false-positive rates, whereas PR-AUC focuses directly on positive predictive performance and is often more informative when the positive class is less prevalent \citep{davis2006relationship}. Matthews correlation coefficient summarises all four confusion-matrix cells and remains informative under imbalance \citep{matthews1975comparison}.
+
+No single metric defines the optimal model independently of use. A screening system may prioritise recall; a system in which false accusations are particularly harmful may prioritise precision. The present selection considered recall, PR-AUC, F1 and MCC together. This avoids hiding an unacceptable error type behind a high aggregate score.
+
+\section{Interpretability and Grad-CAM}
+Grad-CAM computes gradients of a target output with respect to feature maps in a convolutional layer, averages those gradients to obtain channel weights, and combines the weighted maps into a coarse localisation heatmap \citep{selvaraju2017gradcam}. It can indicate which spatial regions are associated with a decision without retraining the model.
+
+The method has important limitations. A visually plausible heatmap does not prove that the model used the same reasoning as a human. Saliency methods can fail sensitivity tests, and visually attractive explanations can remain similar after model or label randomisation \citep{adebayo2018sanity}. Grad-CAM is spatially coarse because it is based on late convolutional maps. It is best used as a diagnostic aid rather than a legal explanation.
+
+In high-stakes settings, post-hoc explanation may be insufficient if the underlying model is opaque and contestability is weak \citep{rudin2019stop}. The present project uses Grad-CAM to interrogate a research artefact, not to legitimise autonomous deployment.
+
+\section{Fairness, documentation and high-stakes use}
+Bias in image classification can arise from sampling, labels, camera conditions, background correlations and uneven representation. Fairness is not limited to demographic attributes; here it also concerns unequal model reliability across breeds, body types, age groups and photographic conditions. Dataset documentation and model cards provide structured ways to state intended use, composition, limitations and evaluation conditions \citep{gebru2021datasheets,mitchell2019modelcards}.
+
+A legally consequential classifier would require more than accuracy. It would require validated definitions, representative field data, calibration, uncertainty estimates, human review, appeal mechanisms, audit trails and monitoring after deployment. The literature therefore supports a cautious distinction between technical feasibility and institutional legitimacy.
+
+\section{Architecture depth, parameters and computational cost}
+Architecture comparison is often reduced to parameter count, but parameters are only one source of cost. Convolutional computation also depends on input resolution, feature-map dimensions, channel counts and kernel operations. InceptionResNetV2 has more parameters than the other modern backbones in this study and processes $299\times299$ inputs. It therefore imposes a greater memory and inference burden than NASNetMobile. The model was selected because predictive performance was the primary experimental objective, not because it was the most efficient option.
+
+Parameter count also has different meanings depending on whether the original ImageNet top is included. The Keras application totals commonly quoted for VGG16 include its large dense classifier. In this project, that top was removed and replaced by global average pooling and a binary head. Consequently, the number of trainable parameters in the frozen stage was much smaller than the architecture's published total. The pretrained backbone parameters remained present in memory but did not receive gradient updates.
+
+Depth is similarly ambiguous. ResNet50 conventionally names a 50-layer weighted architecture. Inception networks contain branches and auxiliary operations that software libraries can count in several ways. A table that compares ``layers'' without defining the counting rule can imply false precision. For this reason, the report uses conventional names, broad Keras depth information and block-level descriptions rather than asserting that one implementation-level layer count is directly comparable with another.
+
+\section{Why EfficientNet and vision transformers were not included}
+EfficientNet and vision transformers are important modern alternatives, but the final model zoo was intentionally bounded. EfficientNet scales depth, width and resolution through a compound rule, while vision transformers divide an image into patches and learn attention-based relationships. Including them would broaden the historical comparison, but it would also increase experimental multiplicity and require additional decisions about augmentation, regularisation and pretrained checkpoints.
+
+The six selected CNNs already span major architectural ideas and answer the principal question within the available compute. Excluding newer families is therefore a scope decision, not a claim that they are inferior. Future work could compare EfficientNetV2, ConvNeXt and transformer-based backbones under the same split. Such a comparison should predeclare the model set and training budget to avoid selecting architectures only after favourable results are observed.
+
+\section{Dog-breed identification and human reliability}
+A key background issue is that visual breed labels are not perfectly objective, especially for mixed dogs. Studies of shelter identification have reported disagreement between visual assessments and DNA-derived breed assignments. This matters because supervised learning inherits the certainty and uncertainty of its labels. Even a model that reproduces dataset labels with high accuracy may not reproduce genetic ancestry or legal interpretation in ambiguous cases.
+
+Purebred benchmark datasets reduce this ambiguity by presenting named categories, which helps controlled experimentation. The same feature is also a limitation: the benchmark may make the problem substantially easier than field identification. The gap between benchmark labels and operational definitions is therefore part of the validity argument, not a reason to discard the experiment. The model can be evaluated accurately for the task it was trained to perform while remaining unsuitable for a broader task.
+
+\section{Literature-review synthesis}
+The literature supports four design choices in this study. First, CNNs remain strong visual feature extractors because local connectivity, hierarchical representation and weight sharing match image structure. Second, transfer learning is appropriate where target data are limited. Third, modern architectures embody different efficiency and optimisation strategies, making controlled comparison preferable to arbitrary selection. Fourth, high-stakes use requires explanation, documentation and governance beyond conventional test accuracy.
+
+The literature also identifies unresolved tensions. Greater model capacity can improve benchmark performance while reducing transparency and increasing compute. Post-hoc heatmaps can aid inspection while creating an illusion of explanation. A binary legal label can simplify modelling while obscuring heterogeneous breed-level behaviour. These tensions frame the interpretation of the experimental results.
