@@ -30,6 +30,7 @@ body{margin:0;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:var(-
 .nav-dropdown-menu a:hover{background:var(--lightblue)}
 .nav-dropdown-menu strong{display:block;overflow:hidden;color:var(--ink);font-size:1rem;text-overflow:ellipsis}
 .nav-dropdown-menu small{display:none}
+.nav-dropdown-menu .explained-link small{display:block;margin-top:3px;color:var(--muted);font-size:.82rem;font-weight:650}
 .hero{padding:105px 0 90px;background:radial-gradient(circle at 80% 20%,#dceafa 0,transparent 28%),linear-gradient(135deg,#fff 0,#f4f8fc 55%,#edf4fb 100%)}
 .hero-grid{display:grid;grid-template-columns:1.45fr .75fr;gap:70px;align-items:center}
 .eyebrow,.chapter{text-transform:uppercase;letter-spacing:.13em;font-weight:900;font-size:.74rem;color:var(--blue);margin:0 0 10px}
