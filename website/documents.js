@@ -1,3 +1,8 @@
+import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.1.200/build/pdf.mjs";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.1.200/build/pdf.worker.mjs";
+
 const documents = {
   report: {
     title: "Report",
@@ -31,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const description = document.querySelector("#document-description");
   const viewer = document.querySelector("#document-viewer");
   const stage = document.querySelector("#document-stage");
+  const presentation = document.querySelector("#pdf-presentation");
+  const canvas = document.querySelector("#pdf-canvas");
+  const loading = document.querySelector("#pdf-loading");
   const fullscreenButton = document.querySelector("#fullscreen-button");
   const openButton = document.querySelector("#open-button");
   const downloadButton = document.querySelector("#download-button");
@@ -40,31 +48,107 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalPagesLabel = document.querySelector("#pdf-total-pages");
   let selectedKey = "report";
   let currentPage = 1;
+  let pdfDocument = null;
+  let loadedFile = "";
+  let renderTask = null;
 
-  const displayPage = (page, focusViewer = false) => {
-    const selected = documents[selectedKey];
-    currentPage = Math.max(1, Math.min(selected.pages, page));
-    const pdfUrl = `docs/${selected.file}`;
-    viewer.src = `${pdfUrl}#page=${currentPage}&view=FitH`;
+  const selectedDocument = () => documents[selectedKey];
+  const pdfUrl = () => `docs/${selectedDocument().file}`;
+
+  const updatePageControls = () => {
     currentPageLabel.textContent = String(currentPage);
-    totalPagesLabel.textContent = String(selected.pages);
+    totalPagesLabel.textContent = String(selectedDocument().pages);
     previousPageButton.disabled = currentPage === 1;
-    nextPageButton.disabled = currentPage === selected.pages;
-    if (focusViewer) viewer.focus();
+    nextPageButton.disabled = currentPage === selectedDocument().pages;
+  };
+
+  const renderPage = async () => {
+    if (!pdfDocument || !document.fullscreenElement) return;
+    currentPage = Math.max(1, Math.min(pdfDocument.numPages, currentPage));
+    updatePageControls();
+    loading.hidden = false;
+    loading.textContent = `Rendering page ${currentPage}…`;
+
+    if (renderTask) {
+      try { renderTask.cancel(); } catch {}
+    }
+
+    const page = await pdfDocument.getPage(currentPage);
+    const original = page.getViewport({scale: 1});
+    const availableWidth = Math.max(stage.clientWidth - 28, 320);
+    const availableHeight = Math.max(stage.clientHeight - 92, 240);
+    const fitScale = Math.min(availableWidth / original.width, availableHeight / original.height);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const viewport = page.getViewport({scale: fitScale});
+
+    canvas.width = Math.floor(viewport.width * pixelRatio);
+    canvas.height = Math.floor(viewport.height * pixelRatio);
+    canvas.style.width = `${Math.floor(viewport.width)}px`;
+    canvas.style.height = `${Math.floor(viewport.height)}px`;
+
+    const context = canvas.getContext("2d", {alpha: false});
+    renderTask = page.render({
+      canvasContext: context,
+      viewport,
+      transform: pixelRatio === 1 ? null : [pixelRatio, 0, 0, pixelRatio, 0, 0]
+    });
+    try {
+      await renderTask.promise;
+      loading.hidden = true;
+    } catch (error) {
+      if (error?.name !== "RenderingCancelledException") {
+        loading.textContent = "This page could not be rendered. Select Open PDF to use Chrome’s viewer.";
+      }
+    } finally {
+      renderTask = null;
+    }
+  };
+
+  const loadPresentation = async () => {
+    presentation.hidden = false;
+    viewer.hidden = true;
+    loading.hidden = false;
+    loading.textContent = "Preparing full-screen PDF…";
+    try {
+      if (!pdfDocument || loadedFile !== selectedDocument().file) {
+        pdfDocument = await pdfjsLib.getDocument(pdfUrl()).promise;
+        loadedFile = selectedDocument().file;
+        selectedDocument().pages = pdfDocument.numPages;
+      }
+      await renderPage();
+    } catch {
+      loading.textContent = "Presentation view could not load. Press Esc and select Open PDF.";
+    }
+  };
+
+  const showBrowserViewer = () => {
+    presentation.hidden = true;
+    viewer.hidden = false;
+  };
+
+  const displayPage = async (page) => {
+    currentPage = Math.max(1, Math.min(selectedDocument().pages, page));
+    updatePageControls();
+    if (document.fullscreenElement) {
+      await renderPage();
+    }
   };
 
   const selectDocument = (key, updateAddress = true) => {
     selectedKey = documents[key] ? key : "report";
-    const selected = documents[selectedKey];
-    const pdfUrl = `docs/${selected.file}`;
+    const selected = selectedDocument();
     currentPage = 1;
+    pdfDocument = null;
+    loadedFile = "";
 
     title.textContent = selected.title;
     description.textContent = selected.description;
+    viewer.src = `${pdfUrl()}#page=1&view=FitH`;
     viewer.title = `${selected.title} PDF viewer`;
-    openButton.href = pdfUrl;
-    downloadButton.href = pdfUrl;
+    openButton.href = pdfUrl();
+    downloadButton.href = pdfUrl();
     downloadButton.setAttribute("download", selected.file);
+    updatePageControls();
 
     tabs.forEach((tab) => {
       const active = tab.dataset.document === selectedKey;
@@ -77,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
       url.searchParams.set("document", selectedKey);
       window.history.replaceState({}, "", url);
     }
-    displayPage(1);
   };
 
   tabs.forEach((tab) => {
@@ -106,9 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const tag = event.target?.tagName;
     if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
     if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+      if (!document.fullscreenElement) return;
       event.preventDefault();
       displayPage(currentPage + 1);
     } else if (event.key === "ArrowLeft" || event.key === "PageUp") {
+      if (!document.fullscreenElement) return;
       event.preventDefault();
       displayPage(currentPage - 1);
     } else if (event.key.toLowerCase() === "f") {
@@ -117,8 +202,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.addEventListener("fullscreenchange", () => {
-    fullscreenButton.textContent = document.fullscreenElement ? "Exit full screen" : "Full screen";
+  document.addEventListener("fullscreenchange", async () => {
+    const active = Boolean(document.fullscreenElement);
+    fullscreenButton.textContent = active ? "Exit full screen" : "Full screen";
+    if (active) {
+      await loadPresentation();
+    } else {
+      showBrowserViewer();
+    }
+  });
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    if (!document.fullscreenElement) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderPage, 120);
   });
 
   const requested = new URLSearchParams(window.location.search).get("document");
