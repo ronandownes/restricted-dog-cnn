@@ -69,6 +69,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const dropdowns = Array.from(navigation.querySelectorAll(".nav-dropdown"));
+  const closeDropdowns = (except = null) => {
+    dropdowns.forEach((menu) => {
+      if (menu !== except) menu.removeAttribute("open");
+    });
+  };
+
+  dropdowns.forEach((menu) => {
+    menu.addEventListener("toggle", () => {
+      if (menu.open) closeDropdowns(menu);
+    });
+  });
+
   button.addEventListener("click", () => {
     const isOpen = navigation.classList.toggle("is-open");
     button.setAttribute("aria-expanded", String(isOpen));
@@ -80,7 +93,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   navigation.addEventListener("click", (event) => {
-    if (mobileQuery.matches && event.target.closest("a")) closeMenu();
+    if (!event.target.closest("a")) return;
+    if (mobileQuery.matches) closeMenu();
+    else closeDropdowns();
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!navigation.contains(event.target) && !button.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("focusin", (event) => {
+    if (!navigation.contains(event.target) && !button.contains(event.target)) {
+      closeDropdowns();
+    }
   });
 
   document.addEventListener("keydown", (event) => {
@@ -93,4 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
   mobileQuery.addEventListener("change", (event) => {
     if (!event.matches) closeMenu();
   });
+
+  window.addEventListener("scroll", closeMenu, { passive: true });
+  window.addEventListener("resize", closeMenu, { passive: true });
+  window.addEventListener("orientationchange", closeMenu);
+  window.addEventListener("hashchange", closeMenu);
+  window.addEventListener("pagehide", closeMenu);
 });
