@@ -76,5 +76,6 @@ jobs:
             echo "Compiled PDFs are already current."
           else
             git commit -m "Refresh compiled LaTeX documents"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
