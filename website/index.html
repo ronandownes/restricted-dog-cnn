@@ -50,7 +50,7 @@
           <a href="theory.html#architectures"><strong>Architectures</strong><small>AlexNet to NASNet</small></a>
           <a href="metrics.html"><strong>Metrics guide</strong><small>Accuracy to MCC</small></a>
           <a href="learning-curves.html"><strong>Learning curves</strong><small>Accuracy and loss</small></a>
-          <a href="theory.html#transformers"><strong>Beyond CNNs</strong><small>Features to Transformers</small></a>
+          <a href="theory.html#transformers"><strong>Transformers</strong><small>Language, attention and vision</small></a>
         </div>
       </details>
       <details class="nav-dropdown">
@@ -319,7 +319,7 @@
 </section>
 
 <section id="transformers" class="section transformer-section">
-  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">After CNN dominance</p><h2>The rise of Transformers: from language to vision.</h2></div><p class="section-intro">The Transformer was introduced for sequence modelling. Its self-attention mechanism later became the foundation of modern large language models, while Vision Transformers applied the same broad idea to image patches.</p></div>
+  <div class="wrap"><div class="section-head light-head"><div><p class="chapter light">Transformers and attention</p><h2>The rise of Transformers: from language to vision.</h2></div><p class="section-intro">The Transformer was introduced for sequence modelling. Its self-attention mechanism later became the foundation of modern large language models, while Vision Transformers applied the same broad idea to image patches.</p></div>
     <div class="versus"><article><span class="label">CNN</span><h3>Locality is built in.</h3><div class="cnn-route"><b>Pixels</b><i>→</i><b>Local filters</b><i>→</i><b>Feature hierarchy</b><i>→</i><b>Prediction</b></div><p>Excellent inductive bias for images; efficient learning of local spatial structure.</p></article><div class="vs">VS</div><article class="transformer-card"><span class="label">ViT</span><h3>Relationships are learned.</h3><div class="patches"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div><p>Split the image into patches, embed them as tokens, add position information, then let self-attention model patch-to-patch relationships.</p></article></div>
     <div class="attention-flow"><div><small>STEP 1</small><b>Image</b></div><i>→</i><div><small>STEP 2</small><b>Patches</b></div><i>→</i><div><small>STEP 3</small><b>Embeddings + position</b></div><i>→</i><div class="attention"><small>STEP 4</small><b>Self-attention</b></div><i>→</i><div><small>STEP 5</small><b>Classification</b></div></div>
     <div class="transformer-note"><p><b>In an LLM:</b> text is divided into tokens. Self-attention lets each token build a context-sensitive representation by weighting information from other tokens. Many stacked Transformer blocks learn increasingly rich language representations used to predict subsequent tokens.</p><p><b>In a Vision Transformer:</b> image patches take the place of text tokens. ViT did not prove convolution was “wrong”; it showed that, with sufficient data and compute, attention-based architectures could also become highly competitive in vision.</p></div>
