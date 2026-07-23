@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset: context, data, CNN benchmarking, fine-tuning, Grad-CAM and accessible education.">
   <title>Restricted Dog Breed Classification Using Deep Learning and the Stanford Dogs Dataset</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-14">
+  <link rel="stylesheet" href="styles.css?v=20260723-16">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260723-14" defer></script>
+  <script src="app.js?v=20260723-17" defer></script>
   <script src="navigation.js?v=20260723-2" defer></script>
 </head>
 <body>
@@ -41,7 +41,7 @@
           <a href="documents.html?document=presentation"><strong>Presentation</strong><small>Read, enlarge or download the viva presentation</small></a>
           <a href="documents.html?document=slides"><strong>Slides</strong><small>Read, enlarge or download the slide deck</small></a>
           <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs" target="_blank" rel="noopener"><strong>Browse all documents</strong><small>Open the complete docs folder on GitHub</small></a>
-          <a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/notebooks" target="_blank" rel="noopener"><strong>Analysis notebooks</strong><small>Explore the project code</small></a>
+          <a href="notebooks.html"><strong>Analysis notebooks</strong><small>Read the executed analysis inside the website</small></a>
         </div>
       </details>
     </nav>
@@ -207,9 +207,9 @@
     </div>
     <div class="stepper"><button id="prev" class="btn">← Previous</button><div><small id="count"></small><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
     <div class="benchmark-results">
-      <div id="benchmarkMetricsVisual" class="chart-box expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark metrics chart"><canvas id="benchmarkChart"></canvas></div>
+      <div id="benchmarkMetricsVisual" class="chart-box expandable-visual labelled-visual" role="button" tabindex="0" aria-label="Enlarge benchmark metrics chart"><div class="visual-identity"><small>TEST METRICS</small><strong id="benchmarkMetricsModel"></strong></div><div class="canvas-stage"><canvas id="benchmarkChart"></canvas></div></div>
       <aside id="benchmarkMatrixVisual" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark confusion matrix">
-        <p class="eyebrow">Current result</p><h3 id="headline"></h3><p id="commentary"></p>
+        <div class="visual-identity"><small>CONFUSION MATRIX</small><strong id="benchmarkMatrixModel"></strong></div><h3 id="headline"></h3><p id="commentary"></p>
         <div id="benchmarkMatrix" class="compact-matrix" aria-live="polite"></div>
         <a class="matrix-help" href="metrics.html#confusion-matrix">How to read this matrix →</a>
       </aside>
@@ -230,7 +230,7 @@
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
     <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next view →</button></div>
     <div class="benchmark-results">
-      <div id="fineMetricsVisual" class="chart-box expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning metrics chart"><canvas id="fineChart"></canvas></div>
+      <div id="fineMetricsVisual" class="chart-box expandable-visual labelled-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning metrics chart"><div class="visual-identity"><small>TEST METRICS</small><strong id="fineMetricsModel"></strong></div><div class="canvas-stage"><canvas id="fineChart"></canvas></div></div>
       <aside id="finePanel" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning confusion matrix or differences" aria-live="polite"></aside>
     </div>
     <div id="fineCurveVisual" class="curve-strip expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning learning curves"><div class="curve-strip-heading"><div><small>TRAINING HISTORY</small><h3 id="fineCurveTitle"></h3></div><a href="learning-curves.html#project-curves">How to interpret these plots →</a></div><div id="fineCurveStrip"></div></div>
@@ -268,7 +268,7 @@
 
 <section id="notebooks" class="section resources">
   <div class="wrap"><div class="section-head"><div><p class="chapter">11 · Go deeper</p><h2>Move from explanation to reproducible evidence.</h2></div><p class="section-intro">Every major project stage is available as an executed notebook, with the report, poster, presentation and slides alongside it.</p></div>
-    <div class="notebooks"><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/01_Data_Preparation.ipynb"><b>01</b><span>Data Preparation</span><small>dataset construction</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/02_Frozen_Model_Benchmarking.ipynb"><b>02</b><span>Frozen Benchmark</span><small>six CNN comparison</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/03_Selected_Model_Fine_Tuning.ipynb"><b>03</b><span>Fine-Tuning</span><small>selected model</small></a><a href="https://github.com/ronandownes/restricted-dog-cnn/blob/main/notebooks/04_Model_Explainability.ipynb"><b>04</b><span>Grad-CAM</span><small>model explanation</small></a></div>
+    <div class="notebooks"><a href="notebooks.html?notebook=data"><b>01</b><span>Data Preparation</span><small>read the executed notebook</small></a><a href="notebooks.html?notebook=benchmark"><b>02</b><span>Frozen Benchmark</span><small>read metrics, curves and matrices</small></a><a href="notebooks.html?notebook=fine"><b>03</b><span>Fine-Tuning</span><small>read the selected-model analysis</small></a><a href="notebooks.html?notebook=gradcam"><b>04</b><span>Grad-CAM</span><small>read the explainability analysis</small></a></div>
     <div class="artefacts"><a href="documents.html?document=report">Report</a><a href="documents.html?document=poster">Poster</a><a href="documents.html?document=presentation">Presentation</a><a href="documents.html?document=slides">Slides</a><a href="https://github.com/ronandownes/restricted-dog-cnn/tree/main/docs">Browse documents ↗</a><a href="https://github.com/ronandownes/restricted-dog-cnn">GitHub repository ↗</a></div>
   </div>
 </section>
