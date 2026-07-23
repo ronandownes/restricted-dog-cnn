@@ -71,6 +71,43 @@ function updateFine(){
   else{fineCurveTitle.textContent='Before and after learning curves';fineCurveStrip.innerHTML=`<div class="curve-pair"><figure><img src="${frozenUrl}" alt="Learning curves before fine-tuning"><figcaption>Before fine-tuning</figcaption></figure><figure><img src="${tunedUrl}" alt="Learning curves after fine-tuning"><figcaption>After fine-tuning</figcaption></figure></div>`}
   fChart.update();
 }
+function setupExpandableVisuals(){
+  const overlay=document.createElement('div');
+  overlay.className='visual-overlay';
+  overlay.hidden=true;
+  overlay.innerHTML='<div class="visual-overlay-toolbar"><strong id="visualOverlayTitle">Expanded visual</strong><span>Press Esc to close</span><button type="button" aria-label="Close expanded visual">×</button></div><div class="visual-overlay-content"></div>';
+  document.body.appendChild(overlay);
+  const content=overlay.querySelector('.visual-overlay-content'),title=overlay.querySelector('strong'),closeButton=overlay.querySelector('button');
+  const close=async()=>{if(document.fullscreenElement)await document.exitFullscreen().catch(()=>{});overlay.hidden=true;content.replaceChildren();document.body.classList.remove('visual-open')};
+  const open=async source=>{
+    title.textContent=source.getAttribute('aria-label')||'Expanded visual';
+    content.replaceChildren();
+    const canvas=source.querySelector('canvas');
+    if(canvas){
+      const image=document.createElement('img');
+      image.src=canvas.toDataURL('image/png');
+      image.alt=title.textContent;
+      content.appendChild(image);
+    }else{
+      const clone=source.cloneNode(true);
+      clone.classList.remove('expandable-visual');
+      clone.removeAttribute('role');clone.removeAttribute('tabindex');
+      clone.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
+      content.appendChild(clone);
+    }
+    overlay.hidden=false;document.body.classList.add('visual-open');
+    await overlay.requestFullscreen?.().catch(()=>{});
+    closeButton.focus();
+  };
+  document.querySelectorAll('.expandable-visual').forEach(source=>{
+    source.addEventListener('click',event=>{if(event.target.closest('a,button'))return;open(source)});
+    source.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&!event.target.closest('a,button')){event.preventDefault();open(source)}});
+  });
+  closeButton.addEventListener('click',close);
+  overlay.addEventListener('click',event=>{if(event.target===overlay)close()});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!overlay.hidden)close()});
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&!overlay.hidden)close()});
+}
 window.addEventListener('DOMContentLoaded',()=>{
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',onClick:()=>{}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
@@ -80,4 +117,5 @@ window.addEventListener('DOMContentLoaded',()=>{
   fineNext.onclick=()=>{if(fineView<3){fineView++;updateFine()}};
   update();
   updateFine();
+  setupExpandableVisuals();
 });
