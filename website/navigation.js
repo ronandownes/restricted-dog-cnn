@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </tbody>
         </table>
       </div>
-      <p class="breed-coverage-note">Only the six represented breeds were used to construct the restricted image class. The table shows the dataset limitation directly rather than implying coverage of all Irish restricted categories.</p>
+      <p class="breed-coverage-note">Only the six represented breeds were used to construct the restricted image class.</p>
     `;
     dataPipeline.insertAdjacentElement("beforebegin", coverage);
 
