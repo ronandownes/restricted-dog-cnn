@@ -6,12 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!button || !navigation) return;
 
   navigation.innerHTML = `
-    <details class="nav-dropdown">
-      <summary>Introduction</summary>
-      <div class="nav-dropdown-menu">
-        <a href="index.html#context"><strong>Irish context</strong></a>
-      </div>
-    </details>
+    <a class="nav-direct" href="index.html#context"><strong>Introduction</strong></a>
     <details class="nav-dropdown">
       <summary>Methodology</summary>
       <div class="nav-dropdown-menu">
@@ -78,17 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
     coverage.className = "breed-coverage-card";
     coverage.innerHTML = `
       <div class="breed-coverage-heading">
-        <div>
-          <small>STANFORD DOGS COVERAGE</small>
-          <h3>Irish restricted breeds represented in the dataset</h3>
-        </div>
+        <div><small>STANFORD DOGS COVERAGE</small><h3>Irish restricted breeds represented in the dataset</h3></div>
         <span>6 represented · 5 not represented</span>
       </div>
       <div class="breed-coverage-table-wrap">
         <table class="breed-coverage-table">
-          <thead>
-            <tr><th>Represented</th><th>Not represented</th></tr>
-          </thead>
+          <thead><tr><th>Represented</th><th>Not represented</th></tr></thead>
           <tbody>
             <tr><td>Rottweiler</td><td>American Pit Bull Terrier</td></tr>
             <tr><td>German Shepherd</td><td>English Bull Terrier</td></tr>
@@ -156,72 +146,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const computeSection = document.querySelector("#compute");
   const gradcamSection = document.querySelector("#gradcam");
-  if (computeSection && gradcamSection) {
-    gradcamSection.insertAdjacentElement("afterend", computeSection);
-  }
+  if (computeSection && gradcamSection) gradcamSection.insertAdjacentElement("afterend", computeSection);
 
   const closeMenu = () => {
     navigation.classList.remove("is-open");
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-label", "Open navigation menu");
     document.body.classList.remove("menu-open");
-    navigation.querySelectorAll("details[open]").forEach((menu) => {
-      menu.removeAttribute("open");
-    });
+    navigation.querySelectorAll("details[open]").forEach((menu) => menu.removeAttribute("open"));
   };
 
   const dropdowns = Array.from(navigation.querySelectorAll(".nav-dropdown"));
-  const closeDropdowns = (except = null) => {
-    dropdowns.forEach((menu) => {
-      if (menu !== except) menu.removeAttribute("open");
-    });
-  };
-
-  dropdowns.forEach((menu) => {
-    menu.addEventListener("toggle", () => {
-      if (menu.open) closeDropdowns(menu);
-    });
-  });
+  const closeDropdowns = (except = null) => dropdowns.forEach((menu) => { if (menu !== except) menu.removeAttribute("open"); });
+  dropdowns.forEach((menu) => menu.addEventListener("toggle", () => { if (menu.open) closeDropdowns(menu); }));
 
   button.addEventListener("click", () => {
     const isOpen = navigation.classList.toggle("is-open");
     button.setAttribute("aria-expanded", String(isOpen));
-    button.setAttribute(
-      "aria-label",
-      isOpen ? "Close navigation menu" : "Open navigation menu"
-    );
+    button.setAttribute("aria-label", isOpen ? "Close navigation menu" : "Open navigation menu");
     document.body.classList.toggle("menu-open", isOpen);
   });
 
   navigation.addEventListener("click", (event) => {
     if (!event.target.closest("a")) return;
-    if (mobileQuery.matches) closeMenu();
-    else closeDropdowns();
+    if (mobileQuery.matches) closeMenu(); else closeDropdowns();
   });
-
-  document.addEventListener("pointerdown", (event) => {
-    if (!navigation.contains(event.target) && !button.contains(event.target)) {
-      closeMenu();
-    }
-  });
-
-  document.addEventListener("focusin", (event) => {
-    if (!navigation.contains(event.target) && !button.contains(event.target)) {
-      closeDropdowns();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeMenu();
-      button.focus();
-    }
-  });
-
-  mobileQuery.addEventListener("change", (event) => {
-    if (!event.matches) closeMenu();
-  });
-
+  document.addEventListener("pointerdown", (event) => { if (!navigation.contains(event.target) && !button.contains(event.target)) closeMenu(); });
+  document.addEventListener("focusin", (event) => { if (!navigation.contains(event.target) && !button.contains(event.target)) closeDropdowns(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") { closeMenu(); button.focus(); } });
+  mobileQuery.addEventListener("change", (event) => { if (!event.matches) closeMenu(); });
   window.addEventListener("scroll", closeMenu, { passive: true });
   window.addEventListener("resize", closeMenu, { passive: true });
   window.addEventListener("orientationchange", closeMenu);
