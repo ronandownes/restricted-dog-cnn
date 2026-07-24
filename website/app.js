@@ -43,6 +43,7 @@ function updateFine(){
   fineMetricsModel.textContent=`InceptionResNetV2 · ${view.title}`;
   finePrev.disabled=fineView===0;
   fineNext.disabled=fineView===3;
+  fineNext.textContent='Next →';
   fChart.options.plugins.legend.display=fineView===2;
   if(fineView===0){
     fChart.data.datasets=[performanceDataset('Before fine-tuning',frozen,metricKeys.map(k=>mutedColors[k]))];
