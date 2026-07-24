@@ -126,10 +126,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const computeSubtitle = document.querySelector("#compute .section-subtitle");
   const computeIntro = document.querySelector("#compute .section-intro");
   if (computeSubtitle) {
-    computeSubtitle.textContent = "GPU acceleration was used for the computationally intensive stages of model benchmarking and fine-tuning, while CPU execution was sufficient for data preparation and the saved Grad-CAM analysis.";
+    computeSubtitle.textContent = "The project was written in Python and organised as Jupyter Notebooks rather than standalone .py scripts.";
   }
   if (computeIntro) {
-    computeIntro.textContent = "The experiments were implemented in Jupyter Notebooks and executed primarily in Google Colab because the local Surface laptop did not provide a suitable GPU for deep-learning training. The committed notebooks remain reproducible in a local Jupyter environment, subject to minor modifications to environment setup and file paths.";
+    computeIntro.textContent = "CNN benchmarking and fine-tuning needed GPU acceleration, so these stages were run in Google Colab. Data preparation and Grad-CAM ran on CPU.";
   }
 
   const finePrev = document.querySelector("#finePrev");
