@@ -118,6 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(coverageStyle);
   }
 
+  const datasetBiasParagraph = document.querySelector("#context .boundary-card p");
+  if (datasetBiasParagraph) {
+    datasetBiasParagraph.textContent = "Breed representation is uneven, and the positive class combines visually different breeds. Breed-level results and Grad-CAM therefore matter alongside headline accuracy.";
+  }
+
   const finePrev = document.querySelector("#finePrev");
   const fineNext = document.querySelector("#fineNext");
   if (finePrev) finePrev.textContent = "← Previous";
