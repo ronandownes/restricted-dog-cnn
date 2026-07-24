@@ -31,8 +31,8 @@ const fineTunedMatrix={tn:824,fp:14,fn:7,tp:183};
 const fineViews=[
   {title:'Before fine-tuning',summary:'InceptionResNetV2 with its pretrained CNN base frozen.'},
   {title:'After fine-tuning',summary:'The same model after its final 20 base layers were allowed to adapt.'},
-  {title:'Side-by-side comparison',summary:'Muted bars show before; richer bars show after fine-tuning.'},
-  {title:'Difference after fine-tuning',summary:'Positive bars improved; the negative recall bar shows the trade-off.'}
+  {title:'Fine-tuning side by side',summary:'Muted bars show before; richer bars show after fine-tuning.'},
+  {title:'Fine-tuning impact',summary:'Positive bars improved; the negative recall bar shows the trade-off.'}
 ];
 function performanceDataset(label,data,backgroundColor){return{label,data,backgroundColor,borderRadius:8,maxBarThickness:88}}
 function updateFine(){
@@ -157,6 +157,9 @@ function setupExpandableVisuals(){
   document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&!overlay.hidden)close()});
 }
 window.addEventListener('DOMContentLoaded',()=>{
+  const fineNavStyle=document.createElement('style');
+  fineNavStyle.textContent='@media(max-width:700px){#fine .stepper{flex-direction:row;gap:8px;align-items:center}#fine .stepper .btn{width:auto;flex:0 0 auto;padding:10px 12px;font-size:.86rem;white-space:nowrap}#fine .stepper>div{min-width:0;flex:1 1 auto}}';
+  document.head.appendChild(fineNavStyle);
   bChart=new Chart(document.getElementById('benchmarkChart'),{type:'bar',data:{labels:metricKeys,datasets:[{data:[],backgroundColor:metricKeys.map(k=>colors[k]),borderRadius:10,maxBarThickness:88}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Model · test metrics',color:'#10294b',font:{size:17,weight:'bold'},padding:{bottom:18}}},scales:{y:{min:55,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   fChart=new Chart(document.getElementById('fineChart'),{type:'bar',data:{labels:metricKeys,datasets:[]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',onClick:()=>{}},title:{display:true,text:'InceptionResNetV2',color:'#10294b',font:{size:17,weight:'bold'},padding:{bottom:18}}},scales:{y:{min:84,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Test performance (%)'}},x:{grid:{display:false}}}}});
   prev.onclick=()=>{if(i){i--;update()}};
