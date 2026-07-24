@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=20260724-36">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
-  <script src="app.js?v=20260724-24" defer></script>
+  <script src="app.js?v=20260724-25" defer></script>
   <script src="navigation.js?v=20260723-13" defer></script>
 </head>
 <body>
@@ -266,7 +266,7 @@
     <div class="section-head benchmark-heading">
       <div><h2>Benchmarks</h2><p class="section-subtitle">ImageNet-pretrained CNNs compared on the same restricted-versus-unrestricted classification task.</p></div>
     </div>
-    <div class="stepper"><button id="prev" class="btn">← Previous</button><div><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next model →</button></div>
+    <div class="stepper"><button id="prev" class="btn">← Previous</button><div><strong id="model"></strong><span id="year"></span></div><button id="next" class="btn primary">Next →</button></div>
     <div class="benchmark-results">
       <div id="benchmarkMetricsVisual" class="chart-box expandable-visual labelled-visual" role="button" tabindex="0" aria-label="Enlarge benchmark metrics chart"><div class="visual-identity"><small>TEST METRICS</small><strong id="benchmarkMetricsModel"></strong></div><div class="canvas-stage"><canvas id="benchmarkChart"></canvas></div></div>
       <aside id="benchmarkMatrixVisual" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge benchmark confusion matrix">
@@ -287,9 +287,9 @@
   </div>
 </section>
 
-<section id="fine" class="section">
+<section id="fine" class="section benchmark-section">
   <div class="wrap"><div class="section-head benchmark-heading"><div><h2>Fine-tuning</h2><p class="section-subtitle">The winning benchmark model, InceptionResNetV2, shown before and after its final 20 base layers were fine-tuned.</p></div></div>
-    <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next view →</button></div>
+    <div class="stepper"><button id="finePrev" class="btn">← Previous</button><div><small id="fineCount"></small><strong id="fineTitle"></strong><span id="fineSummary"></span></div><button id="fineNext" class="btn primary">Next →</button></div>
     <div class="benchmark-results">
       <div id="fineMetricsVisual" class="chart-box expandable-visual labelled-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning metrics chart"><div class="visual-identity"><small>TEST METRICS</small><strong id="fineMetricsModel"></strong></div><div class="canvas-stage"><canvas id="fineChart"></canvas></div></div>
       <aside id="finePanel" class="panel result-panel expandable-visual" role="button" tabindex="0" aria-label="Enlarge fine-tuning confusion matrix or differences" aria-live="polite"></aside>
