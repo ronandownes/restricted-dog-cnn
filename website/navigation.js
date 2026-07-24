@@ -65,6 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
     </details>
   `;
 
+  const finePrev = document.querySelector("#finePrev");
+  const fineNext = document.querySelector("#fineNext");
+  if (finePrev) finePrev.textContent = "← Previous";
+  if (fineNext) fineNext.textContent = "Next →";
+
   const computeSection = document.querySelector("#compute");
   const gradcamSection = document.querySelector("#gradcam");
   if (computeSection && gradcamSection) {
