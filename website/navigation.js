@@ -70,6 +70,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (finePrev) finePrev.textContent = "← Previous";
   if (fineNext) fineNext.textContent = "Next →";
 
+  if (typeof fineViews !== "undefined" && fineViews[3]) {
+    fineViews[3].title = "Difference due to fine-tuning";
+    fineViews[3].summary = "Change in each metric after fine-tuning.";
+  }
+
+  const syncFineDifferenceView = () => {
+    if (typeof fineView === "undefined" || fineView !== 3) return;
+    if (typeof fChart !== "undefined" && fChart?.data?.datasets?.[0]) {
+      fChart.data.datasets[0].unit = "percent";
+      fChart.options.scales.y.title.text = "Change (%)";
+      fChart.update("none");
+    }
+    document.querySelectorAll("#fineDeltas b").forEach((value) => {
+      value.textContent = value.textContent.replace(" pts", "%");
+    });
+  };
+
+  finePrev?.addEventListener("click", () => requestAnimationFrame(syncFineDifferenceView));
+  fineNext?.addEventListener("click", () => requestAnimationFrame(syncFineDifferenceView));
+  syncFineDifferenceView();
+
   const computeSection = document.querySelector("#compute");
   const gradcamSection = document.querySelector("#gradcam");
   if (computeSection && gradcamSection) {
