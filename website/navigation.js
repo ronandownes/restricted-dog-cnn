@@ -7,9 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navigation.innerHTML = `
     <details class="nav-dropdown">
-      <summary>Study</summary>
+      <summary>Introduction</summary>
       <div class="nav-dropdown-menu">
         <a href="index.html#context"><strong>Irish context</strong></a>
+      </div>
+    </details>
+    <details class="nav-dropdown">
+      <summary>Methodology</summary>
+      <div class="nav-dropdown-menu">
         <a href="index.html#data"><strong>Data preparation</strong></a>
         <a href="index.html#compute"><strong>Compute and Colab</strong></a>
         <a href="notebooks.html?notebook=data"><strong>01 · Data Preparation notebook</strong></a>
