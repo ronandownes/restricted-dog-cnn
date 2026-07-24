@@ -123,6 +123,15 @@ document.addEventListener("DOMContentLoaded", () => {
     datasetBiasParagraph.textContent = "The binary target aggregates six fine-grained restricted breed classes into a single positive superclass, while the negative class comprises 24 reproducibly sampled unrestricted breeds that provide contrasting examples for training. Breed-level results and Grad-CAM therefore matter alongside headline accuracy.";
   }
 
+  const computeSubtitle = document.querySelector("#compute .section-subtitle");
+  const computeIntro = document.querySelector("#compute .section-intro");
+  if (computeSubtitle) {
+    computeSubtitle.textContent = "GPU acceleration was used for the computationally intensive stages of model benchmarking and fine-tuning, while CPU execution was sufficient for data preparation and the saved Grad-CAM analysis.";
+  }
+  if (computeIntro) {
+    computeIntro.textContent = "The experiments were implemented in Jupyter Notebooks and executed primarily in Google Colab because the local Surface laptop did not provide a suitable GPU for deep-learning training. The committed notebooks remain reproducible in a local Jupyter environment, subject to minor modifications to environment setup and file paths.";
+  }
+
   const finePrev = document.querySelector("#finePrev");
   const fineNext = document.querySelector("#fineNext");
   if (finePrev) finePrev.textContent = "← Previous";
