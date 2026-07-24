@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const datasetBiasParagraph = document.querySelector("#context .boundary-card p");
   if (datasetBiasParagraph) {
-    datasetBiasParagraph.textContent = "Breed representation is uneven, and the positive class combines visually different breeds. Breed-level results and Grad-CAM therefore matter alongside headline accuracy.";
+    datasetBiasParagraph.textContent = "The binary target aggregates six fine-grained restricted breed classes into a single positive superclass, while the negative class comprises 24 reproducibly sampled unrestricted breeds that provide contrasting examples for training. Breed-level results and Grad-CAM therefore matter alongside headline accuracy.";
   }
 
   const finePrev = document.querySelector("#finePrev");
