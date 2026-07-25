@@ -96,6 +96,6 @@ drive/
 *.snm
 *.vrb
 *.pdf
-!docs/*.pdf
+!documents/*.pdf
 latex/figures/
 latex/*.pdf
