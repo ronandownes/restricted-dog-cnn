@@ -1,35 +1,51 @@
 name: Deploy website to GitHub Pages
+
 on:
   push:
     branches: [main]
-    paths: ["website/**", "docs/*.pdf", "notebooks/*.ipynb", ".github/workflows/pages.yml"]
+    paths:
+      - "website/**"
+      - "documents/*.pdf"
+      - "notebooks/*.ipynb"
+      - ".github/workflows/pages.yml"
+
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/configure-pages@v5
+
       - name: Add project documents to the site
         run: |
-          mkdir -p website/docs
-          cp docs/*.pdf website/docs/
+          mkdir -p website/documents
+          cp documents/*.pdf website/documents/
+
       - name: Add executed notebooks to the site
         run: |
           mkdir -p website/notebooks
           cp notebooks/*.ipynb website/notebooks/
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./website
+
       - id: deployment
         uses: actions/deploy-pages@v4
