@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectDocument = (key, updateAddress = true) => {
     const selectedKey = documents[key] ? key : "report";
     const selected = documents[selectedKey];
-    const pdfUrl = `docs/${selected.file}`;
+const pdfUrl = `../docs/${selected.file}`;
 
     title.textContent = selected.title;
     description.textContent = selected.description;

@@ -460,12 +460,37 @@ h1{font-size:clamp(3rem,15vw,5rem)}
 .metrics-callout{display:grid;grid-template-columns:190px 1fr;gap:18px;background:var(--navy);color:#fff;text-decoration:none;padding:20px 24px;border-radius:14px;margin:0 0 22px;transition:.2s}
 .metrics-callout:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
 .metrics-callout span{color:#b9d2eb}
-.benchmark-heading{grid-template-columns:1fr;margin-bottom:20px}
-.benchmark-section .benchmark-heading{margin-bottom:4px}
-.benchmark-section .stepper{margin:7px 0 14px}
-.benchmark-learning-links{margin-top:26px}
-.benchmark-learning-links .metrics-callout:last-child{margin-bottom:0}
-.inline-help{display:inline-block;color:var(--navy);font-weight:850;margin:-24px 0 22px}
+.benchmark-heading{
+    grid-template-columns:1fr;
+    margin-bottom:20px;
+}
+
+.benchmark-section .benchmark-heading{
+    margin-bottom:4px;
+}
+
+.benchmark-section .section-subtitle{
+    max-width:none;
+}
+
+.benchmark-section .stepper{
+    margin:7px 0 14px;
+}
+
+.benchmark-learning-links{
+    margin-top:26px;
+}
+
+.benchmark-learning-links .metrics-callout:last-child{
+    margin-bottom:0;
+}
+
+.inline-help{
+    display:inline-block;
+    color:var(--navy);
+    font-weight:850;
+    margin:-24px 0 22px;
+}
 
 /* Metrics help page */
 .metrics-hero{padding:90px 0;background:radial-gradient(circle at 80% 20%,#dceafa 0,transparent 30%),linear-gradient(135deg,#fff,#edf4fb)}
