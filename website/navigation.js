@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </details>
     <details class="nav-dropdown">
-      <summary>Literature Review</summary>
+      <summary>Review</summary>
       <div class="nav-dropdown-menu">
         <a href="theory.html"><strong>Literature review overview</strong></a>
         <a href="theory.html#bitter-lesson"><strong>Feature engineering</strong></a>
