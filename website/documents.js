@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectDocument = (key, updateAddress = true) => {
     const selectedKey = documents[key] ? key : "report";
     const selected = documents[selectedKey];
-const pdfUrl = `../docs/${selected.file}`;
+    const pdfUrl = `documents/${selected.file}`;
 
     title.textContent = selected.title;
     description.textContent = selected.description;
@@ -63,7 +63,9 @@ const pdfUrl = `../docs/${selected.file}`;
   };
 
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => selectDocument(tab.dataset.document));
+    tab.addEventListener("click", () => {
+      selectDocument(tab.dataset.document);
+    });
   });
 
   fullscreenButton.addEventListener("click", async () => {
@@ -79,7 +81,9 @@ const pdfUrl = `../docs/${selected.file}`;
   });
 
   document.addEventListener("fullscreenchange", () => {
-    fullscreenButton.textContent = document.fullscreenElement ? "Exit full screen" : "Full screen";
+    fullscreenButton.textContent = document.fullscreenElement
+      ? "Exit full screen"
+      : "Full screen";
   });
 
   const requested = new URLSearchParams(window.location.search).get("document");
