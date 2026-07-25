@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logo Toolkit — Mr Downes Maths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E63329;
+    --green: #3FAE49;
+    --blue: #2D7DD2;
+    --dark: #1A1A1A;
+    --bg: #F5F3EE;
+    --text: #2A2A2A;
+    --subtle: #8A8680;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .page-header {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+  }
+
+  .page-header h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-header p {
+    color: var(--subtle);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 16px 40px rgba(0,0,0,0.06);
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--subtle);
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-align: center;
+  }
+
+  .card-note {
+    font-size: 0.78rem;
+    color: var(--subtle);
+    text-align: center;
+    line-height: 1.5;
+    max-width: 240px;
+  }
+
+  .logo-area {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ========== 1. STATIC ========== */
+  .logo-static {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 90px;
+    height: 90px;
+  }
+  .logo-static .dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  /* ========== 2. PULSE ========== */
+  .logo-pulse {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 90px;
+    height: 90px;
+  }
+  .logo-pulse .dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .logo-pulse .dot:nth-child(1) { animation-delay: 0s; }
+  .logo-pulse .dot:nth-child(2) { animation-delay: 0.3s; }
+  .logo-pulse .dot:nth-child(3) { animation-delay: 0.6s; }
+  .logo-pulse .dot:nth-child(4) { animation-delay: 0.9s; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.82); opacity: 0.7; }
+  }
+
+  /* ========== 3. ORBIT ========== */
+  .logo-orbit {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    animation: orbit-spin 8s linear infinite;
+  }
+  .logo-orbit .dot {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    animation: orbit-counter 8s linear infinite;
+  }
+  .logo-orbit .dot:nth-child(1) { top: 0; left: 0; }
+  .logo-orbit .dot:nth-child(2) { top: 0; right: 0; }
+  .logo-orbit .dot:nth-child(3) { bottom: 0; left: 0; }
+  .logo-orbit .dot:nth-child(4) { bottom: 0; right: 0; }
+
+  @keyframes orbit-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes orbit-counter { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+
+  /* ========== 4. MORPH ========== */
+  .logo-morph {
+    position: relative;
+    width: 110px;
+    height: 110px;
+  }
+  .logo-morph .dot {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+  }
+  .logo-morph .dot:nth-child(1) { animation: morph-d1 6s ease-in-out infinite; }
+  .logo-morph .dot:nth-child(2) { animation: morph-d2 6s ease-in-out infinite; }
+  .logo-morph .dot:nth-child(3) { animation: morph-d3 6s ease-in-out infinite; }
+  .logo-morph .dot:nth-child(4) { animation: morph-d4 6s ease-in-out infinite; }
+
+  @keyframes morph-d1 {
+    0%, 100% { top: 5px; left: 5px; }
+    25% { top: 38px; left: 0px; }
+    50% { top: 0px; left: 38px; }
+    75% { top: 38px; left: 12px; }
+  }
+  @keyframes morph-d2 {
+    0%, 100% { top: 5px; left: 65px; }
+    25% { top: 38px; left: 26px; }
+    50% { top: 38px; left: 38px; }
+    75% { top: 12px; left: 38px; }
+  }
+  @keyframes morph-d3 {
+    0%, 100% { top: 65px; left: 5px; }
+    25% { top: 38px; left: 52px; }
+    50% { top: 76px; left: 38px; }
+    75% { top: 64px; left: 38px; }
+  }
+  @keyframes morph-d4 {
+    0%, 100% { top: 65px; left: 65px; }
+    25% { top: 38px; left: 78px; }
+    50% { top: 38px; left: 38px; }
+    75% { top: 38px; left: 64px; }
+  }
+
+  /* ========== 5. WAVE ========== */
+  .logo-wave {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    height: 80px;
+  }
+  .logo-wave .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    animation: wave 1.6s ease-in-out infinite;
+  }
+  .logo-wave .dot:nth-child(1) { animation-delay: 0s; }
+  .logo-wave .dot:nth-child(2) { animation-delay: 0.15s; }
+  .logo-wave .dot:nth-child(3) { animation-delay: 0.3s; }
+  .logo-wave .dot:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+  }
+
+  /* ========== 6. HOVER EXPAND ========== */
+  .logo-hover {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 90px;
+    height: 90px;
+    cursor: pointer;
+  }
+  .logo-hover .dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .logo-hover:hover .dot:nth-child(1) { transform: translate(-4px, -4px) scale(1.1); }
+  .logo-hover:hover .dot:nth-child(2) { transform: translate(4px, -4px) scale(1.1); }
+  .logo-hover:hover .dot:nth-child(3) { transform: translate(-4px, 4px) scale(1.1); }
+  .logo-hover:hover .dot:nth-child(4) { transform: translate(4px, 4px) scale(1.1); }
+
+  /* ========== 7. LOADING ========== */
+  .logo-loading {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .logo-loading .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    animation: loading-bounce 1.4s ease-in-out infinite;
+  }
+  .logo-loading .dot:nth-child(1) { animation-delay: 0s; }
+  .logo-loading .dot:nth-child(2) { animation-delay: 0.16s; }
+  .logo-loading .dot:nth-child(3) { animation-delay: 0.32s; }
+  .logo-loading .dot:nth-child(4) { animation-delay: 0.48s; }
+
+  @keyframes loading-bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ========== LOCKUP ========== */
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .lockup-dots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+  }
+  .lockup-dots .dot {
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+  }
+  .lockup-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .lockup-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .lockup-tagline {
+    font-size: 0.68rem;
+    color: var(--subtle);
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== FAVICON ========== */
+  .favicon-row {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .logo-favicon {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+  .logo-favicon.sz-32 { width: 32px; height: 32px; }
+  .logo-favicon.sz-32 .dot { width: 14px; height: 14px; border-radius: 50%; }
+  .logo-favicon.sz-16 { width: 16px; height: 16px; }
+  .logo-favicon.sz-16 .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .favicon-label {
+    font-size: 0.7rem;
+    color: var(--subtle);
+    margin-top: 4px;
+    text-align: center;
+  }
+
+  .card.full-width { grid-column: 1 / -1; }
+
+  .uses-row {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  .use-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .page-header h1 { font-size: 1.8rem; }
+    .grid { grid-template-columns: 1fr; padding: 0 1rem 3rem; }
+    .uses-row { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Logo Toolkit</h1>
+  <p>Every variation on white — transparent-ready, drop anywhere.</p>
+</div>
+
+<div class="grid">
+
+  <!-- 1. Static -->
+  <div class="card">
+    <span class="card-label">Core Mark</span>
+    <div class="logo-area">
+      <div class="logo-static">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Static</span>
+    <span class="card-note">The foundation. Works everywhere.</span>
+  </div>
+
+  <!-- 2. Pulse -->
+  <div class="card">
+    <span class="card-label">Ambient</span>
+    <div class="logo-area">
+      <div class="logo-pulse">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Breathing Pulse</span>
+    <span class="card-note">Gentle life. Great for hero sections.</span>
+  </div>
+
+  <!-- 3. Orbit -->
+  <div class="card">
+    <span class="card-label">Hero Animation</span>
+    <div class="logo-area">
+      <div class="logo-orbit">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Orbit</span>
+    <span class="card-note">Grid rotates, dots stay upright.</span>
+  </div>
+
+  <!-- 4. Morph -->
+  <div class="card">
+    <span class="card-label">Transition</span>
+    <div class="logo-area">
+      <div class="logo-morph">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Shape Morph</span>
+    <span class="card-note">Grid → line → diamond → cluster.</span>
+  </div>
+
+  <!-- 5. Wave -->
+  <div class="card">
+    <span class="card-label">Playful</span>
+    <div class="logo-area">
+      <div class="logo-wave">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Wave</span>
+    <span class="card-note">Bouncy energy. Loading screens, transitions.</span>
+  </div>
+
+  <!-- 6. Hover -->
+  <div class="card">
+    <span class="card-label">Interactive</span>
+    <div class="logo-area">
+      <div class="logo-hover">
+        <div class="dot" style="background:var(--red)"></div>
+        <div class="dot" style="background:var(--green)"></div>
+        <div class="dot" style="background:var(--blue)"></div>
+        <div class="dot" style="background:var(--dark)"></div>
+      </div>
+    </div>
+    <span class="card-title">Hover Expand</span>
+    <span class="card-note">Hover me! Dots spread on interaction.</span>
+  </div>
+
+  <!-- 7. Practical uses -->
+  <div class="card full-width">
+    <span class="card-label">In Context</span>
+    <div class="uses-row">
+      <div class="use-item">
+        <div class="lockup">
+          <div class="lockup-dots">
+            <div class="dot" style="background:var(--red)"></div>
+            <div class="dot" style="background:var(--green)"></div>
+            <div class="dot" style="background:var(--blue)"></div>
+            <div class="dot" style="background:var(--dark)"></div>
+          </div>
+          <div class="lockup-text">
+            <span class="lockup-name">Mr Downes</span>
+            <span class="lockup-tagline">Making maths simple &amp; enjoyable</span>
+          </div>
+        </div>
+        <span class="favicon-label">Text lockup</span>
+      </div>
+      <div class="use-item">
+        <div class="favicon-row">
+          <div>
+            <div class="logo-favicon sz-32">
+              <div class="dot" style="background:var(--red)"></div>
+              <div class="dot" style="background:var(--green)"></div>
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="dot" style="background:var(--dark)"></div>
+            </div>
+            <span class="favicon-label">32px</span>
+          </div>
+          <div>
+            <div class="logo-favicon sz-16">
+              <div class="dot" style="background:var(--red)"></div>
+              <div class="dot" style="background:var(--green)"></div>
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="dot" style="background:var(--dark)"></div>
+            </div>
+            <span class="favicon-label">16px</span>
+          </div>
+        </div>
+        <span class="favicon-label">Favicon sizes</span>
+      </div>
+      <div class="use-item">
+        <div class="logo-loading">
+          <div class="dot" style="background:var(--red)"></div>
+          <div class="dot" style="background:var(--green)"></div>
+          <div class="dot" style="background:var(--blue)"></div>
+          <div class="dot" style="background:var(--dark)"></div>
+        </div>
+        <span class="favicon-label">Loading indicator</span>
+      </div>
+    </div>
+    <span class="card-title">Ready to Use</span>
+  </div>
+
+</div>
+
+</body>
+</html>
