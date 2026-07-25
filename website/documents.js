@@ -1,7 +1,8 @@
 const documents = {
   proposal: {
     title: "Proposal",
-    description: "The original research proposal that defined the planned study, motivation and ethical considerations.",
+    description:
+      "The original research proposal that defined the planned study, motivation and ethical considerations.",
     file: "dog_cnn_proposal.pdf"
   },
   report: {
@@ -11,17 +12,20 @@ const documents = {
   },
   poster: {
     title: "Poster",
-    description: "The research poster summarising the question, method and findings.",
+    description:
+      "The research poster summarising the question, method and findings.",
     file: "dog_cnn_poster.pdf"
   },
   presentation: {
     title: "Presentation",
-    description: "The viva presentation with staged reveals, designed for delivery by a presenter rather than uninterrupted self-study.",
+    description:
+      "The viva presentation with staged reveals, designed for delivery by a presenter rather than uninterrupted self-study.",
     file: "dog_cnn_presentation.pdf"
   },
   slides: {
     title: "Slides",
-    description: "The complete slide content for students and independent self-study, without staged reveals.",
+    description:
+      "The complete slide content for students and independent self-study, without staged reveals.",
     file: "dog_cnn_slides.pdf"
   }
 };
@@ -36,27 +40,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const openButton = document.querySelector("#open-button");
   const downloadButton = document.querySelector("#download-button");
 
+  const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
+  const getPdfUrl = (filename) => {
+    return isLocal
+      ? `../documents/${filename}`
+      : `documents/${filename}`;
+  };
+
   const selectDocument = (key, updateAddress = true) => {
     const selectedKey = documents[key] ? key : "report";
     const selected = documents[selectedKey];
-    const pdfUrl = `documents/${selected.file}`;
+    const pdfUrl = getPdfUrl(selected.file);
 
     title.textContent = selected.title;
     description.textContent = selected.description;
+
     viewer.src = `${pdfUrl}#view=FitH`;
     viewer.title = `${selected.title} PDF viewer`;
+
     openButton.href = pdfUrl;
     downloadButton.href = pdfUrl;
     downloadButton.setAttribute("download", selected.file);
 
     tabs.forEach((tab) => {
       const active = tab.dataset.document === selectedKey;
+
       tab.classList.toggle("active", active);
       tab.setAttribute("aria-selected", String(active));
+      tab.setAttribute("tabindex", active ? "0" : "-1");
     });
 
     if (updateAddress) {
-      const url = new URL(window.location);
+      const url = new URL(window.location.href);
       url.searchParams.set("document", selectedKey);
       window.history.replaceState({}, "", url);
     }
@@ -76,7 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
         window.open(openButton.href, "_blank", "noopener");
       }
     } else {
-      await document.exitFullscreen();
+      try {
+        await document.exitFullscreen();
+      } catch {
+        window.open(openButton.href, "_blank", "noopener");
+      }
     }
   });
 
